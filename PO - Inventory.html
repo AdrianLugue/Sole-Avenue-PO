@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-thin-rounded/css/uicons-thin-rounded.css'>
+    <style>
+      i { padding-top: .22rem; }
+
+      * {
+        font-family: 'Inter', sans-serif;
+        margin: 0; padding: 0;
+        box-sizing: border-box;
+        transition: all 0.15s ease;
+      }
+
+      :root {
+        --main-bg:     oklch(98.5% 0.001 106.423);
+        --btn-bg:      #000;
+        --btn-text:    #fff;
+        --muted:       oklch(60% 0 0);
+        --border:      oklch(92% 0 0);
+        --input-bg:    #fff;
+        --icon-bg:     oklch(97% 0 0);
+        --text:        oklch(20% 0 0);
+        --placeholder: oklch(60% 0 0);
+        --divider:     oklch(92% 0 0);
+        --shadow:      0 1px 3px 0 rgb(0 0 0 / 0.04), 0 4px 12px rgb(0 0 0 / 0.03);
+
+        --success-bg:     oklch(94% 0 0);
+        --success-text:   oklch(18% 0 0);
+        --success-border: oklch(84% 0 0);
+        --error-bg:       oklch(89% 0 0);
+        --error-text:     oklch(13% 0 0);
+        --error-border:   oklch(78% 0 0);
+      }
+
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(14px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes slideIn {
+        from { transform: translateX(400px); opacity: 0; }
+        to   { transform: translateX(0); opacity: 1; }
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      html, body { height: 100%; -webkit-font-smoothing: antialiased; }
+
+      .layout { height: 100vh; width: 100%; background: var(--main-bg); }
+
+      .main {
+        display: flex; flex-direction: column;
+        height: 100vh; overflow: hidden;
+      }
+
+      /* ── Dark Sticky Header ─────────────────────── */
+      .main-header {
+        padding: 1.25rem 2.5rem 0;
+        border-bottom: 1px solid oklch(20% 0 0);
+        display: flex; flex-direction: column; flex-shrink: 0;
+        background: oklch(11% 0 0);
+        position: sticky; top: 0; z-index: 50;
+      }
+      .main-header-top {
+        display: flex; align-items: center; justify-content: space-between;
+      }
+      .main-header-title {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700; font-size: 1.25rem;
+        color: oklch(94% 0 0);
+      }
+      .main-header-sub { font-size: 0.85rem; color: oklch(52% 0 0); margin-top: 2px; }
+      .main-header-action-btns { display: flex; align-items: center; gap: 1rem; }
+
+      /* ── Nav Pills ──────────────────────────────── */
+      .header-nav { display: flex; align-items: center; gap: 4px; margin-top: 1rem; }
+      .nav-pill {
+        padding: 8px 18px; border: none; background: transparent;
+        color: oklch(52% 0 0); font-size: 0.82rem; font-weight: 600;
+        cursor: pointer; border-radius: 6px 6px 0 0;
+        position: relative; display: inline-flex; align-items: center;
+        gap: 7px; white-space: nowrap;
+      }
+      .nav-pill:hover { color: oklch(94% 0 0); background: oklch(18% 0 0); }
+      .nav-pill.active { color: oklch(94% 0 0); background: transparent; }
+      .nav-pill.active::after {
+        content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
+        height: 2px; background: oklch(94% 0 0); border-radius: 2px 2px 0 0;
+      }
+      .nav-pill i { font-size: 0.85rem; }
+
+      /* ── Header buttons ─────────────────────────── */
+      .btn {
+        padding: 8px 16px; border-radius: 6px; font-size: 0.82rem; font-weight: 600;
+        cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+        gap: 8px; border: 1px solid transparent; min-height: 36px; white-space: nowrap;
+      }
+      .main-header .btn-primary {
+        background: oklch(97% 0 0); color: oklch(10% 0 0); border-color: oklch(97% 0 0);
+      }
+      .main-header .btn-primary:hover { background: oklch(86% 0 0); border-color: oklch(86% 0 0); }
+      .main-header .btn-outline {
+        background: transparent; border-color: oklch(28% 0 0); color: oklch(72% 0 0);
+      }
+      .main-header .btn-outline:hover {
+        background: oklch(18% 0 0); border-color: oklch(42% 0 0); color: oklch(90% 0 0);
+      }
+
+      /* ── Summary Cards ──────────────────────────── */
+      .cards-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.875rem; padding: 1.25rem 2.5rem 0;
+        flex-shrink: 0;
+      }
+      .card {
+        background: #fff; border: 1px solid var(--border); border-radius: 12px;
+        padding: 1.1rem 1.4rem 1rem; box-shadow: var(--shadow);
+        animation: fadeInUp 0.35s ease-out backwards;
+        position: relative; overflow: hidden;
+      }
+      .card::before {
+        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+        border-radius: 12px 12px 0 0;
+      }
+      .card:nth-child(1)::before { background: oklch(15% 0 0); animation-delay: 0.05s; }
+      .card:nth-child(2)::before { background: oklch(45% 0 0); animation-delay: 0.10s; }
+      .card:nth-child(3)::before { background: oklch(52% 0 0); animation-delay: 0.15s; }
+      .card:nth-child(4)::before { background: oklch(55% 0 0); animation-delay: 0.20s; }
+      .card:nth-child(1) { animation-delay: 0.05s; }
+      .card:nth-child(2) { animation-delay: 0.10s; }
+      .card:nth-child(3) { animation-delay: 0.15s; }
+      .card:nth-child(4) { animation-delay: 0.20s; }
+      .card-icon {
+        width: 30px; height: 30px; background: var(--icon-bg); border-radius: 7px;
+        display: inline-flex; align-items: center; justify-content: center;
+        font-size: 0.82rem; color: var(--muted); margin-bottom: 0.75rem;
+      }
+      .card-label {
+        font-size: 0.66rem; font-weight: 700; text-transform: uppercase;
+        letter-spacing: 0.5px; color: var(--muted); margin-bottom: 3px;
+      }
+      .card-value {
+        font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 1.7rem;
+        color: var(--text); line-height: 1; letter-spacing: -0.02em;
+      }
+      .card-value.green { color: oklch(28% 0 0); }
+      .card-value.amber { color: oklch(20% 0 0); }
+      .card-value.red   { color: oklch(16% 0 0); }
+
+      /* ── Table Area ─────────────────────────────── */
+      .table-area {
+        flex: 1; overflow: hidden; display: flex; flex-direction: column;
+        padding: 1rem 2.5rem 1.25rem; gap: 0.875rem;
+      }
+
+      .table-toolbar {
+        display: flex; gap: 0.75rem; align-items: center; flex-shrink: 0;
+        background: #fff; border: 1px solid var(--border); border-radius: 10px;
+        padding: 10px 14px; box-shadow: var(--shadow);
+      }
+      .search-wrap { position: relative; flex: 1; }
+      .search-wrap i {
+        position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+        color: var(--placeholder); font-size: 1rem; pointer-events: none;
+      }
+      .search-wrap input {
+        width: 100%; padding: 9px 14px 9px 42px;
+        border: 1px solid var(--border); border-radius: 6px;
+        font-size: 0.875rem; font-weight: 500; color: var(--text);
+        background: #fff; outline: none;
+      }
+      .search-wrap input:focus { border-color: #000; box-shadow: 0 0 0 1px #000; }
+
+      .filter-select {
+        padding: 9px 36px 9px 14px; border: 1px solid var(--border); border-radius: 6px;
+        font-size: 0.82rem; font-weight: 600; color: var(--text);
+        background: #fff; outline: none; cursor: pointer; appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat; background-position: right 10px center;
+        min-width: 140px;
+      }
+      .filter-select:focus { border-color: #000; box-shadow: 0 0 0 1px #000; }
+
+      .btn-content { background: var(--btn-bg); color: var(--btn-text); }
+      .btn-content:hover { background: #333; }
+      .btn-outline-light { background: #fff; border: 1px solid var(--border); color: var(--text); }
+      .btn-outline-light:hover { background: var(--icon-bg); border-color: oklch(70% 0 0); }
+
+      .toolbar-count {
+        font-size: 0.78rem; font-weight: 600; color: var(--muted);
+        white-space: nowrap; padding-left: 0.25rem;
+      }
+
+      /* ── Table ──────────────────────────────────── */
+      .table-wrap {
+        flex: 1; overflow-y: auto; border: 1px solid var(--border);
+        border-radius: 10px; background: #fff; box-shadow: var(--shadow);
+        scrollbar-width: thin; scrollbar-color: oklch(80% 0 0) transparent;
+      }
+      .table-wrap::-webkit-scrollbar { width: 6px; }
+      .table-wrap::-webkit-scrollbar-thumb { background: oklch(80% 0 0); border-radius: 3px; }
+
+      table { width: 100%; border-collapse: collapse; }
+      thead th {
+        padding: 11px 16px; text-align: left;
+        font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+        letter-spacing: 0.45px; color: var(--muted);
+        background: #fff; border-bottom: 1px solid var(--border);
+        position: sticky; top: 0; z-index: 2; white-space: nowrap;
+      }
+      thead th:first-child { border-radius: 10px 0 0 0; }
+      thead th:last-child  { border-radius: 0 10px 0 0; text-align: center; }
+
+      tbody tr { border-bottom: 1px solid oklch(96% 0 0); }
+      tbody tr:last-child { border-bottom: none; }
+      tbody tr:hover { background: oklch(99% 0 0); }
+      tbody td {
+        padding: 12px 16px; font-size: 0.84rem; color: var(--text); vertical-align: middle;
+      }
+      tbody td:last-child { text-align: center; }
+
+      .td-name { font-weight: 600; }
+      .td-sku  { color: var(--muted); font-size: 0.78rem; font-weight: 500; }
+      .td-stock {
+        font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.9rem;
+      }
+      .td-stock.in-stock  { color: oklch(28% 0 0); }
+      .td-stock.low-stock { color: oklch(20% 0 0); }
+      .td-stock.out-stock { color: oklch(16% 0 0); }
+
+      .stock-badge {
+        display: inline-flex; align-items: center; gap: 5px;
+        padding: 3px 10px; border-radius: 20px;
+        font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px;
+      }
+      .stock-badge.in-stock  { background: oklch(93% 0 0); color: oklch(28% 0 0); }
+      .stock-badge.low-stock { background: oklch(88% 0 0); color: oklch(20% 0 0); }
+      .stock-badge.out-stock { background: oklch(84% 0 0); color: oklch(16% 0 0); }
+
+      .td-date { font-size: 0.76rem; color: var(--muted); }
+
+      .btn-edit {
+        display: inline-flex; align-items: center; gap: 5px;
+        padding: 5px 12px; border: 1px solid var(--border); border-radius: 6px;
+        background: #fff; font-size: 0.74rem; font-weight: 600; color: var(--text);
+        cursor: pointer;
+      }
+      .btn-edit:hover { background: var(--icon-bg); border-color: oklch(70% 0 0); }
+
+      /* ── Empty State ────────────────────────────── */
+      .table-empty {
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        padding: 4rem 2rem; gap: 0.75rem; color: var(--muted);
+      }
+      .table-empty i { font-size: 2.5rem; opacity: 0.18; }
+      .table-empty p { font-size: 0.88rem; font-weight: 500; }
+
+      /* ── Loading Row ────────────────────────────── */
+      .table-loading {
+        display: flex; align-items: center; justify-content: center;
+        gap: 10px; padding: 3rem; color: var(--muted);
+        font-size: 0.85rem; font-weight: 500;
+      }
+      .spinner {
+        width: 18px; height: 18px; border: 2px solid var(--border);
+        border-top-color: var(--muted); border-radius: 50%;
+        animation: spin 0.6s linear infinite; display: inline-block;
+      }
+      .spinner-btn {
+        width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.35);
+        border-top-color: #fff; border-radius: 50%;
+        animation: spin 0.6s linear infinite; display: inline-block;
+      }
+
+      /* ── Edit Modal ─────────────────────────────── */
+      .modal-overlay {
+        display: none; position: fixed; inset: 0;
+        background: rgba(0,0,0,0.55); z-index: 9998;
+        align-items: center; justify-content: center;
+      }
+      .modal-overlay.active { display: flex; }
+      .modal {
+        background: #fff; border-radius: 12px; padding: 2rem 2rem 1.75rem;
+        max-width: 440px; width: 90%;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+        animation: fadeInUp 0.25s ease-out;
+      }
+      .modal-header {
+        display: flex; align-items: center; justify-content: space-between;
+        margin-bottom: 1.5rem;
+      }
+      .modal-title {
+        font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; color: var(--text);
+      }
+      .modal-close {
+        width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border);
+        background: #fff; cursor: pointer; color: var(--muted); font-size: 0.8rem;
+        display: inline-flex; align-items: center; justify-content: center;
+      }
+      .modal-close:hover { background: var(--icon-bg); }
+
+      .modal-item-info {
+        background: var(--icon-bg); border-radius: 8px; padding: 0.85rem 1rem;
+        margin-bottom: 1.25rem;
+      }
+      .modal-item-name { font-weight: 700; font-size: 0.9rem; color: var(--text); }
+      .modal-item-sku  { font-size: 0.76rem; color: var(--muted); margin-top: 2px; }
+
+      .modal-fields { display: flex; flex-direction: column; gap: 1rem; }
+      .modal-field { display: flex; flex-direction: column; gap: 0.4rem; }
+      .modal-label {
+        font-size: 0.72rem; font-weight: 700; color: var(--text);
+        text-transform: uppercase; letter-spacing: 0.025em;
+      }
+      .modal-hint { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+      .modal-input {
+        padding: 10px 14px; border: 1px solid var(--border); border-radius: 6px;
+        font-size: 0.875rem; font-weight: 500; color: var(--text);
+        outline: none; background: #fff; width: 100%;
+      }
+      .modal-input:focus { border-color: #000; box-shadow: 0 0 0 1px #000; }
+
+      .modal-btns {
+        display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.75rem;
+      }
+      .btn-modal-cancel {
+        padding: 9px 20px; border-radius: 6px; border: 1.5px solid var(--border);
+        background: #fff; color: var(--text); font-size: 0.82rem; font-weight: 600; cursor: pointer;
+      }
+      .btn-modal-cancel:hover { background: var(--icon-bg); }
+      .btn-modal-save {
+        padding: 9px 20px; border-radius: 6px; border: none;
+        background: var(--btn-bg); color: #fff; font-size: 0.82rem; font-weight: 600; cursor: pointer;
+        display: inline-flex; align-items: center; gap: 7px;
+      }
+      .btn-modal-save:hover { background: #333; }
+      .btn-modal-save:disabled { opacity: 0.7; cursor: not-allowed; }
+
+      /* ── Notification ───────────────────────────── */
+      .notification {
+        position: fixed; bottom: 24px; right: 24px;
+        padding: 8px 16px; border-radius: 10px; font-weight: 600;
+        display: none; z-index: 9999;
+        animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      }
+      .notification.success {
+        background: var(--success-bg); color: var(--success-text);
+        border: 2px solid var(--success-border);
+      }
+      .notification.error {
+        background: var(--error-bg); color: var(--error-text);
+        border: 2px solid var(--error-border);
+      }
+
+      /* ── Responsive ─────────────────────────────── */
+      @media (max-width: 900px) {
+        .cards-row { grid-template-columns: repeat(2, 1fr); }
+      }
+      @media (max-width: 700px) {
+        .main-header { padding: 1rem 1.25rem 0; }
+        .cards-row { padding: 1rem 1.25rem 0; }
+        .table-area { padding: 1rem 1.25rem 2rem; }
+        .cards-row { grid-template-columns: repeat(2, 1fr); }
+      }
+      @media (max-width: 500px) {
+        .cards-row { grid-template-columns: 1fr 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="notification" id="notification"></div>
+
+    <!-- Edit / Adjust Stock Modal -->
+    <div class="modal-overlay" id="editModal">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title">Adjust Stock</div>
+          <button class="modal-close" onclick="closeEditModal()"><i class="fi fi-rr-cross-small"></i></button>
+        </div>
+        <div class="modal-item-info">
+          <div class="modal-item-name" id="modalItemName">—</div>
+          <div class="modal-item-sku"  id="modalItemSku">—</div>
+        </div>
+        <div class="modal-fields">
+          <div class="modal-field">
+            <label class="modal-label">Current Stock</label>
+            <input type="number" class="modal-input" id="modalStock" min="0" step="1" placeholder="0">
+            <div class="modal-hint">Total units currently on hand.</div>
+          </div>
+          <div class="modal-field">
+            <label class="modal-label">Reorder Level</label>
+            <input type="number" class="modal-input" id="modalReorder" min="0" step="1" placeholder="0">
+            <div class="modal-hint">Alert threshold — items at or below this level are flagged as Low Stock.</div>
+          </div>
+        </div>
+        <div class="modal-btns">
+          <button class="btn-modal-cancel" onclick="closeEditModal()">Cancel</button>
+          <button class="btn-modal-save" id="saveBtn" onclick="saveItem()">
+            <span id="saveBtnText" style="display:inline-flex;align-items:center;gap:7px;">
+              <i class="fi fi-rr-disk"></i> Save
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div class="main">
+
+        <!-- ── Dark Header ──────────────────────────── -->
+        <div class="main-header">
+          <div class="main-header-top">
+            <div>
+              <div class="main-header-title">Inventory</div>
+              <div class="main-header-sub">Stock levels for all catalog items.</div>
+            </div>
+            <div class="main-header-action-btns">
+              <button class="btn main-header btn-outline" onclick="loadInventory()">
+                <i class="fi fi-rr-rotate-right"></i> Refresh
+              </button>
+            </div>
+          </div>
+          <nav class="header-nav">
+            <button class="nav-pill" onclick="navigate('dashboard')">
+              <i class="fi fi-rr-chart-pie-alt"></i> Dashboard
+            </button>
+            <button class="nav-pill" onclick="navigate('orders')">
+              <i class="fi fi-rr-order-history"></i> Purchase Orders
+            </button>
+            <button class="nav-pill" onclick="navigate('form')">
+              <i class="fi fi-rr-add-document"></i> Create PO
+            </button>
+            <button class="nav-pill" onclick="navigate('edit')">
+              <i class="fi fi-rr-pen-square"></i> Edit PO
+            </button>
+            <button class="nav-pill" onclick="navigate('receives')">
+              <i class="fi fi-rr-box-open"></i> Receives
+            </button>
+            <button class="nav-pill active">
+              <i class="fi fi-rr-boxes"></i> Inventory
+            </button>
+          </nav>
+        </div>
+
+        <!-- ── Summary Cards ────────────────────────── -->
+        <div class="cards-row">
+          <div class="card">
+            <div class="card-icon"><i class="fi fi-rr-boxes"></i></div>
+            <div class="card-label">Total Items</div>
+            <div class="card-value" id="cTotal">—</div>
+          </div>
+          <div class="card">
+            <div class="card-icon"><i class="fi fi-rr-check-circle"></i></div>
+            <div class="card-label">In Stock</div>
+            <div class="card-value green" id="cInStock">—</div>
+          </div>
+          <div class="card">
+            <div class="card-icon"><i class="fi fi-rr-exclamation"></i></div>
+            <div class="card-label">Low Stock</div>
+            <div class="card-value amber" id="cLowStock">—</div>
+          </div>
+          <div class="card">
+            <div class="card-icon"><i class="fi fi-rr-cross-circle"></i></div>
+            <div class="card-label">Out of Stock</div>
+            <div class="card-value red" id="cOutStock">—</div>
+          </div>
+        </div>
+
+        <!-- ── Table ─────────────────────────────────── -->
+        <div class="table-area">
+          <div class="table-toolbar">
+            <div class="search-wrap">
+              <i class="fi fi-rr-search"></i>
+              <input type="text" id="searchInput" placeholder="Search by item name or SKU…"
+                     oninput="filterTable()" autocomplete="nope">
+            </div>
+            <select class="filter-select" id="statusFilter" onchange="filterTable()">
+              <option value="">All Status</option>
+              <option value="in-stock">In Stock</option>
+              <option value="low-stock">Low Stock</option>
+              <option value="out-stock">Out of Stock</option>
+            </select>
+            <span class="toolbar-count" id="toolbarCount"></span>
+          </div>
+
+          <div class="table-wrap" id="tableWrap">
+            <div class="table-loading">
+              <span class="spinner"></span> Loading inventory…
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <script>
+      // Force remove Google Apps Script banner
+      (function() {
+        function removeBanner() {
+          const selectors = ['body > div:first-child', 'body > iframe:first-child', '#docs-banner-container', '.docs-gm', '.apps-script-notice', 'div[role="banner"]', 'div[id*="banner"]', 'div[class*="banner"]'];
+          selectors.forEach(sel => {
+            document.querySelectorAll(sel).forEach(el => {
+              if (el && el.textContent.includes('Google Apps Script')) el.remove();
+            });
+          });
+          if (document.body.firstElementChild && document.body.firstElementChild.textContent.includes('Google Apps Script')) document.body.firstElementChild.remove();
+        }
+        removeBanner();
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', removeBanner);
+        window.addEventListener('load', removeBanner);
+        setTimeout(removeBanner, 100);
+        setTimeout(removeBanner, 500);
+      })();
+
+      const APP_URL = '<?= scriptUrl ?>';
+      const notifEl = document.getElementById('notification');
+
+      var allItems = [];   // full dataset from backend
+      var editItem  = null; // item currently being edited
+
+      // ── Navigation ───────────────────────────────────────────────
+      function navigate(page) {
+        const url = APP_URL + '?page=' + page;
+        window.top.location.href = url;
+      }
+
+      // ── Notification ─────────────────────────────────────────────
+      function showNotif(msg, type) {
+        notifEl.textContent = msg;
+        notifEl.className = 'notification ' + type;
+        notifEl.style.display = 'block';
+        setTimeout(() => { notifEl.style.display = 'none'; }, 4000);
+      }
+
+      // ── Escape HTML ──────────────────────────────────────────────
+      function esc(str) {
+        return String(str || '')
+          .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+          .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      }
+
+      // ── Stock status helper ──────────────────────────────────────
+      function stockStatus(item) {
+        if (item.currentStock === 0) return 'out-stock';
+        if (item.reorderLevel > 0 && item.currentStock <= item.reorderLevel) return 'low-stock';
+        return 'in-stock';
+      }
+
+      function stockLabel(status) {
+        if (status === 'out-stock')  return 'Out of Stock';
+        if (status === 'low-stock')  return 'Low Stock';
+        return 'In Stock';
+      }
+
+      // ── Update summary cards ─────────────────────────────────────
+      function updateCards(items) {
+        var total    = items.length;
+        var inStock  = items.filter(function(i) { return stockStatus(i) === 'in-stock'; }).length;
+        var lowStock = items.filter(function(i) { return stockStatus(i) === 'low-stock'; }).length;
+        var outStock = items.filter(function(i) { return stockStatus(i) === 'out-stock'; }).length;
+        document.getElementById('cTotal').textContent    = total;
+        document.getElementById('cInStock').textContent  = inStock;
+        document.getElementById('cLowStock').textContent = lowStock;
+        document.getElementById('cOutStock').textContent = outStock;
+      }
+
+      // ── Render table ─────────────────────────────────────────────
+      function renderTable(items) {
+        var wrap = document.getElementById('tableWrap');
+        document.getElementById('toolbarCount').textContent =
+          items.length === allItems.length
+            ? items.length + ' items'
+            : items.length + ' of ' + allItems.length + ' items';
+
+        if (items.length === 0) {
+          wrap.innerHTML =
+            '<div class="table-empty">' +
+              '<i class="fi fi-rr-boxes"></i>' +
+              '<p>No inventory items found.</p>' +
+            '</div>';
+          return;
+        }
+
+        var rows = items.map(function(item, idx) {
+          var status = stockStatus(item);
+          var label  = stockLabel(status);
+          return '<tr>' +
+            '<td><div class="td-name">' + esc(item.itemName) + '</div>' +
+                 '<div class="td-sku">'  + esc(item.sku || '—') + '</div></td>' +
+            '<td><span class="td-stock ' + status + '">' + item.currentStock + '</span></td>' +
+            '<td>' + (item.reorderLevel > 0 ? item.reorderLevel : '<span style="color:var(--muted)">—</span>') + '</td>' +
+            '<td><span class="stock-badge ' + status + '">' + label + '</span></td>' +
+            '<td class="td-date">' + esc(item.lastUpdated || '—') + '</td>' +
+            '<td><button class="btn-edit" onclick="openEditModal(' + idx + ')">' +
+              '<i class="fi fi-rr-pencil"></i> Adjust' +
+            '</button></td>' +
+          '</tr>';
+        }).join('');
+
+        wrap.innerHTML =
+          '<table>' +
+            '<thead><tr>' +
+              '<th>Item</th>' +
+              '<th>Current Stock</th>' +
+              '<th>Reorder Level</th>' +
+              '<th>Status</th>' +
+              '<th>Last Updated</th>' +
+              '<th>Actions</th>' +
+            '</tr></thead>' +
+            '<tbody>' + rows + '</tbody>' +
+          '</table>';
+
+        // Store filtered list for index lookup in edit modal
+        document.getElementById('tableWrap')._filteredItems = items;
+      }
+
+      // ── Filter ───────────────────────────────────────────────────
+      function filterTable() {
+        var q      = document.getElementById('searchInput').value.toLowerCase().trim();
+        var status = document.getElementById('statusFilter').value;
+
+        var filtered = allItems.filter(function(item) {
+          var matchText = !q ||
+            (item.itemName || '').toLowerCase().includes(q) ||
+            (item.sku || '').toLowerCase().includes(q);
+          var matchStatus = !status || stockStatus(item) === status;
+          return matchText && matchStatus;
+        });
+
+        renderTable(filtered);
+      }
+
+      // ── Load inventory from backend ──────────────────────────────
+      function loadInventory() {
+        document.getElementById('tableWrap').innerHTML =
+          '<div class="table-loading"><span class="spinner"></span> Loading inventory…</div>';
+
+        if (typeof google !== 'undefined') {
+          google.script.run
+            .withSuccessHandler(function(data) {
+              allItems = data || [];
+              updateCards(allItems);
+              filterTable();
+            })
+            .withFailureHandler(function(err) {
+              document.getElementById('tableWrap').innerHTML =
+                '<div class="table-empty"><i class="fi fi-rr-exclamation"></i><p>Failed to load inventory.</p></div>';
+              showNotif('Load failed: ' + err.message, 'error');
+            })
+            .getInventory();
+        } else {
+          // Mock data for local testing
+          allItems = [
+            { itemName: 'Adidas Samba Jane', sku: 'ADS-SJ-42',  currentStock: 24, reorderLevel: 10, lastUpdated: '02/20/2026 09:15' },
+            { itemName: 'Nike Air Force 1',  sku: 'NKE-AF1-9',  currentStock: 8,  reorderLevel: 10, lastUpdated: '02/19/2026 14:32' },
+            { itemName: 'Adidas Stan Smith',  sku: 'ADS-SS-9',   currentStock: 0,  reorderLevel: 5,  lastUpdated: '02/18/2026 11:00' },
+            { itemName: 'Nike Air Max 90',    sku: 'NKE-AM90-10',currentStock: 15, reorderLevel: 8,  lastUpdated: '02/17/2026 08:45' },
+            { itemName: 'Puma Suede Classic', sku: 'PMA-SC-8',   currentStock: 3,  reorderLevel: 5,  lastUpdated: '02/16/2026 16:20' },
+            { itemName: 'New Balance 574',    sku: 'NB-574-9',   currentStock: 0,  reorderLevel: 0,  lastUpdated: '02/15/2026 10:00' },
+            { itemName: 'Vans Old Skool',     sku: 'VNS-OS-10',  currentStock: 42, reorderLevel: 15, lastUpdated: '02/14/2026 09:30' },
+            { itemName: 'Converse Chuck 70',  sku: 'CNV-C70-8',  currentStock: 7,  reorderLevel: 10, lastUpdated: '02/13/2026 13:10' }
+          ];
+          updateCards(allItems);
+          filterTable();
+        }
+      }
+
+      // ── Edit Modal ───────────────────────────────────────────────
+      function openEditModal(idx) {
+        var items = document.getElementById('tableWrap')._filteredItems || allItems;
+        editItem = items[idx];
+        if (!editItem) return;
+
+        document.getElementById('modalItemName').textContent = editItem.itemName;
+        document.getElementById('modalItemSku').textContent  = editItem.sku || '—';
+        document.getElementById('modalStock').value   = editItem.currentStock;
+        document.getElementById('modalReorder').value = editItem.reorderLevel;
+        document.getElementById('editModal').classList.add('active');
+        document.getElementById('modalStock').focus();
+      }
+
+      function closeEditModal() {
+        document.getElementById('editModal').classList.remove('active');
+        editItem = null;
+      }
+
+      // Close modal on overlay click
+      document.getElementById('editModal').addEventListener('click', function(e) {
+        if (e.target === this) closeEditModal();
+      });
+
+      function saveItem() {
+        if (!editItem) return;
+
+        var stockVal   = parseInt(document.getElementById('modalStock').value);
+        var reorderVal = parseInt(document.getElementById('modalReorder').value);
+
+        if (isNaN(stockVal) || stockVal < 0) {
+          document.getElementById('modalStock').focus();
+          return;
+        }
+        if (isNaN(reorderVal) || reorderVal < 0) reorderVal = 0;
+
+        var saveBtn     = document.getElementById('saveBtn');
+        var saveBtnText = document.getElementById('saveBtnText');
+        saveBtn.disabled = true;
+        saveBtnText.innerHTML = '<span class="spinner-btn"></span> Saving…';
+
+        var payload = {
+          itemName:     editItem.itemName,
+          sku:          editItem.sku,
+          currentStock: stockVal,
+          reorderLevel: reorderVal
+        };
+
+        function onSuccess(res) {
+          saveBtn.disabled = false;
+          saveBtnText.innerHTML = '<i class="fi fi-rr-disk"></i> Save';
+          if (res === 'Success') {
+            // Update local data
+            var target = allItems.find(function(i) {
+              return i.itemName === editItem.itemName && i.sku === editItem.sku;
+            });
+            if (target) {
+              target.currentStock = stockVal;
+              target.reorderLevel = reorderVal;
+              var now = new Date();
+              target.lastUpdated = now.toLocaleDateString('en-US', { month:'2-digit', day:'2-digit', year:'numeric' }) +
+                ' ' + now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
+            }
+            updateCards(allItems);
+            filterTable();
+            closeEditModal();
+            showNotif('✓ Stock updated for ' + editItem.itemName, 'success');
+          } else {
+            showNotif(res || 'Save failed.', 'error');
+          }
+        }
+
+        if (typeof google !== 'undefined') {
+          google.script.run
+            .withSuccessHandler(onSuccess)
+            .withFailureHandler(function(err) {
+              saveBtn.disabled = false;
+              saveBtnText.innerHTML = '<i class="fi fi-rr-disk"></i> Save';
+              showNotif('Error: ' + err.message, 'error');
+            })
+            .updateInventoryItem(payload);
+        } else {
+          setTimeout(function() { onSuccess('Success'); }, 400);
+        }
+      }
+
+      // Allow Enter key in modal inputs to save
+      document.getElementById('editModal').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !document.getElementById('saveBtn').disabled) saveItem();
+        if (e.key === 'Escape') closeEditModal();
+      });
+
+      // ── Init ─────────────────────────────────────────────────────
+      window.addEventListener('load', loadInventory);
+    </script>
+  </body>
+</html>

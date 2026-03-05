@@ -1,0 +1,2602 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+    <style>
+      i { padding-top: .24rem; }
+
+      :root {
+        --main-bg: oklch(98.5% 0.001 106.423);
+        --btn-bg: #000;
+        --btn-text: #fff;
+        --muted: oklch(60% 0 0);
+        --border: oklch(92% 0 0);
+        --text: oklch(20% 0 0);
+        --success-bg: oklch(95% 0.15 145);
+        --success-text: oklch(35% 0.15 145);
+        --error-bg: oklch(95% 0.15 25);
+        --error-text: oklch(55% 0.2 25);
+        --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.04), 0 4px 12px rgb(0 0 0 / 0.03);
+        --draft-bg:    oklch(97% 0.05 75);
+        --draft-text:  oklch(45% 0.15 60);
+        --issued-bg:   oklch(95% 0.08 240);
+        --issued-text: oklch(40% 0.18 240);
+        --partial-bg:  oklch(95% 0.06 310);
+        --partial-text:oklch(40% 0.18 295);
+        --closed-bg:   oklch(95% 0.08 145);
+        --closed-text: oklch(35% 0.15 145);
+      }
+
+      * {
+        font-family: 'Inter', sans-serif;
+        margin: 0; padding: 0;
+        box-sizing: border-box;
+        transition: all 0.15s ease;
+      }
+
+      html, body {
+        height: 100%;
+        background-color: var(--main-bg);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      /* ── Sticky Page Header ─────────────────────────────── */
+      .page-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: oklch(11% 0 0);
+        border-bottom: 1px solid oklch(20% 0 0);
+        padding: 1.25rem 2.5rem 0;
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+      }
+      .page-header-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .page-header-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: oklch(94% 0 0);
+      }
+      .page-header-sub {
+        font-size: 0.8rem;
+        color: oklch(52% 0 0);
+        margin-top: 2px;
+      }
+
+      .page-header-actions {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-shrink: 0;
+      }
+
+      /* ── Header nav pills (dark bg) ───────────────────── */
+      .header-nav {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-top: 1rem;
+      }
+      .nav-pill {
+        padding: 8px 18px;
+        border: none;
+        background: transparent;
+        color: oklch(52% 0 0);
+        font-family: 'Inter', sans-serif;
+        font-size: 0.82rem;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 6px 6px 0 0;
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        white-space: nowrap;
+      }
+      .nav-pill:hover { color: oklch(94% 0 0); background: oklch(18% 0 0); }
+      .nav-pill.active { color: oklch(94% 0 0); background: transparent; }
+      .nav-pill.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0; right: 0;
+        height: 2px;
+        background: oklch(94% 0 0);
+        border-radius: 2px 2px 0 0;
+      }
+      .nav-pill i { font-size: 0.85rem; }
+
+      /* ── Header-context buttons ────────────────────────── */
+      .page-header .btn-primary {
+        background: oklch(97% 0 0); color: oklch(10% 0 0); border-color: oklch(97% 0 0);
+      }
+      .page-header .btn-primary:hover { background: oklch(86% 0 0); border-color: oklch(86% 0 0); }
+      .page-header .btn-outline {
+        background: transparent; border-color: oklch(28% 0 0); color: oklch(72% 0 0);
+      }
+      .page-header .btn-outline:hover {
+        background: oklch(18% 0 0); border-color: oklch(42% 0 0); color: oklch(90% 0 0);
+      }
+
+      /* ── Two-column body layout ─────────────────────────── */
+      .page-body {
+        flex: 1;
+        overflow: hidden;
+        display: flex;
+        gap: 1.25rem;
+        padding: 1.25rem 2.5rem 1.25rem;
+        min-height: 0;
+      }
+
+      /* ── PO Sidebar ─────────────────────────────────────── */
+      .po-sidebar {
+        width: 310px;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        min-height: 0;
+        overflow: hidden;
+      }
+
+      .sidebar-search {
+        flex-shrink: 0;
+      }
+
+      .sidebar-search-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      .sidebar-search-wrap i {
+        position: absolute;
+        left: 12px;
+        color: var(--muted);
+        font-size: 0.9rem;
+        pointer-events: none;
+      }
+
+      #sidebarSearch {
+        width: 100%;
+        padding: 10px 12px 10px 38px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: var(--text);
+        outline: none;
+        background: #fff;
+      }
+      #sidebarSearch:focus { border-color: #000; outline: none; }
+
+      .sidebar-filter {
+        width: 100%; padding: 9px 32px 9px 12px;
+        border: 1px solid var(--border); border-radius: 8px;
+        font-size: 0.8rem; font-weight: 600;
+        color: var(--text); background: #fff; outline: none;
+        cursor: pointer; appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat; background-position: right 10px center;
+        flex-shrink: 0;
+      }
+      .sidebar-filter:focus { border-color: #000; outline: none; }
+
+      .sidebar-list {
+        flex: 1;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        scrollbar-width: none;
+      }
+      .sidebar-list::-webkit-scrollbar { width: 0; }
+
+      .sidebar-po-item {
+        background: #fff;
+        border: 1.5px solid var(--border);
+        border-radius: 10px;
+        padding: 0.9rem 1rem;
+        cursor: pointer;
+        flex-shrink: 0;
+        box-shadow: var(--shadow);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+      }
+      .sidebar-po-left { flex: 1; min-width: 0; }
+      .sidebar-po-item:hover { border-color: oklch(70% 0 0); box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+      .sidebar-po-item.active { border-color: oklch(55% 0 0); background: oklch(98.5% 0 0); }
+      .sidebar-po-num {
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.875rem;
+        font-weight: 700;
+        color: #000;
+        letter-spacing: 0.02em;
+      }
+      .sidebar-po-vendor {
+        font-size: 0.78rem;
+        color: var(--muted);
+        margin-top: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .sidebar-po-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 3px;
+      }
+      .sidebar-po-date { font-size: 0.67rem; color: var(--muted); }
+      .sidebar-badge {
+        display: inline-flex; align-items: center;
+        padding: 4px 10px; border-radius: 20px;
+        font-size: 0.72rem; font-weight: 700;
+        text-transform: uppercase; letter-spacing: 0.3px;
+        flex-shrink: 0;
+      }
+      .sidebar-badge.Draft   { background: var(--draft-bg);   color: var(--draft-text); }
+      .sidebar-badge.Issued  { background: var(--issued-bg);  color: var(--issued-text); }
+      .sidebar-badge.Partial { background: var(--partial-bg); color: var(--partial-text); }
+      .sidebar-badge.Closed  { background: var(--closed-bg);  color: var(--closed-text); }
+      .sidebar-empty, .sidebar-loading {
+        padding: 2.5rem 1rem;
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.82rem;
+        font-weight: 500;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+      }
+      .sidebar-loading .spinner {
+        border-color: var(--border);
+        border-top-color: var(--muted);
+        width: 18px; height: 18px;
+        display: block; margin: 0 auto 0.5rem;
+      }
+
+      /* ── Main content pane ──────────────────────────────── */
+      .po-main {
+        flex: 1;
+        overflow-y: auto;
+        min-width: 0;
+        min-height: 0;
+        background: var(--main-bg);
+        scrollbar-width: none;
+        display: flex;
+        flex-direction: column;
+      }
+      .po-main::-webkit-scrollbar { width: 0; }
+
+      /* ── Section Nav ────────────────────────────────────── */
+      .section-nav {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: #fff;
+        border-bottom: 1px solid var(--border);
+        padding: 0.375rem 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        flex-shrink: 0;
+        flex-wrap: wrap;
+      }
+      .section-nav-label {
+        font-size: 0.67rem;
+        font-weight: 700;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        padding-right: 0.75rem;
+        margin-right: 0.25rem;
+        border-right: 1px solid var(--border);
+      }
+      .section-nav-link {
+        padding: 6px 14px;
+        font-size: 0.77rem;
+        font-weight: 600;
+        color: var(--muted);
+        cursor: pointer;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap;
+        user-select: none;
+        transition: color 0.15s, background 0.15s;
+      }
+      .section-nav-link:hover { color: var(--text); background: oklch(96% 0 0); }
+      .section-nav-link i { font-size: 0.74rem; }
+
+      .page-body-inner {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+      }
+
+      /* ── Form Sections ──────────────────────────────────── */
+      .form-section {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1.5rem 1.75rem;
+        margin-bottom: 1rem;
+        box-shadow: var(--shadow);
+        animation: fadeInUp 0.4s ease-out backwards;
+        flex-shrink: 0;
+      }
+
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes shake {
+        0%,100% { transform: translateX(0); }
+        25%     { transform: translateX(-5px); }
+        75%     { transform: translateX(5px); }
+      }
+
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      .section-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--muted);
+        padding-bottom: 0.75rem;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid var(--border);
+      }
+
+      /* ── Grid Layouts ───────────────────────────────────── */
+      .section-grid-3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1rem;
+      }
+
+      .section-grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      /* ── Search Section ─────────────────────────────────── */
+      .search-row {
+        display: flex;
+        gap: 0.75rem;
+        align-items: stretch;
+      }
+
+      .search-input-wrapper {
+        flex: 1;
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      .search-input-wrapper i {
+        position: absolute;
+        left: 14px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      #searchInput {
+        width: 100%;
+        padding: 10px 14px 10px 40px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--text);
+        outline: none;
+        background: #fff;
+      }
+      #searchInput:focus { border-color: #000; box-shadow: 0 0 0 1px #000; }
+      #searchInput.ac-open { border-radius: 6px 6px 0 0; }
+
+      /* ── Autocomplete Dropdown ─────────────────────────── */
+      .autocomplete-list {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-top: none;
+        border-radius: 0 0 8px 8px;
+        box-shadow: 0 8px 24px oklch(0% 0 0 / .10);
+        max-height: 260px;
+        overflow-y: auto;
+        display: none;
+      }
+      .autocomplete-list.visible { display: block; }
+      .autocomplete-item {
+        padding: 10px 14px 10px 40px;
+        cursor: pointer;
+        font-size: 13px;
+        font-family: 'Inter', sans-serif;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border-bottom: 1px solid oklch(95% 0 0);
+      }
+      .autocomplete-item:last-child { border-bottom: none; }
+      .autocomplete-item:hover,
+      .autocomplete-item.active {
+        background: oklch(97% 0 0);
+      }
+      .autocomplete-item .ac-po {
+        font-weight: 600;
+        color: var(--text);
+        min-width: 80px;
+      }
+      .autocomplete-item .ac-vendor {
+        color: var(--muted);
+        font-weight: 500;
+      }
+      .autocomplete-item .ac-status {
+        margin-left: auto;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 2px 8px;
+        border-radius: 4px;
+      }
+      .autocomplete-item .ac-status.Draft   { background: var(--draft-bg);   color: var(--draft-text); }
+      .autocomplete-item .ac-status.Issued  { background: var(--issued-bg);  color: var(--issued-text); }
+      .autocomplete-item .ac-status.Partial { background: var(--partial-bg); color: var(--partial-text); }
+      .autocomplete-item .ac-status.Closed  { background: var(--closed-bg);  color: var(--closed-text); }
+      .autocomplete-list .ac-empty {
+        padding: 14px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 13px;
+        font-family: 'Inter', sans-serif;
+      }
+
+      .btn-search {
+        padding: 10px 20px;
+        background: var(--btn-bg);
+        color: var(--btn-text);
+        border: none;
+        border-radius: 6px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 40px;
+        white-space: nowrap;
+      }
+      .btn-search:hover { background: #333; }
+      .btn-search:disabled { opacity: 0.7; cursor: not-allowed; }
+      #searchBtnText { display: inline-flex; align-items: center; gap: 8px; }
+
+      .po-badge {
+        display: none;
+        margin-top: 0.65rem;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+
+      /* ── Inline warnings ──────────────────────────────── */
+      .inline-warning {
+        display: none;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 0.7rem 1rem;
+        border-radius: 8px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        line-height: 1.5;
+      }
+      .inline-warning.visible { display: flex; }
+      .inline-warning i { font-size: 0.9rem; flex-shrink: 0; margin-top: 0; padding-top: 0; line-height: 1.5; }
+      .inline-warning.warn-amber {
+        background: oklch(97% 0.05 75);
+        border: 1px solid oklch(80% 0.12 75);
+        color: oklch(40% 0.15 60);
+      }
+      .inline-warning.warn-red {
+        background: oklch(95% 0.06 25);
+        border: 1px solid oklch(78% 0.12 25);
+        color: oklch(42% 0.15 25);
+      }
+      .po-badge.success {
+        background: var(--success-bg);
+        color: var(--success-text);
+        border: 1px solid oklch(80% 0.1 145);
+      }
+      .po-badge.error {
+        background: var(--error-bg);
+        color: var(--error-text);
+        border: 1px solid oklch(80% 0.1 25);
+      }
+
+      /* ── Form Fields ────────────────────────────────────── */
+      .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+      }
+
+      label {
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: var(--text);
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .field-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      .field-wrapper i {
+        position: absolute;
+        left: 14px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      input, select {
+        width: 100%;
+        padding: 10px 14px 10px 40px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--text);
+        outline: none;
+        background: #fff;
+      }
+
+      input:focus, select:focus {
+        border-color: #000;
+        box-shadow: 0 0 0 1px #000;
+      }
+      input[readonly] {
+        background-color: var(--main-bg);
+        color: var(--muted);
+        cursor: not-allowed;
+      }
+      #poNumber {
+        color: var(--text);
+        font-weight: 600;
+        letter-spacing: 0.04em;
+      }
+      input.error, select.error {
+        border-color: var(--error-text);
+        animation: shake 0.4s;
+      }
+
+      select {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 14px center;
+      }
+
+      /* ── Items Section ─────────────────────────────────── */
+      .items-section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 0.85rem;
+        margin-bottom: 1.25rem;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .items-section-header .section-title {
+        border: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .btn-add-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        border: 1.5px solid var(--border);
+        border-radius: 6px;
+        background: #fff;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--text);
+        cursor: pointer;
+      }
+      .btn-add-item:hover {
+        background: oklch(97% 0 0);
+        border-color: oklch(70% 0 0);
+      }
+
+      .items-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .item-row {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1rem 1rem 0.75rem;
+        background: oklch(99.5% 0 0);
+        animation: fadeInUp 0.2s ease-out;
+      }
+
+      .item-row-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.75rem;
+      }
+
+      .item-row-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+        color: var(--muted);
+      }
+
+      .btn-remove-item {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        border: 1px solid var(--border);
+        background: #fff;
+        cursor: pointer;
+        color: var(--muted);
+        font-size: 0.75rem;
+        flex-shrink: 0;
+      }
+      .btn-remove-item:hover {
+        background: var(--error-bg);
+        border-color: oklch(80% 0.1 25);
+        color: var(--error-text);
+      }
+      .btn-remove-item:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+      }
+
+      .item-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 0.75rem;
+        align-items: start;
+      }
+      .item-grid .ig-span2 { grid-column: span 2; }
+      .item-grid .ig-span4 { grid-column: span 4; }
+
+      .item-input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+      }
+
+      .item-label {
+        font-size: 0.68rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+        color: var(--text);
+      }
+
+      .item-label-row {
+        display: flex;
+        align-items: baseline;
+        gap: 0.25rem;
+      }
+
+      .item-field-error {
+        font-size: 0.68rem;
+        color: var(--error-text);
+        font-weight: 500;
+        display: none;
+      }
+      .item-field-error.visible { display: inline; }
+      .item-field-error.visible::before { content: '- '; }
+
+      /* ── Catalog button in item rows ─────────────────────── */
+      .btn-catalog {
+        font-size: 0.62rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        color: var(--muted);
+        background: none;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 2px 7px;
+        cursor: pointer;
+        margin-left: auto;
+      }
+      .btn-catalog:hover {
+        background: oklch(97% 0 0);
+        border-color: oklch(70% 0 0);
+        color: var(--text);
+      }
+
+      .catalog-item {
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .catalog-item:hover {
+        background: oklch(97% 0 0);
+        border-color: oklch(70% 0 0);
+      }
+      .catalog-item-name {
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: var(--text);
+      }
+      .catalog-item-meta {
+        font-size: 0.75rem;
+        color: var(--muted);
+      }
+
+      /* ── Grand Total ────────────────────────────────────── */
+      .grand-total-row {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 1rem;
+        padding: 1rem 0.25rem 0.25rem;
+        border-top: 1px solid var(--border);
+        margin-top: 0.75rem;
+      }
+
+      .grand-total-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+        color: var(--muted);
+      }
+
+      .grand-total-value {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: var(--text);
+        letter-spacing: 0.02em;
+      }
+
+      /* ── Edit Form (hidden until PO found) ──────────────── */
+      #editForm { display: none; flex-shrink: 0; margin-top: 1.25rem; }
+
+      /* ── Empty State ────────────────────────────────────── */
+      .empty-state {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 0.75rem;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 4rem 2rem;
+        color: var(--muted);
+        min-height: 200px;
+      }
+      .empty-state i { font-size: 2.5rem; opacity: 0.2; }
+      .empty-state p { font-size: 0.88rem; font-weight: 500; }
+
+      /* ── Buttons ────────────────────────────────────────── */
+      .btn {
+        padding: 9px 18px;
+        border-radius: 6px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: 1px solid transparent;
+        min-height: 38px;
+        white-space: nowrap;
+      }
+
+      .btn-primary { background: var(--btn-bg); color: var(--btn-text); }
+      .btn-primary:hover { background: #333; }
+      .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
+
+      .btn-outline { background: #fff; border-color: var(--border); color: var(--text); }
+      .btn-outline:hover { background: oklch(97% 0 0); border-color: oklch(70% 0 0); }
+
+      .btn-danger {
+        background: var(--error-bg);
+        color: var(--error-text);
+        border-color: oklch(80% 0.1 25);
+      }
+      .btn-danger:hover { background: oklch(90% 0.15 25); }
+
+      .spinner {
+        width: 14px; height: 14px;
+        border: 2px solid rgba(255,255,255,0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        flex-shrink: 0;
+        display: inline-block;
+      }
+      .spinner.dark {
+        border-color: rgba(0,0,0,0.15);
+        border-top-color: var(--error-text);
+      }
+
+      /* ── Delete Modal ───────────────────────────────────── */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.55);
+        z-index: 9998;
+        align-items: center;
+        justify-content: center;
+      }
+      .modal-overlay.active { display: flex; }
+
+      .modal {
+        background: #fff;
+        border-radius: 12px;
+        padding: 2rem 2.5rem;
+        max-width: 420px;
+        width: 90%;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        animation: fadeInUp 0.3s ease-out;
+        text-align: center;
+      }
+      .modal-icon { font-size: 2.5rem; color: var(--error-text); margin-bottom: 1rem; }
+      .modal-title { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; }
+      .modal-text { color: var(--muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.5rem; }
+      .modal-btns { display: flex; gap: 1rem; justify-content: center; }
+      .modal-btn { padding: 12px 24px; border-radius: 6px; font-weight: 600; font-size: 0.875rem; cursor: pointer; border: none; }
+      .modal-btn-cancel { background: #fff; border: 2px solid var(--border); color: var(--text); }
+      .modal-btn-cancel:hover { background: oklch(98% 0 0); }
+      .modal-btn-confirm { background: var(--error-text); color: #fff; }
+      .modal-btn-confirm:hover { background: oklch(45% 0.2 25); }
+
+      /* ── Notification ───────────────────────────────────── */
+      .notification {
+        position: fixed; bottom: 24px; right: 24px;
+        padding: 8px 16px; border-radius: 10px;
+        font-weight: 600;
+        z-index: 9999; display: none;
+        animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      }
+      @keyframes slideIn {
+        from { transform: translateX(400px); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      .notification.success { background: var(--success-bg); color: var(--success-text); border: 2px solid oklch(75% 0.15 145); }
+      .notification.error   { background: var(--error-bg);   color: var(--error-text);   border: 2px solid oklch(75% 0.15 25);  }
+
+      /* ── Responsive ─────────────────────────────────────── */
+      @media (max-width: 768px) {
+        .page-header {
+          padding: 1rem 1.25rem 0;
+        }
+        .page-header-top {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 1rem;
+        }
+        .page-header-actions { width: 100%; justify-content: flex-end; flex-wrap: wrap; }
+        .header-nav { overflow-x: auto; }
+        .page-body { padding: 0.75rem; }
+        .page-body-inner { padding: 0.75rem 0 2rem; }
+        .form-section { padding: 1.25rem 1rem; }
+        .section-grid-3 { grid-template-columns: 1fr; }
+        .section-grid-2 { grid-template-columns: 1fr; }
+        .search-row { flex-direction: column; }
+        .item-grid { grid-template-columns: 1fr 1fr; }
+        .item-grid .ig-span2 { grid-column: span 2; }
+        .item-grid .ig-span4 { grid-column: span 2; }
+      }
+
+
+      /* ── Comments Section ──────────────────────────────────── */
+      .comment-item {
+        padding: 12px 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .comment-item:last-child { border-bottom: none; }
+      .comment-meta {
+        font-size: 0.75rem;
+        color: var(--muted);
+        margin-bottom: 4px;
+      }
+      .comment-text { font-size: 0.85rem; line-height: 1.5; }
+      .comment-input-row {
+        display: flex;
+        gap: 10px;
+      }
+      .comment-input-row input {
+        flex: 1;
+        padding: 10px 14px;
+        border: 1.5px solid var(--border);
+        border-radius: 8px;
+        font-size: 0.85rem;
+        background: var(--main-bg);
+      }
+      .comment-input-row input:focus {
+        outline: none;
+        border-color: var(--btn-bg);
+      }
+
+      /* ── Warehouse Catalog Modal ───────────────────────────── */
+      .warehouse-catalog-item {
+        padding: 10px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        border: 1px solid var(--border);
+      }
+      .warehouse-catalog-item:hover { background: oklch(97% 0 0); }
+      .warehouse-catalog-name { font-weight: 600; font-size: 0.9rem; }
+      .warehouse-catalog-detail { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+
+      /* ── Responsive ─────────────────────────────────────── (mobile additions) */
+      @media (max-width: 768px) {
+        .po-sidebar { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="notification" id="notification"></div>
+
+    <!-- Delete Modal -->
+    <div class="modal-overlay" id="deleteModal">
+      <div class="modal">
+        <div class="modal-icon"><i class="fi fi-rr-trash"></i></div>
+        <div class="modal-title">Delete Purchase Order?</div>
+        <p class="modal-text" id="deleteModalText">
+          This action cannot be undone. The PO and all its line items will be permanently removed.
+        </p>
+        <div class="modal-btns">
+          <button class="modal-btn modal-btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+          <button class="modal-btn modal-btn-confirm" id="confirmDeleteBtn" onclick="confirmDelete()">
+            <span id="confirmDeleteText">Delete</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Catalog Modal -->
+    <div class="modal-overlay" id="catalogModal">
+      <div class="modal" style="max-width:520px;text-align:left;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+          <div class="modal-title" style="margin:0;">Item Catalog</div>
+          <button type="button" class="btn-remove-item" onclick="closeCatalogModal()" style="width:30px;height:30px;font-size:0.85rem;">
+            <i class="fi fi-rr-cross-small"></i>
+          </button>
+        </div>
+        <input type="text" id="catalogSearch" placeholder="Search by name or SKU…"
+               oninput="filterCatalog(this.value)"
+               style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:6px;font-size:0.875rem;font-weight:500;outline:none;margin-bottom:0.75rem;">
+        <div id="catalogList" style="max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;">
+          <div style="text-align:center;color:var(--muted);padding:2rem 0;font-size:0.85rem;">Loading catalog…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vendor Catalog Modal -->
+    <div class="modal-overlay" id="vendorCatalogModal">
+      <div class="modal" style="text-align:left;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+          <div class="modal-title">Vendor Catalog</div>
+          <button type="button" class="btn-close-modal" onclick="closeVendorCatalog()">
+            <i class="fi fi-rr-cross-small"></i>
+          </button>
+        </div>
+        <input type="text" id="vendorCatalogSearch" placeholder="Search by vendor name…"
+               oninput="filterVendorCatalog(this.value)"
+               style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:6px;font-size:0.875rem;font-weight:500;outline:none;margin-bottom:0.75rem;">
+        <div id="vendorCatalogList" style="max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;">
+          <div style="text-align:center;color:var(--muted);padding:2rem 0;font-size:0.85rem;">Loading vendors…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Warehouse Catalog Modal -->
+    <div class="modal-overlay" id="warehouseCatalogModal">
+      <div class="modal" style="text-align:left;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+          <div class="modal-title">Warehouse Catalog</div>
+          <button type="button" class="btn-close-modal" onclick="closeWarehouseCatalog()">
+            <i class="fi fi-rr-cross-small"></i>
+          </button>
+        </div>
+        <input type="text" id="warehouseCatalogSearch" placeholder="Search by warehouse name…"
+               oninput="filterWarehouseCatalog(this.value)"
+               style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:6px;font-size:0.875rem;font-weight:500;outline:none;margin-bottom:0.75rem;">
+        <div id="warehouseCatalogList" style="max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;">
+          <div style="text-align:center;color:var(--muted);padding:2rem 0;font-size:0.85rem;">Loading warehouses…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QR Code Modal -->
+    <div class="modal-overlay" id="qrModal">
+      <div class="modal" style="text-align:center;max-width:320px;">
+        <div class="modal-title" style="margin-bottom:1rem;">QR Code</div>
+        <div id="qrContainer" style="margin:1.5rem 0;"></div>
+        <p style="color:var(--muted);font-size:0.8rem;" id="qrLabel"></p>
+        <div class="modal-btns" style="margin-top:1rem;">
+          <button class="modal-btn modal-btn-cancel" onclick="closeQRModal()">Close</button>
+          <button class="modal-btn modal-btn-confirm" onclick="printQR()" style="background:var(--btn-bg);">Print</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Sticky Header ──────────────────────────────── -->
+    <div class="page-header">
+      <div class="page-header-top">
+        <div class="page-header-info">
+          <h1 class="page-header-title">Search & Edit Purchase Order</h1>
+          <p class="page-header-sub">Find and modify existing purchase orders in the system.</p>
+        </div>
+        <div class="page-header-actions">
+          <button type="button" class="btn btn-outline" id="qrBtn" onclick="showQRCode()" style="display:none;">
+            <i class="fi fi-rr-grid"></i> QR
+          </button>
+          <button type="button" class="btn btn-outline" id="printBtn" onclick="printPO()" style="display:none;">
+            <i class="fi fi-rr-print"></i> Print
+          </button>
+          <button type="button" class="btn btn-outline" id="duplicateBtn" onclick="duplicatePO()" style="display:none;">
+            <i class="fi fi-rr-copy"></i> Duplicate
+          </button>
+          <button type="button" class="btn btn-danger" id="deleteBtn" onclick="openDeleteModal()" style="display:none;">
+            <i class="fi fi-rr-trash"></i> Delete
+          </button>
+          <button type="submit" class="btn btn-primary" id="saveBtn" form="editForm" style="display:none;">
+            <span id="saveBtnInner" style="display:flex;align-items:center;gap:8px;">
+              <i class="fi fi-rr-disk"></i>
+              <span id="btnText">Save Changes</span>
+            </span>
+          </button>
+        </div>
+      </div>
+      <nav class="header-nav">
+        <button class="nav-pill" onclick="navigate('dashboard')">
+          <i class="fi fi-rr-chart-pie-alt"></i>
+          Dashboard
+        </button>
+        <button class="nav-pill" onclick="navigate('orders')">
+          <i class="fi fi-rr-order-history"></i>
+          Purchase Orders
+        </button>
+        <button class="nav-pill" onclick="navigate('form')">
+          <i class="fi fi-rr-add-document"></i>
+          Create PO
+        </button>
+        <button class="nav-pill active">
+          <i class="fi fi-rr-pen-square"></i>
+          Edit PO
+        </button>
+        <button class="nav-pill" onclick="navigate('receives')">
+          <i class="fi fi-rr-box-open"></i>
+          Receives
+        </button>
+        <button class="nav-pill" onclick="navigate('inventory')">
+          <i class="fi fi-rr-boxes"></i>
+          Inventory
+        </button>
+      </nav>
+    </div>
+
+    <!-- ── Scrollable Body ────────────────────────────── -->
+    <div class="page-body">
+
+      <!-- ── PO Sidebar ────────────────────────────────── -->
+      <div class="po-sidebar">
+        <div class="sidebar-search">
+          <div class="sidebar-search-wrap">
+            <i class="fi fi-rr-search"></i>
+            <input type="text" id="sidebarSearch" placeholder="Search POs…" oninput="filterSidebarList(this.value)">
+          </div>
+        </div>
+        <select class="sidebar-filter" id="sidebarStatusFilter" onchange="filterSidebarList(document.getElementById('sidebarSearch').value)">
+          <option value="">All POs</option>
+          <option value="Draft">Draft</option>
+          <option value="Issued">Issued</option>
+          <option value="Partial">Partial</option>
+          <option value="Closed">Closed</option>
+        </select>
+        <div class="sidebar-list" id="sidebarList">
+          <div class="sidebar-loading"><span class="spinner"></span>Loading purchase orders…</div>
+        </div>
+      </div>
+
+      <!-- ── Main content ──────────────────────────────── -->
+      <div class="po-main">
+
+        <!-- Section nav (sticky, shown when PO loaded) -->
+        <div class="section-nav" id="sectionNav" style="display:none;">
+          <span class="section-nav-label">Jump to</span>
+          <a class="section-nav-link" onclick="scrollToSection('orderDetails')">
+            <i class="fi fi-rr-info"></i> Order Details
+          </a>
+          <a class="section-nav-link" onclick="scrollToSection('vendorShipping')">
+            <i class="fi fi-rr-user"></i> Vendor & Shipping
+          </a>
+          <a class="section-nav-link" onclick="scrollToSection('lineItems')">
+            <i class="fi fi-rr-box-open"></i> Line Items
+          </a>
+          <a class="section-nav-link" id="navComments" onclick="scrollToSection('commentsSection')" style="display:none;">
+            <i class="fi fi-rr-comment"></i> Comments
+          </a>
+        </div>
+
+        <div class="page-body-inner">
+
+          <!-- Hidden: search plumbing used by searchPO() JS -->
+          <div style="display:none;">
+            <input type="text" id="searchInput">
+            <button id="searchBtn"><span id="searchBtnText"></span></button>
+            <div id="foundBadge"></div>
+            <div id="notFoundBadge"></div>
+          </div>
+
+          <!-- Edit Form (hidden until PO found) -->
+        <form id="editForm">
+          <input type="hidden" id="originalPo">
+
+          <!-- Fix 2: warning shown when PO has receiving history -->
+          <div class="inline-warning warn-amber" id="receivingWarning">
+            <i class="fi fi-rr-info"></i>
+            <span>This PO has receiving records. Editing item quantities may cause inconsistencies with existing receiving history.</span>
+          </div>
+
+          <!-- Fix 3: warning shown when status is manually set to Closed -->
+          <div class="inline-warning warn-red" id="statusCloseWarning">
+            <i class="fi fi-rr-triangle-warning"></i>
+            <span>Manually closing a PO does <strong>not</strong> update inventory. Use the <strong>Receives</strong> page to record deliveries and update inventory correctly.</span>
+          </div>
+
+          <!-- Section: Order Details -->
+          <div class="form-section" id="orderDetails">
+            <div class="section-title">Order Details</div>
+            <div class="section-grid-3">
+              <div class="input-group">
+                <label>PO Number</label>
+                <div class="field-wrapper">
+                  <i class="fi fi-rr-document"></i>
+                  <input type="text" id="poNumber" name="poNumber" readonly>
+                </div>
+              </div>
+              <div class="input-group">
+                <label>PO Date</label>
+                <div class="field-wrapper">
+                  <i class="fi fi-rr-calendar"></i>
+                  <input type="text" id="poDate" name="poDate" readonly>
+                </div>
+              </div>
+              <div class="input-group">
+                <label>Reference #</label>
+                <div class="field-wrapper">
+                  <i class="fi fi-rr-hastag"></i>
+                  <input type="text" id="reference" name="reference" placeholder="e.g. REF-001" maxlength="100">
+                </div>
+              </div>
+              <div class="input-group">
+                <label>Expected Delivery Date</label>
+                <div class="field-wrapper">
+                  <i class="fi fi-rr-calendar"></i>
+                  <input type="date" id="deliveryDate" name="deliveryDate">
+                </div>
+              </div>
+              <div class="input-group">
+                <label>Order Status</label>
+                <div class="field-wrapper">
+                  <i class="fi fi-rr-stats"></i>
+                  <select id="status" name="status">
+                    <option value="">Choose Status</option>
+                    <option value="Draft">Draft</option>
+                    <option value="Issued">Issued</option>
+                    <option value="Partial">Partial</option>
+                    <option value="Closed">Closed</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section: Vendor & Shipping -->
+          <div class="form-section" id="vendorShipping">
+            <div class="section-title">Vendor & Shipping</div>
+            <div class="section-grid-2">
+              <div class="input-group">
+                <label>Vendor Name <button type="button" class="btn-catalog" onclick="openVendorCatalog()">Catalog</button></label>
+                <div class="field-wrapper">
+                  <i class="fi fi-rr-user"></i>
+                  <input type="text" id="vendor" name="vendor" placeholder="Supplier Name" maxlength="100">
+                </div>
+              </div>
+              <div class="input-group">
+                <label>Attention</label>
+                <div class="field-wrapper">
+                  <i class="fi fi-rr-at"></i>
+                  <input type="text" id="attention" name="attention" placeholder="Contact Person" maxlength="100">
+                </div>
+              </div>
+              <div class="input-group">
+                <label>Warehouse Name <button type="button" class="btn-catalog" onclick="openWarehouseCatalog()">Catalog</button></label>
+                <div class="field-wrapper">
+                  <i class="fi fi-rr-building"></i>
+                  <input type="text" id="warehouse" name="warehouse" placeholder="e.g. Main Warehouse" maxlength="100">
+                </div>
+              </div>
+              <div class="input-group">
+                <label>Delivery Instructions</label>
+                <div class="field-wrapper">
+                  <i class="fi fi-rr-shipping-fast"></i>
+                  <input type="text" id="deliveryInstructions" name="deliveryInstructions" placeholder="Special instructions…" maxlength="300">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section: Line Items -->
+          <div class="form-section" id="lineItems">
+            <div class="items-section-header">
+              <div class="section-title">Line Items</div>
+              <button type="button" class="btn-add-item" id="addItemBtn">
+                <i class="fi fi-rr-plus-small"></i>
+                Add Item
+              </button>
+            </div>
+            <div class="items-list" id="itemsList">
+              <!-- populated by populateForm() -->
+            </div>
+            <div class="grand-total-row">
+              <span class="grand-total-label">Grand Total</span>
+              <span class="grand-total-value" id="grandTotal">₱0.00</span>
+            </div>
+          </div>
+        </form>
+
+<!-- Section: Comments -->
+        <div class="form-section" id="commentsSection" style="display:none;">
+          <div class="section-title">Notes & Comments</div>
+          <div class="comment-input-row">
+            <input type="text" id="commentInput" placeholder="Add a note…" maxlength="500">
+            <button type="button" class="btn btn-outline" onclick="addComment()">Add Note</button>
+          </div>
+          <div id="commentsList" style="margin-top:1rem;"></div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState">
+          <i class="fi fi-rr-pen-square"></i>
+          <p>Select a purchase order from the list on the left.</p>
+        </div>
+
+        </div><!-- /page-body-inner -->
+      </div><!-- /po-main -->
+    </div><!-- /page-body -->
+
+    <script>
+      // Force remove Google Apps Script banner
+      (function() {
+        function removeBanner() {
+          const selectors = [
+            'body > div:first-child', 'body > iframe:first-child',
+            '#docs-banner-container', '.docs-gm',
+            '.apps-script-notice', 'div[role="banner"]',
+            'div[id*="banner"]', 'div[class*="banner"]'
+          ];
+          selectors.forEach(sel => {
+            document.querySelectorAll(sel).forEach(el => {
+              if (el && el.textContent.includes('Google Apps Script')) el.remove();
+            });
+          });
+          if (document.body.firstElementChild &&
+              document.body.firstElementChild.textContent.includes('Google Apps Script')) {
+            document.body.firstElementChild.remove();
+          }
+        }
+        removeBanner();
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', removeBanner);
+        window.addEventListener('load', removeBanner);
+        setTimeout(removeBanner, 100);
+        setTimeout(removeBanner, 500);
+        setTimeout(removeBanner, 1000);
+      })();
+
+      let currentPO  = null;
+      let itemCount  = 0;
+      var sidebarPOs = [];
+      const notifEl  = document.getElementById('notification');
+
+      // ── Escape HTML ──────────────────────────────────────────────
+      function esc(str) {
+        return String(str || '')
+          .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+          .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      }
+
+      // ── Notification ─────────────────────────────────────────────
+      function showNotif(msg, type) {
+        notifEl.textContent = msg;
+        notifEl.className = 'notification ' + type;
+        notifEl.style.display = 'block';
+        setTimeout(() => { notifEl.style.display = 'none'; }, 4000);
+      }
+
+      // ── Navigation ────────────────────────────────────────────────
+      const APP_URL = '<?= scriptUrl ?>';
+      function navigate(page) {
+        const url = APP_URL + '?page=' + page;
+        window.top.location.href = url;
+      }
+
+      // ── Section nav scroll ───────────────────────────────────────
+      function scrollToSection(id) {
+        var el   = document.getElementById(id);
+        var main = document.querySelector('.po-main');
+        var nav  = document.getElementById('sectionNav');
+        if (!el || !main) return;
+        var navH     = (nav && nav.offsetParent !== null) ? nav.offsetHeight : 0;
+        var rect     = el.getBoundingClientRect();
+        var mainRect = main.getBoundingClientRect();
+        main.scrollBy({ top: rect.top - mainRect.top - navH - 16, behavior: 'smooth' });
+      }
+
+      // ── Date conversion helpers ───────────────────────────────────
+      function toInputDate(str) {
+        if (!str) return '';
+        const parts = str.split('/');
+        if (parts.length === 3) {
+          return parts[2] + '-' + parts[0].padStart(2, '0') + '-' + parts[1].padStart(2, '0');
+        }
+        return str;
+      }
+
+      // ── Format helpers ───────────────────────────────────────────
+      function fmtNum(n) {
+        return parseFloat(n || 0).toFixed(2);
+      }
+
+      function fmt(n) {
+        return '₱' + parseFloat(n || 0).toLocaleString('en-PH', {
+          minimumFractionDigits: 2, maximumFractionDigits: 2
+        });
+      }
+
+      // ── Item Row Manager ─────────────────────────────────────────
+      function createItemRow(data) {
+        itemCount++;
+        const idx = itemCount;
+        const d   = data || {};
+
+        const row = document.createElement('div');
+        row.className   = 'item-row';
+        row.dataset.idx = idx;
+
+        row.innerHTML = `
+          <div class="item-row-header">
+            <span class="item-row-label">Item ${idx}</span>
+            <button type="button" class="btn-remove-item" onclick="removeItemRow(this)" title="Remove item">
+              <i class="fi fi-rr-cross-small"></i>
+            </button>
+          </div>
+          <div class="item-grid">
+            <div class="item-input-group ig-span2">
+              <div class="item-label-row">
+                <span class="item-label">Item Name <span style="color:var(--error-text)">*</span></span>
+                <span class="item-field-error" id="itemNameErr-${idx}"></span>
+                <button type="button" class="btn-catalog" onclick="openCatalogModal(this.closest('.item-row'))">Catalog</button>
+              </div>
+              <div class="field-wrapper">
+                <i class="fi fi-rr-box-open"></i>
+                <input type="text" class="item-name" placeholder="e.g. Adidas Samba Jane"
+                       maxlength="200" value="${esc(d.itemName || '')}">
+              </div>
+            </div>
+            <div class="item-input-group">
+              <span class="item-label">SKU</span>
+              <div class="field-wrapper">
+                <i class="fi fi-rr-barcode"></i>
+                <input type="text" class="item-sku" placeholder="e.g. ADS-SJ-42"
+                       maxlength="100" value="${esc(d.sku || '')}">
+              </div>
+            </div>
+            <div class="item-input-group">
+              <span class="item-label">Usage Unit</span>
+              <div class="field-wrapper">
+                <i class="fi fi-rr-boxes"></i>
+                <input type="text" class="item-unit" placeholder="Pairs"
+                       maxlength="50" value="${esc(d.usageUnit || '')}">
+              </div>
+            </div>
+            <div class="item-input-group ig-span4">
+              <span class="item-label">Item Description</span>
+              <div class="field-wrapper">
+                <i class="fi fi-rr-align-left"></i>
+                <input type="text" class="item-desc" placeholder="Additional details…"
+                       maxlength="300" value="${esc(d.itemDesc || '')}">
+              </div>
+            </div>
+            <div class="item-input-group">
+              <div class="item-label-row">
+                <span class="item-label">Quantity <span style="color:var(--error-text)">*</span></span>
+                <span class="item-field-error" id="itemQtyErr-${idx}"></span>
+              </div>
+              <div class="field-wrapper">
+                <i class="fi fi-rr-layers"></i>
+                <input type="number" class="item-qty" placeholder="0"
+                       min="1" max="99999" step="1"
+                       value="${d.qty || ''}" oninput="recalcItemRow(this)">
+              </div>
+            </div>
+            <div class="item-input-group">
+              <div class="item-label-row">
+                <span class="item-label">Item Price <span style="color:var(--error-text)">*</span></span>
+                <span class="item-field-error" id="itemRateErr-${idx}"></span>
+              </div>
+              <div class="field-wrapper">
+                <i class="fi fi-rr-money-bill-wave"></i>
+                <input type="number" class="item-rate" placeholder="0.00"
+                       min="0.01" step="0.01"
+                       value="${d.rate || ''}" oninput="recalcItemRow(this)">
+              </div>
+            </div>
+            <div class="item-input-group ig-span2">
+              <span class="item-label">Item Total</span>
+              <div class="field-wrapper">
+                <i class="fi fi-rr-calculator"></i>
+                <input type="text" class="item-total" readonly
+                       value="${d.total ? fmtNum(d.total) : ''}">
+              </div>
+            </div>
+          </div>
+        `;
+        return row;
+      }
+
+      function addItemRow(data) {
+        document.getElementById('itemsList').appendChild(createItemRow(data));
+        refreshRemoveButtons();
+        updateGrandTotal();
+      }
+
+      function removeItemRow(btn) {
+        const rows = document.querySelectorAll('#itemsList .item-row');
+        if (rows.length <= 1) return;
+        btn.closest('.item-row').remove();
+        renumberItemRows();
+        refreshRemoveButtons();
+        updateGrandTotal();
+      }
+
+      function renumberItemRows() {
+        document.querySelectorAll('#itemsList .item-row').forEach(function(row, i) {
+          row.querySelector('.item-row-label').textContent = 'Item ' + (i + 1);
+        });
+      }
+
+      function refreshRemoveButtons() {
+        const rows   = document.querySelectorAll('#itemsList .item-row');
+        const isOnly = rows.length === 1;
+        rows.forEach(function(row) {
+          row.querySelector('.btn-remove-item').disabled = isOnly;
+        });
+      }
+
+      function recalcItemRow(inputEl) {
+        const row  = inputEl.closest('.item-row');
+        const qty  = parseFloat(row.querySelector('.item-qty').value)  || 0;
+        const rate = parseFloat(row.querySelector('.item-rate').value) || 0;
+        row.querySelector('.item-total').value = fmtNum(qty * rate);
+        updateGrandTotal();
+      }
+
+      function updateGrandTotal() {
+        let total = 0;
+        document.querySelectorAll('#itemsList .item-row').forEach(function(row) {
+          total += parseFloat(row.querySelector('.item-total').value) || 0;
+        });
+        document.getElementById('grandTotal').textContent = fmt(total);
+      }
+
+      document.getElementById('addItemBtn').addEventListener('click', function() {
+        addItemRow();
+      });
+
+      // ── Item Validation ──────────────────────────────────────────
+      function validateItems() {
+        let valid = true;
+        document.querySelectorAll('#itemsList .item-row').forEach(function(row) {
+          const nameEl  = row.querySelector('.item-name');
+          const qtyEl   = row.querySelector('.item-qty');
+          const rateEl  = row.querySelector('.item-rate');
+          const nameErr = row.querySelector('[id^="itemNameErr-"]');
+          const qtyErr  = row.querySelector('[id^="itemQtyErr-"]');
+          const rateErr = row.querySelector('[id^="itemRateErr-"]');
+
+          const name = nameEl.value.trim();
+          if (!name) {
+            nameEl.classList.add('error');
+            if (nameErr) { nameErr.textContent = 'Required.'; nameErr.classList.add('visible'); }
+            valid = false;
+          } else {
+            nameEl.classList.remove('error');
+            if (nameErr) { nameErr.textContent = ''; nameErr.classList.remove('visible'); }
+          }
+
+          const qty = parseInt(qtyEl.value, 10);
+          if (!qtyEl.value || isNaN(qty) || qty < 1) {
+            qtyEl.classList.add('error');
+            if (qtyErr) { qtyErr.textContent = 'Min 1.'; qtyErr.classList.add('visible'); }
+            valid = false;
+          } else {
+            qtyEl.classList.remove('error');
+            if (qtyErr) { qtyErr.textContent = ''; qtyErr.classList.remove('visible'); }
+          }
+
+          const rate = parseFloat(rateEl.value);
+          if (!rateEl.value || isNaN(rate) || rate <= 0) {
+            rateEl.classList.add('error');
+            if (rateErr) { rateErr.textContent = 'Must be > 0.'; rateErr.classList.add('visible'); }
+            valid = false;
+          } else {
+            rateEl.classList.remove('error');
+            if (rateErr) { rateErr.textContent = ''; rateErr.classList.remove('visible'); }
+          }
+        });
+        return valid;
+      }
+
+      // ── Collect items array for submit ───────────────────────────
+      function collectItems() {
+        return Array.from(document.querySelectorAll('#itemsList .item-row')).map(function(row) {
+          return {
+            itemName:  row.querySelector('.item-name').value.trim(),
+            sku:       row.querySelector('.item-sku').value.trim(),
+            itemDesc:  row.querySelector('.item-desc').value.trim(),
+            qty:       parseInt(row.querySelector('.item-qty').value, 10),
+            usageUnit: row.querySelector('.item-unit').value.trim(),
+            rate:      parseFloat(row.querySelector('.item-rate').value)
+          };
+        });
+      }
+
+      // ── Search PO ────────────────────────────────────────────────
+      function searchPO() {
+        const input = document.getElementById('searchInput').value.trim();
+        if (!input) {
+          showNotif('Please enter a PO number to search.', 'error');
+          document.getElementById('searchInput').focus();
+          return;
+        }
+
+        const searchBtn     = document.getElementById('searchBtn');
+        const searchBtnText = document.getElementById('searchBtnText');
+        searchBtn.disabled  = true;
+        searchBtnText.innerHTML = '<div class="spinner"></div> <span>Searching...</span>';
+
+        document.getElementById('foundBadge').style.display    = 'none';
+        document.getElementById('notFoundBadge').style.display = 'none';
+
+        if (typeof google !== 'undefined') {
+          google.script.run
+            .withSuccessHandler(function(data) {
+              searchBtn.disabled = false;
+              searchBtnText.innerHTML = '<i class="fi fi-rr-search"></i> <span>Search</span>';
+
+              if (data) {
+                populateForm(data);
+                document.getElementById('foundBadge').textContent = '✓ PO found: ' + data.po + ' — ' + data.vendor;
+                document.getElementById('foundBadge').style.display = 'block';
+              } else {
+                clearForm();
+                document.getElementById('notFoundBadge').textContent = '✕ No PO found for "' + input + '". Please check the number and try again.';
+                document.getElementById('notFoundBadge').style.display = 'block';
+              }
+            })
+            .withFailureHandler(function(err) {
+              searchBtn.disabled = false;
+              searchBtnText.innerHTML = '<i class="fi fi-rr-search"></i> <span>Search</span>';
+              showNotif('Search failed: ' + err.message, 'error');
+            })
+            .searchPO(input);
+        } else {
+          // Mock data for local testing
+          searchBtn.disabled = false;
+          searchBtnText.innerHTML = '<i class="fi fi-rr-search"></i> <span>Search</span>';
+          const mockPO = {
+            po: 'PO-00011', poDate: '02/16/2026',
+            reference: 'REF-001', deliveryDate: '03/01/2026',
+            status: 'Issued', vendor: 'Raven Tejada',
+            attention: 'John Doe', warehouse: 'Main Warehouse',
+            deliveryInstructions: '',
+            items: [
+              { itemName: 'Adidas Samba Jane', sku: 'ADS-SJ-8', itemDesc: '', qty: 10, usageUnit: 'Pairs', rate: 5000, total: 50000 },
+              { itemName: 'Nike Air Force 1',  sku: 'NKE-AF1-9', itemDesc: '', qty: 3,  usageUnit: 'Pairs', rate: 6500, total: 19500 }
+            ],
+            poTotal: 69500
+          };
+          populateForm(mockPO);
+          document.getElementById('foundBadge').textContent = '✓ PO found: ' + mockPO.po + ' — ' + mockPO.vendor;
+          document.getElementById('foundBadge').style.display = 'block';
+        }
+      }
+
+      // ── Autocomplete for Edit search ─────────────────────────────
+      var acPOList = [];
+      var acIndex  = -1;
+
+      // ── Sidebar: build deduplicated PO list ───────────────────────
+      function buildSidebarPOs(data) {
+        var seen = {}, result = [];
+        (data || []).forEach(function(row) {
+          if (row.po && !seen[row.po]) {
+            seen[row.po] = true;
+            result.push({ po: row.po, vendor: row.vendor, status: row.status, poDate: row.poDate, qtyReceived: row.qtyReceived || 0, totalQtyOrdered: row.totalQtyOrdered || 0 });
+          }
+        });
+        result.sort(function(a, b) { return String(b.po).localeCompare(String(a.po)); });
+        return result;
+      }
+
+      function renderSidebarList(pos) {
+        var container = document.getElementById('sidebarList');
+        if (!pos || pos.length === 0) {
+          container.innerHTML = '<div class="sidebar-empty">No purchase orders found.</div>';
+          return;
+        }
+        var activePo = currentPO ? currentPO.po : null;
+        container.innerHTML = pos.map(function(p) {
+          var sc       = String(p.status || '').replace(/[^a-zA-Z]/g, '');
+          var isActive = (p.po === activePo);
+          var total    = p.totalQtyOrdered || 0;
+          var received = p.qtyReceived || 0;
+          var pct      = total > 0 ? Math.min(100, Math.round(received / total * 100)) : 0;
+          var complete = received >= total && total > 0;
+          return '<div class="sidebar-po-item' + (isActive ? ' active' : '') + '" onclick="selectSidebarPO(\'' + String(p.po).replace(/'/g, "\\'") + '\')">'
+            + '<div class="sidebar-po-left">'
+              + '<div class="sidebar-po-num" style="margin-bottom:2px;">' + esc(p.po) + '</div>'
+              + '<div class="sidebar-po-vendor">' + esc(p.vendor || '—') + '</div>'
+              + '<div style="height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:6px;">'
+                + '<div style="height:100%;width:' + pct + '%;background:' + (complete ? 'oklch(45% 0.15 145)' : 'oklch(50% 0 0)') + ';border-radius:2px;"></div>'
+              + '</div>'
+              + '<div style="display:flex;justify-content:space-between;margin-top:3px;font-size:0.68rem;color:var(--muted);font-weight:600;">'
+                + '<span>' + received + '/' + total + ' units</span>'
+                + '<span>' + pct + '%</span>'
+              + '</div>'
+            + '</div>'
+            + '<span class="sidebar-badge ' + sc + '" style="align-self:flex-start;">' + esc(p.status || '') + '</span>'
+            + '</div>';
+        }).join('');
+      }
+
+      function filterSidebarList(query) {
+        var q      = (query || '').toLowerCase().trim();
+        var status = document.getElementById('sidebarStatusFilter') ? document.getElementById('sidebarStatusFilter').value : '';
+        var filtered = sidebarPOs.filter(function(p) {
+          var matchText = !q
+            || (p.po || '').toLowerCase().includes(q)
+            || (p.vendor || '').toLowerCase().includes(q);
+          var matchStatus = !status || (p.status || '') === status;
+          return matchText && matchStatus;
+        });
+        renderSidebarList(filtered);
+      }
+
+      function selectSidebarPO(poNum) {
+        document.getElementById('searchInput').value = poNum;
+        searchPO();
+      }
+
+      function setActiveSidebarItem(poNum) {
+        document.querySelectorAll('.sidebar-po-item').forEach(function(el) {
+          var num = el.querySelector('.sidebar-po-num');
+          el.classList.toggle('active', !!(poNum && num && num.textContent === poNum));
+        });
+      }
+
+      // Load PO list for sidebar + autocomplete on page init
+      function loadPOList() {
+        document.getElementById('sidebarList').innerHTML = '<div class="sidebar-loading"><span class="spinner"></span>Loading purchase orders…</div>';
+        if (typeof google !== 'undefined') {
+          google.script.run
+            .withSuccessHandler(function(data) {
+              acPOList = data || [];
+              sidebarPOs = buildSidebarPOs(data);
+              renderSidebarList(sidebarPOs);
+            })
+            .withFailureHandler(function() {
+              acPOList = [];
+              sidebarPOs = [];
+              renderSidebarList([]);
+            })
+            .getAllPOs();
+        } else {
+          // Mock data for local testing
+          acPOList = [
+            { po: 'PO-00011', vendor: 'Raven Tejada',    status: 'Issued',  poDate: '02/16/2026', qtyReceived: 50,  totalQtyOrdered: 100 },
+            { po: 'PO-00010', vendor: 'Nike Philippines', status: 'Partial', poDate: '02/10/2026', qtyReceived: 12,  totalQtyOrdered: 30  },
+            { po: 'PO-00009', vendor: 'Adidas Manila',    status: 'Closed',  poDate: '01/28/2026', qtyReceived: 8,   totalQtyOrdered: 8   },
+            { po: 'PO-00008', vendor: 'Puma PH',          status: 'Draft',   poDate: '01/15/2026', qtyReceived: 0,   totalQtyOrdered: 20  }
+          ];
+          sidebarPOs = buildSidebarPOs(acPOList);
+          renderSidebarList(sidebarPOs);
+        }
+      }
+
+      function onEditSearchFocus() {
+        var q = document.getElementById('searchInput').value.trim();
+        if (q.length > 0) showEditAutocomplete();
+      }
+
+      function showEditAutocomplete() {
+        var input = document.getElementById('searchInput');
+        var list  = document.getElementById('acList');
+        var q     = input.value.toLowerCase().trim();
+        acIndex   = -1;
+
+        if (!q || acPOList.length === 0) {
+          closeEditAutocomplete();
+          return;
+        }
+
+        var seen = {};
+        var matches = [];
+        for (var i = 0; i < acPOList.length && matches.length < 8; i++) {
+          var po = acPOList[i];
+          var poNum = String(po.po || '');
+          if (seen[poNum]) continue;
+          var vendor = String(po.vendor || '');
+          if (poNum.toLowerCase().includes(q) || vendor.toLowerCase().includes(q)) {
+            seen[poNum] = true;
+            matches.push(po);
+          }
+        }
+
+        if (matches.length === 0) {
+          list.innerHTML = '<div class="ac-empty">No matching POs found</div>';
+          list.classList.add('visible');
+          input.classList.add('ac-open');
+          return;
+        }
+
+        list.innerHTML = matches.map(function(po) {
+          var statusClass = String(po.status || '').replace(/[^a-zA-Z]/g, '');
+          return '<div class="autocomplete-item" onmousedown="selectEditAutocomplete(\'' + String(po.po).replace(/'/g, "\\'") + '\')">'
+            + '<span class="ac-po">' + esc(po.po) + '</span>'
+            + '<span class="ac-vendor">' + esc(po.vendor) + '</span>'
+            + '<span class="ac-status ' + statusClass + '">' + esc(po.status) + '</span>'
+            + '</div>';
+        }).join('');
+
+        list.classList.add('visible');
+        input.classList.add('ac-open');
+      }
+
+      function selectEditAutocomplete(poNum) {
+        var input = document.getElementById('searchInput');
+        input.value = poNum;
+        closeEditAutocomplete();
+        searchPO();
+      }
+
+      function closeEditAutocomplete() {
+        var list  = document.getElementById('acList');
+        var input = document.getElementById('searchInput');
+        list.classList.remove('visible');
+        list.innerHTML = '';
+        input.classList.remove('ac-open');
+        acIndex = -1;
+      }
+
+      // Keyboard navigation (Enter, ArrowDown, ArrowUp, Escape)
+      document.getElementById('searchInput').addEventListener('keydown', function(e) {
+        var list  = document.getElementById('acList');
+        var items = list.querySelectorAll('.autocomplete-item');
+        var acOpen = list.classList.contains('visible') && items.length > 0;
+
+        if (acOpen && e.key === 'ArrowDown') {
+          e.preventDefault();
+          acIndex = Math.min(acIndex + 1, items.length - 1);
+          updateEditAcHighlight(items);
+        } else if (acOpen && e.key === 'ArrowUp') {
+          e.preventDefault();
+          acIndex = Math.max(acIndex - 1, 0);
+          updateEditAcHighlight(items);
+        } else if (acOpen && e.key === 'Enter' && acIndex >= 0) {
+          e.preventDefault();
+          items[acIndex].onmousedown();
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          closeEditAutocomplete();
+          searchPO();
+        } else if (e.key === 'Escape') {
+          closeEditAutocomplete();
+        }
+      });
+
+      function updateEditAcHighlight(items) {
+        items.forEach(function(el, i) {
+          el.classList.toggle('active', i === acIndex);
+        });
+        if (acIndex >= 0 && items[acIndex]) {
+          items[acIndex].scrollIntoView({ block: 'nearest' });
+        }
+      }
+
+      // Close autocomplete when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.search-input-wrapper')) closeEditAutocomplete();
+      });
+
+      // ── Populate form ─────────────────────────────────────────────
+      function populateForm(data) {
+        currentPO = data;
+        document.getElementById('originalPo').value           = data.po;
+        document.getElementById('poNumber').value             = data.po;
+        document.getElementById('poDate').value               = data.poDate || '';
+        document.getElementById('reference').value            = data.reference || '';
+        document.getElementById('deliveryDate').value         = toInputDate(data.deliveryDate);
+        document.getElementById('status').value               = data.status;
+        document.getElementById('vendor').value               = data.vendor;
+        document.getElementById('attention').value            = data.attention || '';
+        document.getElementById('warehouse').value            = data.warehouse || '';
+        document.getElementById('deliveryInstructions').value = data.deliveryInstructions || '';
+
+        // Rebuild items list
+        itemCount = 0;
+        document.getElementById('itemsList').innerHTML = '';
+        const items = (data.items && data.items.length > 0) ? data.items : [{}];
+        items.forEach(function(item) { addItemRow(item); });
+        updateGrandTotal();
+
+        document.getElementById('editForm').style.display     = 'block';
+        document.getElementById('emptyState').style.display  = 'none';
+        document.getElementById('printBtn').style.display    = 'inline-flex';
+        document.getElementById('duplicateBtn').style.display = 'inline-flex';
+        document.getElementById('deleteBtn').style.display   = 'inline-flex';
+        document.getElementById('saveBtn').style.display     = 'inline-flex';
+        document.getElementById('qrBtn').style.display       = 'inline-flex';
+
+        // Show section nav + comments section for all loaded POs
+        document.getElementById('sectionNav').style.display = 'flex';
+        document.getElementById('commentsSection').style.display = 'block';
+        document.getElementById('navComments').style.display = 'inline-flex';
+        loadComments(data.po);
+
+        document.querySelectorAll('#editForm input:not([readonly]), #editForm select').forEach(el => {
+          el.classList.remove('error');
+        });
+
+        // Fix 2: show warning if PO already has receiving records
+        var recWarn = document.getElementById('receivingWarning');
+        if (recWarn) {
+          if ((data.qtyReceived || 0) > 0) recWarn.classList.add('visible');
+          else recWarn.classList.remove('visible');
+        }
+        // Fix 3: reset close-warning (only shown when user changes status to Closed)
+        var closeWarn = document.getElementById('statusCloseWarning');
+        if (closeWarn) closeWarn.classList.remove('visible');
+
+        setActiveSidebarItem(data.po);
+        document.querySelector('.po-main').scrollTop = 0;
+      }
+
+      // ── Clear form ────────────────────────────────────────────────
+      function clearForm() {
+        currentPO = null;
+        itemCount = 0;
+        setActiveSidebarItem(null);
+        document.getElementById('itemsList').innerHTML = '';
+        // Hide inline warnings
+        var recWarn   = document.getElementById('receivingWarning');
+        var closeWarn = document.getElementById('statusCloseWarning');
+        if (recWarn)   recWarn.classList.remove('visible');
+        if (closeWarn) closeWarn.classList.remove('visible');
+        document.getElementById('grandTotal').textContent = '₱0.00';
+        document.getElementById('editForm').style.display     = 'none';
+        document.getElementById('emptyState').style.display  = 'block';
+        document.getElementById('printBtn').style.display    = 'none';
+        document.getElementById('duplicateBtn').style.display = 'none';
+        document.getElementById('deleteBtn').style.display   = 'none';
+        document.getElementById('saveBtn').style.display     = 'none';
+        document.getElementById('qrBtn').style.display       = 'none';
+        document.getElementById('commentsSection').style.display = 'none';
+        document.getElementById('sectionNav').style.display = 'none';
+        document.getElementById('navComments').style.display = 'none';
+      }
+
+      // ── Validate form ─────────────────────────────────────────────
+      function validateForm() {
+        let valid = true;
+
+        const vendor = document.getElementById('vendor').value.trim();
+        if (!vendor) {
+          document.getElementById('vendor').classList.add('error');
+          valid = false;
+        } else {
+          document.getElementById('vendor').classList.remove('error');
+        }
+
+        const status = document.getElementById('status').value;
+        if (!status) {
+          document.getElementById('status').classList.add('error');
+          valid = false;
+        } else {
+          document.getElementById('status').classList.remove('error');
+        }
+
+        if (!validateItems()) valid = false;
+        return valid;
+      }
+
+      // Remove error on input
+      document.querySelectorAll('#editForm input, #editForm select').forEach(el => {
+        el.addEventListener('input', () => el.classList.remove('error'));
+        el.addEventListener('change', () => el.classList.remove('error'));
+      });
+
+      // Fix 3: Show close-warning when status is manually set to Closed
+      document.getElementById('status').addEventListener('change', function() {
+        var closeWarn = document.getElementById('statusCloseWarning');
+        if (!closeWarn) return;
+        var isManualClose = this.value === 'Closed'
+          && currentPO
+          && currentPO.status !== 'Closed'
+          && (currentPO.qtyReceived || 0) < (currentPO.totalQtyOrdered || 0);
+        if (isManualClose) closeWarn.classList.add('visible');
+        else closeWarn.classList.remove('visible');
+      });
+
+      // ── Save changes ──────────────────────────────────────────────
+      document.getElementById('editForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        if (!validateForm()) {
+          showNotif('Please fill in all required fields.', 'error');
+          return;
+        }
+
+        const saveBtn      = document.getElementById('saveBtn');
+        const saveBtnInner = document.getElementById('saveBtnInner');
+        saveBtn.disabled   = true;
+        saveBtnInner.innerHTML = '<div class="spinner"></div> <span>Saving...</span>';
+
+        const formData = {
+          originalPo:           document.getElementById('originalPo').value,
+          po:                   document.getElementById('poNumber').value.trim(),
+          deliveryDate:         document.getElementById('deliveryDate').value,
+          reference:            document.getElementById('reference').value.trim(),
+          status:               document.getElementById('status').value,
+          vendor:               document.getElementById('vendor').value.trim(),
+          attention:            document.getElementById('attention').value.trim(),
+          warehouse:            document.getElementById('warehouse').value.trim(),
+          deliveryInstructions: document.getElementById('deliveryInstructions').value.trim(),
+          items:                collectItems()
+        };
+
+        if (typeof google !== 'undefined') {
+          google.script.run
+            .withSuccessHandler(function(res) {
+              saveBtn.disabled = false;
+              saveBtnInner.innerHTML = '<i class="fi fi-rr-disk"></i> <span>Save Changes</span>';
+
+              if (res === 'Success') {
+                showNotif('✓ Purchase Order updated successfully!', 'success');
+                document.getElementById('originalPo').value = formData.po;
+                currentPO = formData;
+                // Refresh sidebar entry to reflect any status/vendor changes
+                sidebarPOs = sidebarPOs.map(function(p) {
+                  return p.po === formData.originalPo
+                    ? { po: formData.po, vendor: formData.vendor, status: formData.status, poDate: p.poDate }
+                    : p;
+                });
+                renderSidebarList(sidebarPOs);
+                setActiveSidebarItem(formData.po);
+              } else {
+                showNotif('Update failed: ' + res, 'error');
+              }
+            })
+            .withFailureHandler(function(err) {
+              saveBtn.disabled = false;
+              saveBtnInner.innerHTML = '<i class="fi fi-rr-disk"></i> <span>Save Changes</span>';
+              showNotif('Error: ' + err.message, 'error');
+            })
+            .updatePO(formData);
+        }
+      });
+
+      // ── Delete modal ──────────────────────────────────────────────
+      function openDeleteModal() {
+        if (!currentPO) return;
+        const itemCount = (currentPO.items || []).length;
+        const itemText  = itemCount === 1 ? '1 line item' : itemCount + ' line items';
+        document.getElementById('deleteModalText').textContent =
+          'You are about to permanently delete PO "' + currentPO.po + '" and all ' +
+          itemText + '. This action cannot be undone.';
+        document.getElementById('deleteModal').classList.add('active');
+      }
+
+      function closeDeleteModal() {
+        document.getElementById('deleteModal').classList.remove('active');
+      }
+
+      function confirmDelete() {
+        const poNum       = document.getElementById('originalPo').value;
+        const confirmBtn  = document.getElementById('confirmDeleteBtn');
+        const confirmText = document.getElementById('confirmDeleteText');
+        confirmBtn.disabled = true;
+        confirmText.innerHTML = '<div class="spinner dark"></div> Deleting...';
+
+        if (typeof google !== 'undefined') {
+          google.script.run
+            .withSuccessHandler(function(res) {
+              confirmBtn.disabled = false;
+              confirmText.textContent = 'Delete';
+              closeDeleteModal();
+
+              if (res === 'Success') {
+                showNotif('✓ Purchase Order "' + poNum + '" deleted.', 'success');
+                clearForm();
+                document.getElementById('searchInput').value = '';
+                document.getElementById('sidebarSearch').value = '';
+                sidebarPOs = sidebarPOs.filter(function(p) { return p.po !== poNum; });
+                renderSidebarList(sidebarPOs);
+              } else {
+                showNotif('Delete failed: ' + res, 'error');
+              }
+            })
+            .withFailureHandler(function(err) {
+              confirmBtn.disabled = false;
+              confirmText.textContent = 'Delete';
+              closeDeleteModal();
+              showNotif('Error: ' + err.message, 'error');
+            })
+            .deletePO(poNum);
+        }
+      }
+
+      // Close modal on overlay click
+      document.getElementById('deleteModal').addEventListener('click', function(e) {
+        if (e.target === this) closeDeleteModal();
+      });
+
+      // ── Print PO ──────────────────────────────────────────────────
+      function printPO() {
+        if (!currentPO) return;
+        var po = currentPO;
+        var items = po.items || collectItems();
+        var grandTotal = 0;
+        var rows = '';
+        items.forEach(function(it, i) {
+          var total = (parseFloat(it.qty) || 0) * (parseFloat(it.rate) || 0);
+          grandTotal += total;
+          rows += '<tr>' +
+            '<td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:center;">' + (i + 1) + '</td>' +
+            '<td style="padding:8px 10px;border-bottom:1px solid #eee;">' + esc(it.itemName) + '</td>' +
+            '<td style="padding:8px 10px;border-bottom:1px solid #eee;">' + esc(it.sku || '') + '</td>' +
+            '<td style="padding:8px 10px;border-bottom:1px solid #eee;">' + esc(it.itemDesc || '') + '</td>' +
+            '<td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:center;">' + (it.qty || 0) + '</td>' +
+            '<td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:center;">' + esc(it.usageUnit || '') + '</td>' +
+            '<td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right;">' + fmt(it.rate) + '</td>' +
+            '<td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right;">' + fmt(total) + '</td>' +
+            '</tr>';
+        });
+
+        var statusColor = po.status === 'Draft' ? '#c87d14' : po.status === 'Issued' ? '#2563eb' : po.status === 'Partial' ? '#7c3aed' : '#16a34a';
+        var html = '<!DOCTYPE html><html><head><title>PO ' + esc(po.po) + '</title>' +
+          '<style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}' +
+          'body{padding:40px 50px;color:#333;} @media print{body{padding:20px;}}</style></head><body>' +
+          '<div style="text-align:center;margin-bottom:30px;">' +
+            '<h1 style="font-size:22px;letter-spacing:2px;margin-bottom:4px;">SOLE AVENUE</h1>' +
+            '<p style="font-size:12px;color:#888;text-transform:uppercase;letter-spacing:1px;">Purchase Order</p>' +
+          '</div>' +
+          '<div style="display:flex;justify-content:space-between;margin-bottom:24px;font-size:13px;">' +
+            '<div><strong>PO Number:</strong> ' + esc(po.po) + '<br><strong>Date:</strong> ' + esc(po.poDate || document.getElementById('poDate').value) + '<br><strong>Reference:</strong> ' + esc(po.reference || document.getElementById('reference').value || '—') + '</div>' +
+            '<div style="text-align:right;"><strong>Vendor:</strong> ' + esc(po.vendor || document.getElementById('vendor').value) + '<br><strong>Attention:</strong> ' + esc(po.attention || document.getElementById('attention').value || '—') + '<br><strong>Status:</strong> <span style="color:' + statusColor + ';font-weight:700;">' + esc(document.getElementById('status').value) + '</span></div>' +
+          '</div>' +
+          '<div style="margin-bottom:24px;font-size:13px;">' +
+            '<strong>Warehouse:</strong> ' + esc(po.warehouse || document.getElementById('warehouse').value || '—') +
+            ' &nbsp;|&nbsp; <strong>Delivery:</strong> ' + esc(document.getElementById('deliveryDate').value || '—') +
+            (po.deliveryInstructions || document.getElementById('deliveryInstructions').value ? ' &nbsp;|&nbsp; <strong>Instructions:</strong> ' + esc(po.deliveryInstructions || document.getElementById('deliveryInstructions').value) : '') +
+          '</div>' +
+          '<table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:16px;">' +
+            '<thead><tr style="background:#f5f5f5;">' +
+              '<th style="padding:10px;text-align:center;border-bottom:2px solid #ddd;font-size:11px;text-transform:uppercase;">#</th>' +
+              '<th style="padding:10px;text-align:left;border-bottom:2px solid #ddd;font-size:11px;text-transform:uppercase;">Name</th>' +
+              '<th style="padding:10px;text-align:left;border-bottom:2px solid #ddd;font-size:11px;text-transform:uppercase;">SKU</th>' +
+              '<th style="padding:10px;text-align:left;border-bottom:2px solid #ddd;font-size:11px;text-transform:uppercase;">Description</th>' +
+              '<th style="padding:10px;text-align:center;border-bottom:2px solid #ddd;font-size:11px;text-transform:uppercase;">Qty</th>' +
+              '<th style="padding:10px;text-align:center;border-bottom:2px solid #ddd;font-size:11px;text-transform:uppercase;">Unit</th>' +
+              '<th style="padding:10px;text-align:right;border-bottom:2px solid #ddd;font-size:11px;text-transform:uppercase;">Price</th>' +
+              '<th style="padding:10px;text-align:right;border-bottom:2px solid #ddd;font-size:11px;text-transform:uppercase;">Total</th>' +
+            '</tr></thead><tbody>' + rows + '</tbody>' +
+            '<tfoot><tr><td colspan="7" style="padding:12px 10px;text-align:right;font-weight:700;font-size:14px;border-top:2px solid #333;">Grand Total</td>' +
+            '<td style="padding:12px 10px;text-align:right;font-weight:700;font-size:14px;border-top:2px solid #333;">' + fmt(grandTotal) + '</td></tr></tfoot>' +
+          '</table>' +
+          '<div style="display:flex;justify-content:space-between;margin-top:60px;font-size:12px;">' +
+            '<div style="text-align:center;width:40%;"><div style="border-top:1px solid #333;padding-top:8px;">Prepared by</div></div>' +
+            '<div style="text-align:center;width:40%;"><div style="border-top:1px solid #333;padding-top:8px;">Approved by</div></div>' +
+          '</div>' +
+          '</body></html>';
+
+        var w = window.open('', '_blank');
+        w.document.write(html);
+        w.document.close();
+        setTimeout(function() { w.print(); }, 300);
+      }
+
+      // ── Duplicate PO ──────────────────────────────────────────────
+      function duplicatePO() {
+        if (!currentPO) return;
+        if (!confirm('Create a duplicate of ' + currentPO.po + ' as a new Draft PO?')) return;
+
+        var dupBtn = document.getElementById('duplicateBtn');
+        dupBtn.disabled = true;
+        dupBtn.innerHTML = '<div class="spinner"></div> Duplicating…';
+
+        var items = collectItems();
+        function doCreate(newPoNumber) {
+          var formData = {
+            po: newPoNumber,
+            deliveryDate: '',
+            reference: 'PO-REF-' + newPoNumber.replace(/^PO-/, ''),
+            status: 'Draft',
+            vendor: document.getElementById('vendor').value.trim(),
+            attention: document.getElementById('attention').value.trim(),
+            warehouse: document.getElementById('warehouse').value.trim(),
+            deliveryInstructions: document.getElementById('deliveryInstructions').value.trim(),
+            items: items
+          };
+
+          function onCreateSuccess(res) {
+            dupBtn.disabled = false;
+            dupBtn.innerHTML = '<i class="fi fi-rr-copy"></i> Duplicate';
+            if (res === 'Success') {
+              showNotif('Duplicated! New PO: ' + newPoNumber, 'success');
+            } else {
+              showNotif('Duplicate failed: ' + res, 'error');
+            }
+          }
+
+          function onCreateFail(err) {
+            dupBtn.disabled = false;
+            dupBtn.innerHTML = '<i class="fi fi-rr-copy"></i> Duplicate';
+            showNotif('Error: ' + err.message, 'error');
+          }
+
+          if (typeof google !== 'undefined') {
+            google.script.run
+              .withSuccessHandler(onCreateSuccess)
+              .withFailureHandler(onCreateFail)
+              .processForm(formData);
+          } else {
+            setTimeout(function() { onCreateSuccess('Success'); }, 500);
+          }
+        }
+
+        if (typeof google !== 'undefined') {
+          google.script.run
+            .withSuccessHandler(doCreate)
+            .withFailureHandler(function(err) {
+              dupBtn.disabled = false;
+              dupBtn.innerHTML = '<i class="fi fi-rr-copy"></i> Duplicate';
+              showNotif('Error generating PO number: ' + err.message, 'error');
+            })
+            .generatePONumber();
+        } else {
+          setTimeout(function() { doCreate('PO-00099'); }, 300);
+        }
+      }
+
+      // ── Item Catalog ──────────────────────────────────────────────
+      var catalogData = null;
+      var catalogTargetRow = null;
+
+      function openCatalogModal(itemRow) {
+        catalogTargetRow = itemRow;
+        document.getElementById('catalogSearch').value = '';
+        document.getElementById('catalogModal').classList.add('active');
+
+        if (catalogData) {
+          renderCatalogList(catalogData);
+          return;
+        }
+
+        if (typeof google !== 'undefined') {
+          google.script.run
+            .withSuccessHandler(function(data) {
+              catalogData = data || [];
+              renderCatalogList(catalogData);
+            })
+            .withFailureHandler(function() {
+              catalogData = [];
+              renderCatalogList([]);
+            })
+            .getItemCatalog();
+        } else {
+          catalogData = [
+            { itemName: 'Adidas Samba Jane', sku: 'ADS-SJ-42', itemDesc: 'Classic samba silhouette', usageUnit: 'Pairs', defaultRate: 5000 },
+            { itemName: 'Nike Air Force 1', sku: 'NKE-AF1-9', itemDesc: 'White leather', usageUnit: 'Pairs', defaultRate: 6500 },
+            { itemName: 'Adidas Stan Smith', sku: 'ADS-SS-9', itemDesc: 'Green heel tab', usageUnit: 'Pairs', defaultRate: 4500 },
+            { itemName: 'Nike Air Max 90', sku: 'NKE-AM90-10', itemDesc: '', usageUnit: 'Pairs', defaultRate: 7200 }
+          ];
+          renderCatalogList(catalogData);
+        }
+      }
+
+      function closeCatalogModal() {
+        document.getElementById('catalogModal').classList.remove('active');
+        catalogTargetRow = null;
+      }
+
+      function filterCatalog(query) {
+        if (!catalogData) return;
+        var q = query.toLowerCase().trim();
+        var filtered = q ? catalogData.filter(function(item) {
+          return (item.itemName || '').toLowerCase().includes(q) ||
+                 (item.sku || '').toLowerCase().includes(q);
+        }) : catalogData;
+        renderCatalogList(filtered);
+      }
+
+      function renderCatalogList(items) {
+        var container = document.getElementById('catalogList');
+        if (!items || items.length === 0) {
+          container.innerHTML = '<div style="text-align:center;color:var(--muted);padding:2rem 0;font-size:0.85rem;">No items found.</div>';
+          return;
+        }
+        container.innerHTML = items.map(function(item, i) {
+          return '<div class="catalog-item" onclick="selectCatalogItem(' + i + ')">' +
+            '<span class="catalog-item-name">' + esc(item.itemName) + '</span>' +
+            '<span class="catalog-item-meta">' + esc(item.sku || '—') + ' · ' + esc(item.usageUnit || '') + ' · ' + fmt(item.defaultRate || 0) + '</span>' +
+            '</div>';
+        }).join('');
+        // Store current filtered list for index lookup
+        container._currentItems = items;
+      }
+
+      function selectCatalogItem(idx) {
+        var list = document.getElementById('catalogList')._currentItems;
+        if (!list || !list[idx] || !catalogTargetRow) return;
+        var item = list[idx];
+        catalogTargetRow.querySelector('.item-name').value = item.itemName || '';
+        catalogTargetRow.querySelector('.item-sku').value  = item.sku || '';
+        catalogTargetRow.querySelector('.item-desc').value = item.itemDesc || '';
+        catalogTargetRow.querySelector('.item-unit').value = item.usageUnit || '';
+        catalogTargetRow.querySelector('.item-rate').value = item.defaultRate || '';
+        recalcItemRow(catalogTargetRow.querySelector('.item-rate'));
+        closeCatalogModal();
+      }
+
+      // Close catalog modal on overlay click
+      document.getElementById('catalogModal').addEventListener('click', function(e) {
+        if (e.target === this) closeCatalogModal();
+      });
+
+      // ── Vendor Catalog ─────────────────────────────────────────
+      var vendorCatalogData = null;
+
+      function openVendorCatalog() {
+        document.getElementById('vendorCatalogSearch').value = '';
+        document.getElementById('vendorCatalogModal').classList.add('active');
+
+        if (vendorCatalogData) {
+          renderVendorCatalogList(vendorCatalogData);
+          return;
+        }
+
+        if (typeof google !== 'undefined') {
+          google.script.run
+            .withSuccessHandler(function(data) {
+              vendorCatalogData = data || [];
+              renderVendorCatalogList(vendorCatalogData);
+            })
+            .withFailureHandler(function() {
+              vendorCatalogData = [];
+              renderVendorCatalogList([]);
+            })
+            .getVendorCatalog();
+        } else {
+          vendorCatalogData = [
+            { vendorName: 'Raven Tejada', contactPerson: 'Raven T.', email: 'raven@example.com', phone: '0917-123-4567', address: 'Manila' },
+            { vendorName: 'Nike Store PH', contactPerson: 'Nike CS', email: 'orders@nike.ph', phone: '', address: 'BGC, Taguig' },
+            { vendorName: 'Adidas PH', contactPerson: '', email: 'sales@adidas.ph', phone: '0918-987-6543', address: 'Makati' },
+            { vendorName: 'Montenegro', contactPerson: 'Juan M.', email: '', phone: '', address: 'Cebu City' }
+          ];
+          renderVendorCatalogList(vendorCatalogData);
+        }
+      }
+
+      function closeVendorCatalog() {
+        document.getElementById('vendorCatalogModal').classList.remove('active');
+      }
+
+      function filterVendorCatalog(query) {
+        if (!vendorCatalogData) return;
+        var q = query.toLowerCase().trim();
+        var filtered = q ? vendorCatalogData.filter(function(v) {
+          return (v.vendorName || '').toLowerCase().includes(q) ||
+                 (v.contactPerson || '').toLowerCase().includes(q);
+        }) : vendorCatalogData;
+        renderVendorCatalogList(filtered);
+      }
+
+      function renderVendorCatalogList(vendors) {
+        var container = document.getElementById('vendorCatalogList');
+        if (!vendors || vendors.length === 0) {
+          container.innerHTML = '<div style="text-align:center;color:var(--muted);padding:2rem 0;font-size:0.85rem;">No vendors found.</div>';
+          return;
+        }
+        container.innerHTML = vendors.map(function(v, i) {
+          var meta = [v.contactPerson, v.phone, v.email].filter(Boolean).join(' · ') || 'No contact info';
+          return '<div class="catalog-item" onclick="selectVendorCatalogItem(' + i + ')">' +
+            '<span class="catalog-item-name">' + esc(v.vendorName) + '</span>' +
+            '<span class="catalog-item-meta">' + esc(meta) + '</span>' +
+            '</div>';
+        }).join('');
+        container._currentVendors = vendors;
+      }
+
+      function selectVendorCatalogItem(idx) {
+        var list = document.getElementById('vendorCatalogList')._currentVendors;
+        if (!list || !list[idx]) return;
+        var v = list[idx];
+        document.getElementById('vendor').value = v.vendorName || '';
+        document.getElementById('attention').value = v.contactPerson || '';
+        closeVendorCatalog();
+      }
+
+      document.getElementById('vendorCatalogModal').addEventListener('click', function(e) {
+        if (e.target === this) closeVendorCatalog();
+      });
+
+      // ── Warehouse Catalog ─────────────────────────────────────────
+      var warehouseCatalogData = null;
+
+      function openWarehouseCatalog() {
+        document.getElementById('warehouseCatalogSearch').value = '';
+        document.getElementById('warehouseCatalogModal').classList.add('active');
+
+        if (warehouseCatalogData) {
+          renderWarehouseCatalogList(warehouseCatalogData);
+          return;
+        }
+
+        if (typeof google !== 'undefined') {
+          google.script.run
+            .withSuccessHandler(function(data) {
+              warehouseCatalogData = data || [];
+              renderWarehouseCatalogList(warehouseCatalogData);
+            })
+            .withFailureHandler(function() {
+              warehouseCatalogData = [];
+              renderWarehouseCatalogList([]);
+            })
+            .getWarehouseCatalog();
+        } else {
+          warehouseCatalogData = [
+            { warehouseName: 'Main Warehouse', address: '123 Main St', contactPerson: 'John', phone: '09171234567' },
+            { warehouseName: 'Cebu Branch', address: '456 Cebu Ave', contactPerson: 'Jane', phone: '09179876543' }
+          ];
+          renderWarehouseCatalogList(warehouseCatalogData);
+        }
+      }
+
+      function closeWarehouseCatalog() {
+        document.getElementById('warehouseCatalogModal').classList.remove('active');
+      }
+
+      function filterWarehouseCatalog(q) {
+        if (!warehouseCatalogData) return;
+        q = q.toLowerCase().trim();
+        var filtered = q ? warehouseCatalogData.filter(function(w) {
+          return (w.warehouseName || '').toLowerCase().includes(q) ||
+                 (w.address || '').toLowerCase().includes(q);
+        }) : warehouseCatalogData;
+        renderWarehouseCatalogList(filtered);
+      }
+
+      function renderWarehouseCatalogList(warehouses) {
+        var container = document.getElementById('warehouseCatalogList');
+        if (!warehouses || warehouses.length === 0) {
+          container.innerHTML = '<div style="text-align:center;color:var(--muted);padding:2rem 0;font-size:0.85rem;">No warehouses found.</div>';
+          container._currentWarehouses = [];
+          return;
+        }
+        container.innerHTML = warehouses.map(function(w, i) {
+          var detail = [w.address, w.contactPerson, w.phone].filter(Boolean).join(' · ') || 'No details';
+          return '<div class="warehouse-catalog-item" onclick="selectWarehouseCatalogItem(' + i + ')">' +
+            '<div class="warehouse-catalog-name">' + esc(w.warehouseName) + '</div>' +
+            '<div class="warehouse-catalog-detail">' + esc(detail) + '</div>' +
+            '</div>';
+        }).join('');
+        container._currentWarehouses = warehouses;
+      }
+
+      function selectWarehouseCatalogItem(idx) {
+        var list = document.getElementById('warehouseCatalogList')._currentWarehouses;
+        if (!list || !list[idx]) return;
+        document.getElementById('warehouse').value = list[idx].warehouseName || '';
+        closeWarehouseCatalog();
+      }
+
+      document.getElementById('warehouseCatalogModal').addEventListener('click', function(e) {
+        if (e.target === this) closeWarehouseCatalog();
+      });
+
+      // ── Comments ──────────────────────────────────────────────────
+      function loadComments(poNumber) {
+        if (typeof google !== 'undefined') {
+          google.script.run
+            .withSuccessHandler(function(comments) { renderComments(comments); })
+            .withFailureHandler(function() { document.getElementById('commentsList').innerHTML = ''; })
+            .getComments(poNumber);
+        } else {
+          renderComments([
+            { timestamp: '02/16/2026 2:00 PM', email: 'user@example.com', comment: 'Initial order placed.' },
+            { timestamp: '02/15/2026 10:00 AM', email: 'admin@example.com', comment: 'Vendor confirmed availability.' }
+          ]);
+        }
+      }
+
+      function renderComments(comments) {
+        var container = document.getElementById('commentsList');
+        if (!comments || comments.length === 0) {
+          container.innerHTML = '<div style="color:var(--muted);font-size:0.85rem;padding:0.5rem 0;">No comments yet.</div>';
+          return;
+        }
+        container.innerHTML = comments.map(function(c) {
+          return '<div class="comment-item">' +
+            '<div class="comment-meta">' + esc(c.timestamp) + ' — ' + esc(c.email) + '</div>' +
+            '<div class="comment-text">' + esc(c.comment) + '</div>' +
+            '</div>';
+        }).join('');
+      }
+
+      function addComment() {
+        var input = document.getElementById('commentInput');
+        var comment = input.value.trim();
+        if (!comment) { showNotif('Please enter a comment.', 'error'); return; }
+        if (!currentPO) return;
+
+        var poNumber = currentPO.po;
+
+        function onSuccess(result) {
+          if (result === 'Success') {
+            input.value = '';
+            showNotif('Comment added.', 'success');
+            loadComments(poNumber);
+          } else {
+            showNotif(result || 'Failed to add comment.', 'error');
+          }
+        }
+
+        if (typeof google !== 'undefined') {
+          google.script.run
+            .withSuccessHandler(onSuccess)
+            .withFailureHandler(function(err) { showNotif('Error: ' + err.message, 'error'); })
+            .addComment(poNumber, comment);
+        } else {
+          setTimeout(function() { onSuccess('Success'); }, 300);
+        }
+      }
+
+      // ── QR Code ───────────────────────────────────────────────────
+      function showQRCode() {
+        if (!currentPO) return;
+        var poNumber = currentPO.po;
+        var qrUrl = 'https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=' + encodeURIComponent(poNumber);
+        document.getElementById('qrContainer').innerHTML = '<img src="' + qrUrl + '" alt="QR Code" style="image-rendering:pixelated;">';
+        document.getElementById('qrLabel').textContent = poNumber;
+        document.getElementById('qrModal').classList.add('active');
+      }
+
+      function closeQRModal() {
+        document.getElementById('qrModal').classList.remove('active');
+      }
+
+      function printQR() {
+        if (!currentPO) return;
+        var poNumber = currentPO.po;
+        var qrUrl = 'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=' + encodeURIComponent(poNumber);
+        var win = window.open('', '_blank', 'width=400,height=500');
+        win.document.write(
+          '<html><head><title>QR - ' + poNumber + '</title>' +
+          '<style>body{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;margin:0;}' +
+          'img{image-rendering:pixelated;}p{margin-top:1rem;font-size:1.2rem;font-weight:700;}</style></head>' +
+          '<body><img src="' + qrUrl + '" alt="QR"><p>' + poNumber + '</p></body></html>'
+        );
+        win.document.close();
+        win.onload = function() { win.print(); };
+      }
+
+      document.getElementById('qrModal').addEventListener('click', function(e) {
+        if (e.target === this) closeQRModal();
+      });
+
+      // ── Disable browser autocomplete on all inputs ────────────
+      document.querySelectorAll('input, select').forEach(function(el) { el.setAttribute('autocomplete', 'nope'); });
+      new MutationObserver(function(mutations) {
+        mutations.forEach(function(m) {
+          m.addedNodes.forEach(function(n) {
+            if (n.nodeType === 1) {
+              if (n.matches && n.matches('input,select')) n.setAttribute('autocomplete', 'nope');
+              if (n.querySelectorAll) n.querySelectorAll('input,select').forEach(function(el) { el.setAttribute('autocomplete', 'nope'); });
+            }
+          });
+        });
+      }).observe(document.body, { childList: true, subtree: true });
+
+      // ── Auto-load from URL param ──────────────────────────────────
+      const PRE_LOADED_PO = '<?= poParam ?>';
+
+      window.addEventListener('load', function() {
+        loadPOList();
+        if (PRE_LOADED_PO) {
+          document.getElementById('searchInput').value = PRE_LOADED_PO;
+          searchPO();
+        } else {
+          document.getElementById('searchInput').focus();
+        }
+      });
+    </script>
+  </body>
+</html>

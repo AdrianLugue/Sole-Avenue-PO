@@ -1,0 +1,1947 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+    <style>
+      i { padding-top: .24rem; }
+
+      :root {
+        --main-bg: oklch(98.5% 0.001 106.423);
+        --btn-bg: #000;
+        --btn-text: #fff;
+        --muted: oklch(60% 0 0);
+        --border: oklch(92% 0 0);
+        --text: oklch(20% 0 0);
+        --success-bg: oklch(95% 0.15 145);
+        --success-text: oklch(35% 0.15 145);
+        --error-bg: oklch(95% 0.15 25);
+        --error-text: oklch(55% 0.2 25);
+        --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.04), 0 4px 12px rgb(0 0 0 / 0.03);
+      }
+
+      * {
+        font-family: 'Inter', sans-serif;
+        margin: 0; padding: 0;
+        box-sizing: border-box;
+        transition: all 0.15s ease;
+      }
+
+      html, body {
+        height: 100%;
+        background-color: var(--main-bg);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      #poForm {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+      }
+
+      /* ── Sticky Page Header ─────────────────────────────── */
+      .page-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: oklch(11% 0 0);
+        border-bottom: 1px solid oklch(20% 0 0);
+        padding: 1.25rem 2.5rem 0;
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+      }
+      .page-header-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .page-header-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: oklch(94% 0 0);
+      }
+      .page-header-sub {
+        font-size: 0.8rem;
+        color: oklch(52% 0 0);
+        margin-top: 2px;
+      }
+
+      .page-header-actions {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-shrink: 0;
+      }
+
+      /* ── Header nav pills (dark bg) ───────────────────── */
+      .header-nav {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-top: 1rem;
+      }
+      .nav-pill {
+        padding: 8px 18px;
+        border: none;
+        background: transparent;
+        color: oklch(52% 0 0);
+        font-family: 'Inter', sans-serif;
+        font-size: 0.82rem;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 6px 6px 0 0;
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        white-space: nowrap;
+      }
+      .nav-pill:hover { color: oklch(94% 0 0); background: oklch(18% 0 0); }
+      .nav-pill.active { color: oklch(94% 0 0); background: transparent; }
+      .nav-pill.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0; right: 0;
+        height: 2px;
+        background: oklch(94% 0 0);
+        border-radius: 2px 2px 0 0;
+      }
+      .nav-pill i { font-size: 0.85rem; }
+
+      /* ── Header-context buttons ────────────────────────── */
+      .page-header .btn-primary {
+        background: oklch(97% 0 0); color: oklch(10% 0 0); border-color: oklch(97% 0 0);
+      }
+      .page-header .btn-primary:hover { background: oklch(86% 0 0); border-color: oklch(86% 0 0); }
+      .page-header .btn-outline {
+        background: transparent; border-color: oklch(28% 0 0); color: oklch(72% 0 0);
+      }
+      .page-header .btn-outline:hover {
+        background: oklch(18% 0 0); border-color: oklch(42% 0 0); color: oklch(90% 0 0);
+      }
+
+      /* ── Step Indicator Bar ─────────────────────────────── */
+      .step-bar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.875rem 2.5rem;
+        background: #fff;
+        border-bottom: 1px solid var(--border);
+        flex-shrink: 0;
+      }
+
+      .step-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: default;
+      }
+
+      .step-dot {
+        width: 30px; height: 30px;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700; font-size: 0.8rem;
+        border: 2px solid var(--border);
+        background: #fff;
+        color: var(--muted);
+        flex-shrink: 0;
+      }
+
+      .step-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+
+      .step-connector {
+        width: 56px; height: 2px;
+        background: var(--border);
+        margin: 0 10px;
+        flex-shrink: 0;
+      }
+
+      /* Active step */
+      .step-item.active .step-dot {
+        background: #000;
+        border-color: #000;
+        color: #fff;
+      }
+      .step-item.active .step-label { color: var(--text); }
+
+      /* Done step */
+      .step-item.done .step-dot {
+        background: oklch(35% 0.15 145);
+        border-color: oklch(35% 0.15 145);
+        color: #fff;
+      }
+      .step-item.done .step-label { color: oklch(35% 0.15 145); }
+      .step-item.done { cursor: pointer; }
+      .step-item.done:hover .step-dot { background: oklch(28% 0.15 145); }
+      .step-connector.done { background: oklch(35% 0.15 145); }
+
+      /* ── Scrollable Page Body ───────────────────────────── */
+      .page-body {
+        flex: 1;
+        overflow-y: auto;
+        background: var(--main-bg);
+      }
+
+      .page-body-inner {
+        max-width: 1060px;
+        margin: 0 auto;
+        padding: 1.5rem 2.5rem 2rem;
+      }
+
+      /* ── Step panel ─────────────────────────────────────── */
+      .step-panel { display: none; }
+      .step-panel.active { display: block; }
+
+      /* ── Fixed form footer ──────────────────────────────── */
+      .form-footer {
+        flex-shrink: 0;
+        background: #fff;
+        border-top: 1px solid var(--border);
+        padding: 0.9rem 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        box-shadow: 0 -2px 12px rgba(0,0,0,0.05);
+      }
+      .footer-left  { display: flex; align-items: center; gap: 0.75rem; }
+      .footer-right { display: flex; align-items: center; gap: 0.75rem; }
+      @media (max-width: 768px) {
+        .form-footer { padding: 0.75rem 1rem; }
+      }
+
+      /* ── Form Sections ──────────────────────────────────── */
+      .form-section {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1.5rem 1.75rem;
+        margin-bottom: 1rem;
+        box-shadow: var(--shadow);
+        animation: fadeInUp 0.3s ease-out backwards;
+      }
+
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .section-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--muted);
+        padding-bottom: 0.75rem;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid var(--border);
+      }
+
+      /* ── Grid Layouts ───────────────────────────────────── */
+      .section-grid-3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1rem;
+      }
+
+      .section-grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      /* ── Form Fields ────────────────────────────────────── */
+      .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+      }
+
+      label {
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: var(--text);
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .field-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      .field-wrapper i {
+        position: absolute;
+        left: 14px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      input, select {
+        width: 100%;
+        padding: 10px 14px 10px 40px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--text);
+        outline: none;
+        background: #fff;
+      }
+
+      input:focus, select:focus {
+        border-color: #000;
+        box-shadow: 0 0 0 1px #000;
+      }
+      input[readonly] {
+        background-color: var(--main-bg);
+        color: var(--muted);
+        cursor: not-allowed;
+      }
+      #poNumber {
+        color: var(--text);
+        font-weight: 600;
+        letter-spacing: 0.04em;
+      }
+
+      select {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 14px center;
+      }
+
+      input.error, select.error {
+        border-color: var(--error-text);
+        box-shadow: 0 0 0 1px var(--error-text);
+      }
+
+      .label-row {
+        display: flex;
+        align-items: baseline;
+        gap: 0.25rem;
+      }
+
+      .field-error {
+        font-size: 0.7rem;
+        color: var(--error-text);
+        font-weight: 500;
+        text-transform: none;
+        letter-spacing: 0;
+        display: none;
+      }
+      .field-error.visible { display: inline; }
+      .field-error.visible::before { content: '- '; }
+
+      .auto-badge {
+        font-size: 0.6rem;
+        font-weight: 500;
+        color: var(--muted);
+        background: var(--main-bg);
+        border: 1px solid var(--border);
+        padding: 1px 5px;
+        border-radius: 4px;
+        text-transform: none;
+        letter-spacing: 0;
+      }
+
+      /* ── Items Section ─────────────────────────────────── */
+      .items-section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 0.85rem;
+        margin-bottom: 1.25rem;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .items-section-header .section-title {
+        border: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .btn-add-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        border: 1.5px solid var(--border);
+        border-radius: 6px;
+        background: #fff;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--text);
+        cursor: pointer;
+      }
+      .btn-add-item:hover {
+        background: oklch(97% 0 0);
+        border-color: oklch(70% 0 0);
+      }
+
+      .items-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .item-row {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1rem 1rem 0.75rem;
+        background: oklch(99.5% 0 0);
+        animation: fadeInUp 0.2s ease-out;
+      }
+
+      .item-row-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.75rem;
+      }
+
+      .item-row-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+        color: var(--muted);
+      }
+
+      .btn-remove-item {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        border: 1px solid var(--border);
+        background: #fff;
+        cursor: pointer;
+        color: var(--muted);
+        font-size: 0.75rem;
+        flex-shrink: 0;
+      }
+      .btn-remove-item:hover {
+        background: var(--error-bg);
+        border-color: oklch(80% 0.1 25);
+        color: var(--error-text);
+      }
+      .btn-remove-item:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+      }
+
+      .item-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 0.75rem;
+        align-items: start;
+      }
+      .item-grid .ig-span2 { grid-column: span 2; }
+      .item-grid .ig-span4 { grid-column: span 4; }
+
+      .item-input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+      }
+
+      .item-label {
+        font-size: 0.68rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+        color: var(--text);
+      }
+
+      .item-label-row {
+        display: flex;
+        align-items: baseline;
+        gap: 0.25rem;
+      }
+
+      .item-field-error {
+        font-size: 0.68rem;
+        color: var(--error-text);
+        font-weight: 500;
+        display: none;
+      }
+      .item-field-error.visible { display: inline; }
+      .item-field-error.visible::before { content: '- '; }
+
+      /* ── Catalog button in item rows ─────────────────────── */
+      .btn-catalog {
+        font-size: 0.62rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        color: var(--muted);
+        background: none;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 2px 7px;
+        cursor: pointer;
+        margin-left: auto;
+      }
+      .btn-catalog:hover {
+        background: oklch(97% 0 0);
+        border-color: oklch(70% 0 0);
+        color: var(--text);
+      }
+
+      .catalog-item {
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .catalog-item:hover {
+        background: oklch(97% 0 0);
+        border-color: oklch(70% 0 0);
+      }
+      .catalog-item-name {
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: var(--text);
+      }
+      .catalog-item-meta {
+        font-size: 0.75rem;
+        color: var(--muted);
+      }
+
+      /* ── Modal ──────────────────────────────────────────── */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.55);
+        z-index: 9998;
+        align-items: center;
+        justify-content: center;
+      }
+      .modal-overlay.active { display: flex; }
+
+      .modal {
+        background: #fff;
+        border-radius: 12px;
+        padding: 2rem 2.5rem;
+        max-width: 520px;
+        width: 90%;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        animation: fadeInUp 0.3s ease-out;
+      }
+      .modal-title {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700;
+        font-size: 1.1rem;
+      }
+
+      .btn-close-modal {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px; height: 30px;
+        border-radius: 50%;
+        border: 1px solid var(--border);
+        background: #fff;
+        cursor: pointer;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+      .btn-close-modal:hover {
+        background: var(--error-bg);
+        border-color: oklch(80% 0.1 25);
+        color: var(--error-text);
+      }
+
+      /* ── Grand Total ────────────────────────────────────── */
+      .grand-total-row {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 1rem;
+        padding: 1rem 0.25rem 0.25rem;
+        border-top: 1px solid var(--border);
+        margin-top: 0.75rem;
+      }
+
+      .grand-total-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+        color: var(--muted);
+      }
+
+      .grand-total-value {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: var(--text);
+        letter-spacing: 0.02em;
+      }
+
+      /* ── Buttons ────────────────────────────────────────── */
+      .btn {
+        padding: 9px 18px;
+        border-radius: 6px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: 1px solid transparent;
+        min-height: 38px;
+        white-space: nowrap;
+      }
+
+      .btn-primary { background: var(--btn-bg); color: var(--btn-text); }
+      .btn-primary:hover { background: #333; }
+      .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
+
+      .btn-outline { background: #fff; border-color: var(--border); color: var(--text); }
+      .btn-outline:hover { background: oklch(97% 0 0); border-color: oklch(70% 0 0); }
+
+      .spinner {
+        width: 14px; height: 14px;
+        border: 2px solid rgba(255,255,255,0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        flex-shrink: 0;
+        display: inline-block;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      /* ── Notification ───────────────────────────────────── */
+      .notification {
+        position: fixed; bottom: 24px; right: 24px;
+        padding: 8px 16px; border-radius: 10px;
+        font-weight: 600;
+        z-index: 9999; display: none;
+        animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      }
+      @keyframes slideIn {
+        from { transform: translateX(400px); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      .notification.success { background: var(--success-bg); color: var(--success-text); border: 2px solid oklch(75% 0.15 145); }
+      .notification.error   { background: var(--error-bg);   color: var(--error-text);   border: 2px solid oklch(75% 0.15 25);  }
+
+      /* ── Warehouse / Template Catalog ────────────────────── */
+      .warehouse-catalog-item, .template-item {
+        padding: 10px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        border: 1px solid var(--border);
+      }
+      .warehouse-catalog-item:hover, .template-item:hover { background: oklch(97% 0 0); }
+      .warehouse-catalog-name, .template-name { font-weight: 600; font-size: 0.9rem; }
+      .warehouse-catalog-detail, .template-detail { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+      .template-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .template-item-info { flex: 1; }
+      .template-delete-btn {
+        background: none;
+        border: none;
+        color: var(--muted);
+        cursor: pointer;
+        padding: 4px 8px;
+        font-size: 0.8rem;
+        border-radius: 4px;
+      }
+      .template-delete-btn:hover { color: var(--error-text); background: var(--error-bg); }
+
+      /* ── Responsive ─────────────────────────────────────── */
+      @media (max-width: 768px) {
+        .page-header { padding: 1rem 1.25rem 0; }
+        .page-header-top { flex-direction: column; align-items: flex-start; gap: 1rem; }
+        .page-header-actions { width: 100%; justify-content: flex-end; }
+        .header-nav { overflow-x: auto; }
+        .step-bar { padding: 0.85rem 1rem; gap: 0; }
+        .step-label { display: none; }
+        .step-connector { width: 32px; }
+        .page-body-inner { padding: 1.25rem 1rem 2rem; }
+        .form-section { padding: 1.25rem 1rem; }
+        .section-grid-3 { grid-template-columns: 1fr; }
+        .section-grid-2 { grid-template-columns: 1fr; }
+        .item-grid { grid-template-columns: 1fr 1fr; }
+        .item-grid .ig-span2 { grid-column: span 2; }
+        .item-grid .ig-span4 { grid-column: span 2; }
+      }
+
+      /* ── Scrollbar ──────────────────────────────────────── */
+      .page-body::-webkit-scrollbar { width: 6px; }
+      .page-body::-webkit-scrollbar-track { background: var(--main-bg); }
+      .page-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+      .page-body::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+    </style>
+  </head>
+  <body>
+    <div class="notification" id="notification"></div>
+
+    <!-- Catalog Modal -->
+    <div class="modal-overlay" id="catalogModal">
+      <div class="modal" style="text-align:left;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+          <div class="modal-title">Item Catalog</div>
+          <button type="button" class="btn-close-modal" onclick="closeCatalogModal()">
+            <i class="fi fi-rr-cross-small"></i>
+          </button>
+        </div>
+        <input type="text" id="catalogSearch" placeholder="Search by name or SKU…"
+               oninput="filterCatalog(this.value)"
+               style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:6px;font-size:0.875rem;font-weight:500;outline:none;margin-bottom:0.75rem;">
+        <div id="catalogList" style="max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;">
+          <div style="text-align:center;color:var(--muted);padding:2rem 0;font-size:0.85rem;">Loading catalog…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vendor Catalog Modal -->
+    <div class="modal-overlay" id="vendorCatalogModal">
+      <div class="modal" style="text-align:left;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+          <div class="modal-title">Vendor Catalog</div>
+          <button type="button" class="btn-close-modal" onclick="closeVendorCatalog()">
+            <i class="fi fi-rr-cross-small"></i>
+          </button>
+        </div>
+        <input type="text" id="vendorCatalogSearch" placeholder="Search by vendor name…"
+               oninput="filterVendorCatalog(this.value)"
+               style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:6px;font-size:0.875rem;font-weight:500;outline:none;margin-bottom:0.75rem;">
+        <div id="vendorCatalogList" style="max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;">
+          <div style="text-align:center;color:var(--muted);padding:2rem 0;font-size:0.85rem;">Loading vendors…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Warehouse Catalog Modal -->
+    <div class="modal-overlay" id="warehouseCatalogModal">
+      <div class="modal" style="text-align:left;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+          <div class="modal-title">Warehouse Catalog</div>
+          <button type="button" class="btn-close-modal" onclick="closeWarehouseCatalog()">
+            <i class="fi fi-rr-cross-small"></i>
+          </button>
+        </div>
+        <input type="text" id="warehouseCatalogSearch" placeholder="Search by warehouse name…"
+               oninput="filterWarehouseCatalog(this.value)"
+               style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:6px;font-size:0.875rem;font-weight:500;outline:none;margin-bottom:0.75rem;">
+        <div id="warehouseCatalogList" style="max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;">
+          <div style="text-align:center;color:var(--muted);padding:2rem 0;font-size:0.85rem;">Loading warehouses…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Template Load Modal -->
+    <div class="modal-overlay" id="templateModal">
+      <div class="modal" style="text-align:left;max-width:520px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+          <div class="modal-title">PO Templates</div>
+          <button type="button" class="btn-close-modal" onclick="closeTemplateModal()">
+            <i class="fi fi-rr-cross-small"></i>
+          </button>
+        </div>
+        <input type="text" id="templateSearch" placeholder="Search templates…"
+               oninput="filterTemplates(this.value)"
+               style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:6px;font-size:0.875rem;font-weight:500;outline:none;margin-bottom:0.75rem;">
+        <div id="templateList" style="max-height:350px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;">
+          <div style="text-align:center;color:var(--muted);padding:2rem 0;font-size:0.85rem;">Loading templates…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Save Template Modal -->
+    <div class="modal-overlay" id="saveTemplateModal">
+      <div class="modal" style="max-width:380px;">
+        <div class="modal-title" style="margin-bottom:1rem;">Save as Template</div>
+        <input type="text" id="templateNameInput" placeholder="Template name…" maxlength="100"
+               style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:0.9rem;outline:none;margin-bottom:1rem;">
+        <div style="display:flex;gap:10px;justify-content:center;">
+          <button type="button" class="btn btn-outline" onclick="closeSaveTemplateModal()">Cancel</button>
+          <button type="button" class="btn btn-primary" onclick="saveTemplate()">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <form id="poForm" novalidate>
+      <!-- ── Sticky Header ──────────────────────────────── -->
+      <div class="page-header">
+        <div class="page-header-top">
+          <div class="page-header-info">
+            <h1 class="page-header-title">New Purchase Order</h1>
+            <p class="page-header-sub" id="stepSubtitle">Step 1 of 3 — Start with order details</p>
+          </div>
+          <div class="page-header-actions">
+            <button type="button" class="btn btn-outline" onclick="openTemplateModal()">
+              <i class="fi fi-rr-duplicate"></i> Templates
+            </button>
+            <button type="button" class="btn btn-outline" onclick="openSaveTemplateModal()">
+              <i class="fi fi-rr-bookmark"></i> Save Template
+            </button>
+            <button type="button" class="btn btn-outline" id="clearBtn">
+              <i class="fi fi-rr-eraser"></i> Clear
+            </button>
+          </div>
+        </div>
+        <nav class="header-nav">
+          <button type="button" class="nav-pill" onclick="navigate('dashboard')">
+            <i class="fi fi-rr-chart-pie-alt"></i>
+            Dashboard
+          </button>
+          <button type="button" class="nav-pill" onclick="navigate('orders')">
+            <i class="fi fi-rr-order-history"></i>
+            Purchase Orders
+          </button>
+          <button type="button" class="nav-pill active">
+            <i class="fi fi-rr-add-document"></i>
+            Create PO
+          </button>
+          <button type="button" class="nav-pill" onclick="navigate('edit')">
+            <i class="fi fi-rr-pen-square"></i>
+            Edit PO
+          </button>
+          <button type="button" class="nav-pill" onclick="navigate('receives')">
+            <i class="fi fi-rr-box-open"></i>
+            Receives
+          </button>
+          <button type="button" class="nav-pill" onclick="navigate('inventory')">
+            <i class="fi fi-rr-boxes"></i>
+            Inventory
+          </button>
+        </nav>
+      </div>
+
+      <!-- ── Step indicator ─────────────────────────────── -->
+      <div class="step-bar">
+        <div class="step-item active" id="step-item-1" onclick="clickStep(1)">
+          <div class="step-dot" id="step-dot-1">1</div>
+          <span class="step-label">Order Details</span>
+        </div>
+        <div class="step-connector" id="step-conn-1"></div>
+        <div class="step-item" id="step-item-2" onclick="clickStep(2)">
+          <div class="step-dot" id="step-dot-2">2</div>
+          <span class="step-label">Vendor & Shipping</span>
+        </div>
+        <div class="step-connector" id="step-conn-2"></div>
+        <div class="step-item" id="step-item-3" onclick="clickStep(3)">
+          <div class="step-dot" id="step-dot-3">3</div>
+          <span class="step-label">Line Items</span>
+        </div>
+      </div>
+
+      <!-- ── Scrollable Body ────────────────────────────── -->
+      <div class="page-body">
+        <div class="page-body-inner">
+
+          <!-- ══ Step 1: Order Details ══ -->
+          <div class="step-panel active" id="step1">
+            <div class="form-section">
+              <div class="section-title">Order Details</div>
+              <div class="section-grid-3">
+                <div class="input-group">
+                  <label>
+                    PO Number
+                    <span class="auto-badge">Auto-generated</span>
+                  </label>
+                  <div class="field-wrapper">
+                    <i class="fi fi-rr-document"></i>
+                    <input type="text" id="poNumber" name="poNumber" placeholder="Generating…" readonly>
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label>
+                    Reference #
+                    <span class="auto-badge">Auto-generated</span>
+                  </label>
+                  <div class="field-wrapper">
+                    <i class="fi fi-rr-hastag"></i>
+                    <input type="text" id="reference" name="reference" placeholder="Generating…" readonly>
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label>Expected Delivery Date</label>
+                  <div class="field-wrapper">
+                    <i class="fi fi-rr-calendar"></i>
+                    <input type="date" id="deliveryDate" name="deliveryDate">
+                  </div>
+                </div>
+                <div class="input-group">
+                  <div class="label-row">
+                    <label>Order Status <span style="color:var(--error-text);font-size:0.9em;">*</span></label>
+                    <span class="field-error" id="statusError"></span>
+                  </div>
+                  <div class="field-wrapper">
+                    <i class="fi fi-rr-stats"></i>
+                    <select id="status" name="status">
+                      <option value="">Choose Status</option>
+                      <option value="Draft">Draft</option>
+                      <option value="Issued">Issued</option>
+                      <option value="Closed">Closed</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ══ Step 2: Vendor & Shipping ══ -->
+          <div class="step-panel" id="step2">
+            <div class="form-section">
+              <div class="section-title">Vendor & Shipping</div>
+              <div class="section-grid-2">
+                <div class="input-group">
+                  <div class="label-row">
+                    <label>Vendor Name <span style="color:var(--error-text);font-size:0.9em;">*</span> <button type="button" class="btn-catalog" onclick="openVendorCatalog()">Catalog</button></label>
+                    <span class="field-error" id="vendorError"></span>
+                  </div>
+                  <div class="field-wrapper">
+                    <i class="fi fi-rr-user"></i>
+                    <input type="text" id="vendor" name="vendor" placeholder="Supplier Name" maxlength="100">
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label>Attention</label>
+                  <div class="field-wrapper">
+                    <i class="fi fi-rr-at"></i>
+                    <input type="text" id="attention" name="attention" placeholder="Contact Person" maxlength="100">
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label>Warehouse Name <button type="button" class="btn-catalog" onclick="openWarehouseCatalog()">Catalog</button></label>
+                  <div class="field-wrapper">
+                    <i class="fi fi-rr-building"></i>
+                    <input type="text" id="warehouse" name="warehouse" placeholder="e.g. Main Warehouse" maxlength="100">
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label>Delivery Instructions</label>
+                  <div class="field-wrapper">
+                    <i class="fi fi-rr-shipping-fast"></i>
+                    <input type="text" id="deliveryInstructions" name="deliveryInstructions" placeholder="Special instructions…" maxlength="300">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ══ Step 3: Line Items ══ -->
+          <div class="step-panel" id="step3">
+            <div class="form-section">
+              <div class="items-section-header">
+                <div class="section-title">Line Items</div>
+              </div>
+
+              <div class="items-list" id="itemsList">
+                <!-- Item rows injected by JS -->
+              </div>
+
+              <div class="grand-total-row">
+                <span class="grand-total-label">Grand Total</span>
+                <span class="grand-total-value" id="grandTotal">₱0.00</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── Fixed bottom footer ───────────────────────── -->
+      <div class="form-footer" id="formFooter">
+        <!-- Rendered dynamically by updateFormFooter() -->
+      </div>
+    </form>
+
+    <script>
+      const form    = document.getElementById('poForm');
+      const notifEl = document.getElementById('notification');
+
+      // ── Escape HTML ──────────────────────────────────────────────
+      function esc(str) {
+        return String(str || '')
+          .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+          .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      }
+
+      // ── Notification ────────────────────────────────────────────
+      function showNotif(msg, type) {
+        notifEl.textContent = msg;
+        notifEl.className   = 'notification ' + type;
+        notifEl.style.display = 'block';
+        setTimeout(() => { notifEl.style.display = 'none'; }, 4000);
+      }
+
+      // ── Auto-generate PO Number ─────────────────────────────────
+      function loadPONumber() {
+        const input   = document.getElementById('poNumber');
+        const refInput = document.getElementById('reference');
+        input.value       = '';
+        input.placeholder = 'Generating…';
+        refInput.value       = '';
+        refInput.placeholder = 'Generating…';
+        if (typeof google !== 'undefined') {
+          google.script.run
+            .withSuccessHandler(function(num) {
+              input.value       = num;
+              input.placeholder = 'PO-00001';
+              const digits = num.replace(/^PO-/, '');
+              refInput.value       = 'PO-REF-' + digits;
+              refInput.placeholder = 'PO-REF-00001';
+            })
+            .withFailureHandler(function() {
+              input.value       = 'PO-00001';
+              input.placeholder = 'PO-00001';
+              refInput.value       = 'PO-REF-00001';
+              refInput.placeholder = 'PO-REF-00001';
+            })
+            .generatePONumber();
+        } else {
+          const digits = String(Math.floor(Math.random() * 99999) + 1).padStart(5, '0');
+          input.value    = 'PO-' + digits;
+          refInput.value = 'PO-REF-' + digits;
+        }
+      }
+
+      // ── Inline Error Helpers ─────────────────────────────────────
+      function showFieldError(id, msg) {
+        const errEl = document.getElementById(id + 'Error');
+        const input = document.getElementById(id);
+        if (errEl) { errEl.textContent = msg; errEl.classList.add('visible'); }
+        if (input)   input.classList.add('error');
+      }
+
+      function clearFieldError(id) {
+        const errEl = document.getElementById(id + 'Error');
+        const input = document.getElementById(id);
+        if (errEl) { errEl.textContent = ''; errEl.classList.remove('visible'); }
+        if (input)   input.classList.remove('error');
+      }
+
+      // ── Format helpers ───────────────────────────────────────────
+      function fmtNum(n) {
+        return parseFloat(n || 0).toFixed(2);
+      }
+
+      function fmt(n) {
+        return '₱' + parseFloat(n || 0).toLocaleString('en-PH', {
+          minimumFractionDigits: 2, maximumFractionDigits: 2
+        });
+      }
+
+      // ══════════════════════════════════════════════════════════
+      // ── Step Wizard ──────────────────────────────────────────
+      // ══════════════════════════════════════════════════════════
+      var currentStep  = 1;
+      var TOTAL_STEPS  = 3;
+
+      var STEP_SUBTITLES = [
+        '',
+        'Step 1 of 3 — Start with order details',
+        'Step 2 of 3 — Enter vendor & shipping info',
+        'Step 3 of 3 — Add line items and submit'
+      ];
+
+      function showStep(n) {
+        // Hide all panels
+        for (var i = 1; i <= TOTAL_STEPS; i++) {
+          var panel = document.getElementById('step' + i);
+          panel.classList.remove('active');
+        }
+        currentStep = n;
+        document.getElementById('step' + n).classList.add('active');
+        updateStepBar();
+        document.querySelector('.page-body').scrollTop = 0;
+      }
+
+      function goToStep(n) {
+        if (n > currentStep) {
+          // Validate each step between current and target
+          for (var s = currentStep; s < n; s++) {
+            if (!validateStepN(s)) return;
+          }
+        }
+        showStep(n);
+      }
+
+      function goBack() {
+        if (currentStep <= 1) return;
+        showStep(currentStep - 1);
+      }
+
+      function clickStep(n) {
+        // Only allow clicking already-completed steps (going back)
+        if (n >= currentStep) return;
+        showStep(n);
+      }
+
+      function updateStepBar() {
+        for (var i = 1; i <= TOTAL_STEPS; i++) {
+          var item = document.getElementById('step-item-' + i);
+          var dot  = document.getElementById('step-dot-' + i);
+          item.classList.remove('active', 'done');
+
+          if (i < currentStep) {
+            item.classList.add('done');
+            dot.textContent = '✓';
+          } else {
+            dot.textContent = i;
+            if (i === currentStep) item.classList.add('active');
+          }
+
+          // Connector
+          if (i < TOTAL_STEPS) {
+            var conn = document.getElementById('step-conn-' + i);
+            if (i < currentStep) conn.classList.add('done');
+            else conn.classList.remove('done');
+          }
+        }
+
+        // Update header subtitle
+        document.getElementById('stepSubtitle').textContent = STEP_SUBTITLES[currentStep];
+        updateFormFooter();
+      }
+
+      // ── Footer renderer ──────────────────────────────────────────
+      function updateFormFooter() {
+        var footer = document.getElementById('formFooter');
+        var leftHtml  = '';
+        var rightHtml = '';
+
+        if (currentStep > 1) {
+          leftHtml += '<button type="button" class="btn btn-outline" onclick="goBack()"><i class="fi fi-rr-arrow-left"></i> Back</button>';
+        }
+
+        if (currentStep === 3) {
+          leftHtml  += '<button type="button" class="btn btn-outline btn-add-item" onclick="addItemRow()"><i class="fi fi-rr-plus-small"></i> Add Item</button>';
+          rightHtml  = '<button type="submit" class="btn btn-primary" id="submitBtn"><span id="submitBtnInner" style="display:flex;align-items:center;gap:8px;"><i class="fi fi-rr-disk"></i><span>Save Purchase Order</span></span></button>';
+        } else if (currentStep === 2) {
+          rightHtml = '<button type="button" class="btn btn-primary" onclick="goToStep(3)">Next <i class="fi fi-rr-arrow-right"></i></button>';
+        } else {
+          rightHtml = '<button type="button" class="btn btn-primary" onclick="goToStep(2)">Next <i class="fi fi-rr-arrow-right"></i></button>';
+        }
+
+        footer.innerHTML =
+          '<div class="footer-left">'  + leftHtml  + '</div>' +
+          '<div class="footer-right">' + rightHtml + '</div>';
+      }
+
+      // ── Per-step validators ──────────────────────────────────────
+      function validateStepN(step) {
+        if (step === 1) return validateStep1();
+        if (step === 2) return validateStep2();
+        if (step === 3) return validateItems();
+        return true;
+      }
+
+      function validateStep1() {
+        var valid = true;
+        var status = document.getElementById('status').value;
+        if (!status) {
+          showFieldError('status', 'Please select a status.');
+          valid = false;
+        } else {
+          clearFieldError('status');
+        }
+        if (!valid) showNotif('Please select an order status before continuing.', 'error');
+        return valid;
+      }
+
+      function validateStep2() {
+        var valid = true;
+        var vendor = document.getElementById('vendor').value.trim();
+        if (!vendor) {
+          showFieldError('vendor', 'Vendor name is required.');
+          valid = false;
+        } else if (vendor.length < 2) {
+          showFieldError('vendor', 'Must be at least 2 characters.');
+          valid = false;
+        } else {
+          clearFieldError('vendor');
+        }
+        if (!valid) showNotif('Please enter a vendor name before continuing.', 'error');
+        return valid;
+      }
+
+      // ── Item Row Manager ─────────────────────────────────────────
+      let itemCount = 0;
+
+      function createItemRow(data) {
+        itemCount++;
+        const idx = itemCount;
+        const d   = data || {};
+
+        const row = document.createElement('div');
+        row.className   = 'item-row';
+        row.dataset.idx = idx;
+
+        row.innerHTML = `
+          <div class="item-row-header">
+            <span class="item-row-label">Item ${idx}</span>
+            <button type="button" class="btn-remove-item" onclick="removeItemRow(this)" title="Remove item">
+              <i class="fi fi-rr-cross-small"></i>
+            </button>
+          </div>
+          <div class="item-grid">
+            <div class="item-input-group ig-span2">
+              <div class="item-label-row">
+                <span class="item-label">Item Name <span style="color:var(--error-text)">*</span></span>
+                <span class="item-field-error" id="itemNameErr-${idx}"></span>
+                <button type="button" class="btn-catalog" onclick="openCatalogModal(this.closest('.item-row'))">Catalog</button>
+              </div>
+              <div class="field-wrapper">
+                <i class="fi fi-rr-box-open"></i>
+                <input type="text" class="item-name" placeholder="e.g. Adidas Samba Jane"
+                       maxlength="200" value="${esc(d.itemName || '')}">
+              </div>
+            </div>
+            <div class="item-input-group">
+              <span class="item-label">SKU</span>
+              <div class="field-wrapper">
+                <i class="fi fi-rr-barcode"></i>
+                <input type="text" class="item-sku" placeholder="e.g. ADS-SJ-42"
+                       maxlength="100" value="${esc(d.sku || '')}">
+              </div>
+            </div>
+            <div class="item-input-group">
+              <span class="item-label">Usage Unit</span>
+              <div class="field-wrapper">
+                <i class="fi fi-rr-boxes"></i>
+                <input type="text" class="item-unit" placeholder="Pairs"
+                       maxlength="50" value="${esc(d.usageUnit || '')}">
+              </div>
+            </div>
+            <div class="item-input-group ig-span4">
+              <span class="item-label">Item Description</span>
+              <div class="field-wrapper">
+                <i class="fi fi-rr-align-left"></i>
+                <input type="text" class="item-desc" placeholder="Additional details…"
+                       maxlength="300" value="${esc(d.itemDesc || '')}">
+              </div>
+            </div>
+            <div class="item-input-group">
+              <div class="item-label-row">
+                <span class="item-label">Quantity <span style="color:var(--error-text)">*</span></span>
+                <span class="item-field-error" id="itemQtyErr-${idx}"></span>
+              </div>
+              <div class="field-wrapper">
+                <i class="fi fi-rr-layers"></i>
+                <input type="number" class="item-qty" placeholder="0"
+                       min="1" max="99999" step="1"
+                       value="${d.qty || ''}" oninput="recalcItemRow(this)">
+              </div>
+            </div>
+            <div class="item-input-group">
+              <div class="item-label-row">
+                <span class="item-label">Item Price <span style="color:var(--error-text)">*</span></span>
+                <span class="item-field-error" id="itemRateErr-${idx}"></span>
+              </div>
+              <div class="field-wrapper">
+                <i class="fi fi-rr-money-bill-wave"></i>
+                <input type="number" class="item-rate" placeholder="0.00"
+                       min="0.01" step="0.01"
+                       value="${d.rate || ''}" oninput="recalcItemRow(this)">
+              </div>
+            </div>
+            <div class="item-input-group ig-span2">
+              <span class="item-label">Item Total</span>
+              <div class="field-wrapper">
+                <i class="fi fi-rr-calculator"></i>
+                <input type="text" class="item-total" readonly
+                       value="${d.total ? fmtNum(d.total) : ''}">
+              </div>
+            </div>
+          </div>
+        `;
+        return row;
+      }
+
+      function addItemRow(data) {
+        document.getElementById('itemsList').appendChild(createItemRow(data));
+        refreshRemoveButtons();
+        updateGrandTotal();
+      }
+
+      function removeItemRow(btn) {
+        const rows = document.querySelectorAll('#itemsList .item-row');
+        if (rows.length <= 1) return;
+        btn.closest('.item-row').remove();
+        renumberItemRows();
+        refreshRemoveButtons();
+        updateGrandTotal();
+      }
+
+      function renumberItemRows() {
+        document.querySelectorAll('#itemsList .item-row').forEach(function(row, i) {
+          row.querySelector('.item-row-label').textContent = 'Item ' + (i + 1);
+        });
+      }
+
+      function refreshRemoveButtons() {
+        const rows   = document.querySelectorAll('#itemsList .item-row');
+        const isOnly = rows.length === 1;
+        rows.forEach(function(row) {
+          row.querySelector('.btn-remove-item').disabled = isOnly;
+        });
+      }
+
+      function recalcItemRow(inputEl) {
+        const row  = inputEl.closest('.item-row');
+        const qty  = parseFloat(row.querySelector('.item-qty').value)  || 0;
+        const rate = parseFloat(row.querySelector('.item-rate').value) || 0;
+        row.querySelector('.item-total').value = fmtNum(qty * rate);
+        updateGrandTotal();
+      }
+
+      function updateGrandTotal() {
+        let total = 0;
+        document.querySelectorAll('#itemsList .item-row').forEach(function(row) {
+          total += parseFloat(row.querySelector('.item-total').value) || 0;
+        });
+        document.getElementById('grandTotal').textContent = fmt(total);
+      }
+
+      // Add Item is rendered dynamically in the footer (inline onclick="addItemRow()")
+
+      // ── Item Validation ──────────────────────────────────────────
+      function validateItems() {
+        let valid = true;
+        document.querySelectorAll('#itemsList .item-row').forEach(function(row) {
+          const nameEl  = row.querySelector('.item-name');
+          const qtyEl   = row.querySelector('.item-qty');
+          const rateEl  = row.querySelector('.item-rate');
+          const nameErr = row.querySelector('[id^="itemNameErr-"]');
+          const qtyErr  = row.querySelector('[id^="itemQtyErr-"]');
+          const rateErr = row.querySelector('[id^="itemRateErr-"]');
+
+          const name = nameEl.value.trim();
+          if (!name) {
+            nameEl.classList.add('error');
+            if (nameErr) { nameErr.textContent = 'Required.'; nameErr.classList.add('visible'); }
+            valid = false;
+          } else {
+            nameEl.classList.remove('error');
+            if (nameErr) { nameErr.textContent = ''; nameErr.classList.remove('visible'); }
+          }
+
+          const qty = parseInt(qtyEl.value, 10);
+          if (!qtyEl.value || isNaN(qty) || qty < 1) {
+            qtyEl.classList.add('error');
+            if (qtyErr) { qtyErr.textContent = 'Min 1.'; qtyErr.classList.add('visible'); }
+            valid = false;
+          } else {
+            qtyEl.classList.remove('error');
+            if (qtyErr) { qtyErr.textContent = ''; qtyErr.classList.remove('visible'); }
+          }
+
+          const rate = parseFloat(rateEl.value);
+          if (!rateEl.value || isNaN(rate) || rate <= 0) {
+            rateEl.classList.add('error');
+            if (rateErr) { rateErr.textContent = 'Must be > 0.'; rateErr.classList.add('visible'); }
+            valid = false;
+          } else {
+            rateEl.classList.remove('error');
+            if (rateErr) { rateErr.textContent = ''; rateErr.classList.remove('visible'); }
+          }
+        });
+        if (!valid) showNotif('Please fix the item errors before submitting.', 'error');
+        return valid;
+      }
+
+      // ── Collect items array for submit ───────────────────────────
+      function collectItems() {
+        return Array.from(document.querySelectorAll('#itemsList .item-row')).map(function(row) {
+          return {
+            itemName:  row.querySelector('.item-name').value.trim(),
+            sku:       row.querySelector('.item-sku').value.trim(),
+            itemDesc:  row.querySelector('.item-desc').value.trim(),
+            qty:       parseInt(row.querySelector('.item-qty').value, 10),
+            usageUnit: row.querySelector('.item-unit').value.trim(),
+            rate:      parseFloat(row.querySelector('.item-rate').value)
+          };
+        });
+      }
+
+      // ── Full form validation (for submit) ────────────────────────
+      function validateForm() {
+        return validateStep1() && validateStep2() && validateItems();
+      }
+
+      // ── Real-time blur validation ────────────────────────────────
+      document.getElementById('vendor').addEventListener('blur', function() {
+        const v = this.value.trim();
+        if (!v)            showFieldError('vendor', 'Vendor name is required.');
+        else if (v.length < 2) showFieldError('vendor', 'Must be at least 2 characters.');
+        else               clearFieldError('vendor');
+      });
+
+      document.getElementById('status').addEventListener('change', function() {
+        if (!this.value) showFieldError('status', 'Please select a status.');
+        else             clearFieldError('status');
+      });
+
+      // ── Clear Form ──────────────────────────────────────────────
+      const CLEARABLE_FIELDS = [
+        'deliveryDate', 'status',
+        'vendor', 'attention', 'warehouse', 'deliveryInstructions'
+      ];
+
+      document.getElementById('clearBtn').addEventListener('click', function() {
+        CLEARABLE_FIELDS.forEach(function(id) {
+          const el = document.getElementById(id);
+          if (el) el.value = '';
+        });
+        ['vendor', 'status'].forEach(clearFieldError);
+
+        itemCount = 0;
+        document.getElementById('itemsList').innerHTML = '';
+        addItemRow();
+
+        loadPONumber();
+        showStep(1);
+      });
+
+      // ── Form Submit ─────────────────────────────────────────────
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!validateItems()) return;
+
+        var submitBtn      = document.getElementById('submitBtn');
+        var submitBtnInner = document.getElementById('submitBtnInner');
+        if (submitBtn)      submitBtn.disabled = true;
+        if (submitBtnInner) submitBtnInner.innerHTML = '<div class="spinner"></div><span>Submitting…</span>';
+
+        const formData = {
+          po:                   document.getElementById('poNumber').value.trim(),
+          deliveryDate:         document.getElementById('deliveryDate').value,
+          reference:            document.getElementById('reference').value.trim(),
+          status:               document.getElementById('status').value,
+          vendor:               document.getElementById('vendor').value.trim(),
+          attention:            document.getElementById('attention').value.trim(),
+          warehouse:            document.getElementById('warehouse').value.trim(),
+          deliveryInstructions: document.getElementById('deliveryInstructions').value.trim(),
+          items:                collectItems()
+        };
+
+        if (typeof google !== 'undefined') {
+          google.script.run
+            .withSuccessHandler(function(res) {
+              var submitBtn      = document.getElementById('submitBtn');
+              var submitBtnInner = document.getElementById('submitBtnInner');
+              if (submitBtn)      submitBtn.disabled = false;
+              if (submitBtnInner) submitBtnInner.innerHTML = '<i class="fi fi-rr-disk"></i><span>Save Purchase Order</span>';
+              if (res === 'Success') {
+                showNotif('Purchase order saved successfully.', 'success');
+                CLEARABLE_FIELDS.forEach(function(id) {
+                  const el = document.getElementById(id);
+                  if (el) el.value = '';
+                });
+                itemCount = 0;
+                document.getElementById('itemsList').innerHTML = '';
+                addItemRow();
+                loadPONumber();
+                showStep(1);
+                // Fix 5: invalidate catalog caches so new auto-saved entries appear on next open
+                catalogData = null;
+                vendorCatalogData = null;
+                warehouseCatalogData = null;
+              } else {
+                showNotif(res, 'error');
+              }
+            })
+            .withFailureHandler(function(err) {
+              var submitBtn      = document.getElementById('submitBtn');
+              var submitBtnInner = document.getElementById('submitBtnInner');
+              if (submitBtn)      submitBtn.disabled = false;
+              if (submitBtnInner) submitBtnInner.innerHTML = '<i class="fi fi-rr-disk"></i><span>Save Purchase Order</span>';
+              showNotif('Unexpected error: ' + err.message, 'error');
+            })
+            .processForm(formData);
+        }
+      });
+
+      // ── Navigation ──────────────────────────────────────────────
+      const APP_URL = '<?= scriptUrl ?>';
+      function navigate(page) {
+        const url = APP_URL + '?page=' + page;
+        window.top.location.href = url;
+      }
+
+      // ── Item Catalog ──────────────────────────────────────────────
+      var catalogData = null;
+      var catalogTargetRow = null;
+
+      function openCatalogModal(itemRow) {
+        catalogTargetRow = itemRow;
+        document.getElementById('catalogSearch').value = '';
+        document.getElementById('catalogModal').classList.add('active');
+
+        if (catalogData) {
+          renderCatalogList(catalogData);
+          return;
+        }
+
+        if (typeof google !== 'undefined') {
+          google.script.run
+            .withSuccessHandler(function(data) {
+              catalogData = data || [];
+              renderCatalogList(catalogData);
+            })
+            .withFailureHandler(function() {
+              catalogData = [];
+              renderCatalogList([]);
+            })
+            .getItemCatalog();
+        } else {
+          catalogData = [
+            { itemName: 'Adidas Samba Jane', sku: 'ADS-SJ-42', itemDesc: 'Classic samba silhouette', usageUnit: 'Pairs', defaultRate: 5000 },
+            { itemName: 'Nike Air Force 1', sku: 'NKE-AF1-9', itemDesc: 'White leather', usageUnit: 'Pairs', defaultRate: 6500 },
+            { itemName: 'Adidas Stan Smith', sku: 'ADS-SS-9', itemDesc: 'Green heel tab', usageUnit: 'Pairs', defaultRate: 4500 },
+            { itemName: 'Nike Air Max 90', sku: 'NKE-AM90-10', itemDesc: '', usageUnit: 'Pairs', defaultRate: 7200 }
+          ];
+          renderCatalogList(catalogData);
+        }
+      }
+
+      function closeCatalogModal() {
+        document.getElementById('catalogModal').classList.remove('active');
+        catalogTargetRow = null;
+      }
+
+      function filterCatalog(query) {
+        if (!catalogData) return;
+        var q = query.toLowerCase().trim();
+        var filtered = q ? catalogData.filter(function(item) {
+          return (item.itemName || '').toLowerCase().includes(q) ||
+                 (item.sku || '').toLowerCase().includes(q);
+        }) : catalogData;
+        renderCatalogList(filtered);
+      }
+
+      function renderCatalogList(items) {
+        var container = document.getElementById('catalogList');
+        if (!items || items.length === 0) {
+          container.innerHTML = '<div style="text-align:center;color:var(--muted);padding:2rem 0;font-size:0.85rem;">No items found.</div>';
+          return;
+        }
+        container.innerHTML = items.map(function(item, i) {
+          return '<div class="catalog-item" onclick="selectCatalogItem(' + i + ')">' +
+            '<span class="catalog-item-name">' + esc(item.itemName) + '</span>' +
+            '<span class="catalog-item-meta">' + esc(item.sku || '—') + ' · ' + esc(item.usageUnit || '') + ' · ' + fmt(item.defaultRate || 0) + '</span>' +
+            '</div>';
+        }).join('');
+        container._currentItems = items;
+      }
+
+      function selectCatalogItem(idx) {
+        var list = document.getElementById('catalogList')._currentItems;
+        if (!list || !list[idx] || !catalogTargetRow) return;
+        var item = list[idx];
+        catalogTargetRow.querySelector('.item-name').value = item.itemName || '';
+        catalogTargetRow.querySelector('.item-sku').value  = item.sku || '';
+        catalogTargetRow.querySelector('.item-desc').value = item.itemDesc || '';
+        catalogTargetRow.querySelector('.item-unit').value = item.usageUnit || '';
+        catalogTargetRow.querySelector('.item-rate').value = item.defaultRate || '';
+        recalcItemRow(catalogTargetRow.querySelector('.item-rate'));
+        closeCatalogModal();
+      }
+
+      document.getElementById('catalogModal').addEventListener('click', function(e) {
+        if (e.target === this) closeCatalogModal();
+      });
+
+      // ── Vendor Catalog ─────────────────────────────────────────
+      var vendorCatalogData = null;
+
+      function openVendorCatalog() {
+        document.getElementById('vendorCatalogSearch').value = '';
+        document.getElementById('vendorCatalogModal').classList.add('active');
+
+        if (vendorCatalogData) {
+          renderVendorCatalogList(vendorCatalogData);
+          return;
+        }
+
+        if (typeof google !== 'undefined') {
+          google.script.run
+            .withSuccessHandler(function(data) {
+              vendorCatalogData = data || [];
+              renderVendorCatalogList(vendorCatalogData);
+            })
+            .withFailureHandler(function() {
+              vendorCatalogData = [];
+              renderVendorCatalogList([]);
+            })
+            .getVendorCatalog();
+        } else {
+          vendorCatalogData = [
+            { vendorName: 'Raven Tejada', contactPerson: 'Raven T.', email: 'raven@example.com', phone: '0917-123-4567', address: 'Manila' },
+            { vendorName: 'Nike Store PH', contactPerson: 'Nike CS', email: 'orders@nike.ph', phone: '', address: 'BGC, Taguig' },
+            { vendorName: 'Adidas PH', contactPerson: '', email: 'sales@adidas.ph', phone: '0918-987-6543', address: 'Makati' },
+            { vendorName: 'Montenegro', contactPerson: 'Juan M.', email: '', phone: '', address: 'Cebu City' }
+          ];
+          renderVendorCatalogList(vendorCatalogData);
+        }
+      }
+
+      function closeVendorCatalog() {
+        document.getElementById('vendorCatalogModal').classList.remove('active');
+      }
+
+      function filterVendorCatalog(query) {
+        if (!vendorCatalogData) return;
+        var q = query.toLowerCase().trim();
+        var filtered = q ? vendorCatalogData.filter(function(v) {
+          return (v.vendorName || '').toLowerCase().includes(q) ||
+                 (v.contactPerson || '').toLowerCase().includes(q);
+        }) : vendorCatalogData;
+        renderVendorCatalogList(filtered);
+      }
+
+      function renderVendorCatalogList(vendors) {
+        var container = document.getElementById('vendorCatalogList');
+        if (!vendors || vendors.length === 0) {
+          container.innerHTML = '<div style="text-align:center;color:var(--muted);padding:2rem 0;font-size:0.85rem;">No vendors found.</div>';
+          return;
+        }
+        container.innerHTML = vendors.map(function(v, i) {
+          var meta = [v.contactPerson, v.phone, v.email].filter(Boolean).join(' · ') || 'No contact info';
+          return '<div class="catalog-item" onclick="selectVendorCatalogItem(' + i + ')">' +
+            '<span class="catalog-item-name">' + esc(v.vendorName) + '</span>' +
+            '<span class="catalog-item-meta">' + esc(meta) + '</span>' +
+            '</div>';
+        }).join('');
+        container._currentVendors = vendors;
+      }
+
+      function selectVendorCatalogItem(idx) {
+        var list = document.getElementById('vendorCatalogList')._currentVendors;
+        if (!list || !list[idx]) return;
+        var v = list[idx];
+        document.getElementById('vendor').value = v.vendorName || '';
+        document.getElementById('attention').value = v.contactPerson || '';
+        clearFieldError('vendor');
+        closeVendorCatalog();
+      }
+
+      document.getElementById('vendorCatalogModal').addEventListener('click', function(e) {
+        if (e.target === this) closeVendorCatalog();
+      });
+
+      // ── Warehouse Catalog ─────────────────────────────────────────
+      var warehouseCatalogData = null;
+
+      function openWarehouseCatalog() {
+        document.getElementById('warehouseCatalogSearch').value = '';
+        document.getElementById('warehouseCatalogModal').classList.add('active');
+
+        if (warehouseCatalogData) {
+          renderWarehouseCatalogList(warehouseCatalogData);
+          return;
+        }
+
+        if (typeof google !== 'undefined') {
+          google.script.run
+            .withSuccessHandler(function(data) {
+              warehouseCatalogData = data || [];
+              renderWarehouseCatalogList(warehouseCatalogData);
+            })
+            .withFailureHandler(function() {
+              warehouseCatalogData = [];
+              renderWarehouseCatalogList([]);
+            })
+            .getWarehouseCatalog();
+        } else {
+          warehouseCatalogData = [
+            { warehouseName: 'Main Warehouse', address: '123 Main St', contactPerson: 'John', phone: '09171234567' },
+            { warehouseName: 'Cebu Branch', address: '456 Cebu Ave', contactPerson: 'Jane', phone: '09179876543' }
+          ];
+          renderWarehouseCatalogList(warehouseCatalogData);
+        }
+      }
+
+      function closeWarehouseCatalog() {
+        document.getElementById('warehouseCatalogModal').classList.remove('active');
+      }
+
+      function filterWarehouseCatalog(q) {
+        if (!warehouseCatalogData) return;
+        q = q.toLowerCase().trim();
+        var filtered = q ? warehouseCatalogData.filter(function(w) {
+          return (w.warehouseName || '').toLowerCase().includes(q) ||
+                 (w.address || '').toLowerCase().includes(q);
+        }) : warehouseCatalogData;
+        renderWarehouseCatalogList(filtered);
+      }
+
+      function renderWarehouseCatalogList(warehouses) {
+        var container = document.getElementById('warehouseCatalogList');
+        if (!warehouses || warehouses.length === 0) {
+          container.innerHTML = '<div style="text-align:center;color:var(--muted);padding:2rem 0;font-size:0.85rem;">No warehouses found.</div>';
+          container._currentWarehouses = [];
+          return;
+        }
+        container.innerHTML = warehouses.map(function(w, i) {
+          var detail = [w.address, w.contactPerson, w.phone].filter(Boolean).join(' · ') || 'No details';
+          return '<div class="warehouse-catalog-item" onclick="selectWarehouseCatalogItem(' + i + ')">' +
+            '<div class="warehouse-catalog-name">' + esc(w.warehouseName) + '</div>' +
+            '<div class="warehouse-catalog-detail">' + esc(detail) + '</div>' +
+            '</div>';
+        }).join('');
+        container._currentWarehouses = warehouses;
+      }
+
+      function selectWarehouseCatalogItem(idx) {
+        var list = document.getElementById('warehouseCatalogList')._currentWarehouses;
+        if (!list || !list[idx]) return;
+        document.getElementById('warehouse').value = list[idx].warehouseName || '';
+        closeWarehouseCatalog();
+      }
+
+      document.getElementById('warehouseCatalogModal').addEventListener('click', function(e) {
+        if (e.target === this) closeWarehouseCatalog();
+      });
+
+      // ── PO Templates ──────────────────────────────────────────────
+      var templatesData = null;
+
+      function openTemplateModal() {
+        document.getElementById('templateSearch').value = '';
+        document.getElementById('templateModal').classList.add('active');
+
+        if (typeof google !== 'undefined') {
+          google.script.run
+            .withSuccessHandler(function(data) {
+              templatesData = data || [];
+              renderTemplateList(templatesData);
+            })
+            .withFailureHandler(function() {
+              templatesData = [];
+              renderTemplateList([]);
+            })
+            .getTemplates();
+        } else {
+          templatesData = [
+            {
+              templateName: 'Weekly Adidas Order',
+              vendor: 'Adidas PH',
+              attention: 'Sales Dept',
+              warehouse: 'Main Warehouse',
+              deliveryInstructions: 'Door 3',
+              items: [
+                { itemName: 'Adidas Samba', sku: 'ADS-SB-8', itemDesc: '', qty: 10, usageUnit: 'Pairs', rate: 5000 },
+                { itemName: 'Adidas Stan Smith', sku: 'ADS-SS-9', itemDesc: '', qty: 5, usageUnit: 'Pairs', rate: 4500 }
+              ]
+            }
+          ];
+          renderTemplateList(templatesData);
+        }
+      }
+
+      function closeTemplateModal() {
+        document.getElementById('templateModal').classList.remove('active');
+      }
+
+      function filterTemplates(q) {
+        if (!templatesData) return;
+        q = q.toLowerCase().trim();
+        var filtered = q ? templatesData.filter(function(t) {
+          return (t.templateName || '').toLowerCase().includes(q) ||
+                 (t.vendor || '').toLowerCase().includes(q);
+        }) : templatesData;
+        renderTemplateList(filtered);
+      }
+
+      function renderTemplateList(templates) {
+        var container = document.getElementById('templateList');
+        if (!templates || templates.length === 0) {
+          container.innerHTML = '<div style="text-align:center;color:var(--muted);padding:2rem 0;font-size:0.85rem;">No templates found.</div>';
+          container._currentTemplates = [];
+          return;
+        }
+        container.innerHTML = templates.map(function(t, i) {
+          var ic = (t.items && t.items.length) || 0;
+          var detail = (t.vendor || 'No vendor') + ' · ' + ic + ' item' + (ic === 1 ? '' : 's');
+          return '<div class="template-item">' +
+            '<div class="template-item-info" onclick="selectTemplate(' + i + ')">' +
+              '<div class="template-name">' + esc(t.templateName) + '</div>' +
+              '<div class="template-detail">' + esc(detail) + '</div>' +
+            '</div>' +
+            '<button type="button" class="template-delete-btn" onclick="event.stopPropagation();deleteTemplateItem(' + i + ')" title="Delete template">' +
+              '<i class="fi fi-rr-trash"></i>' +
+            '</button>' +
+            '</div>';
+        }).join('');
+        container._currentTemplates = templates;
+      }
+
+      function selectTemplate(idx) {
+        var list = document.getElementById('templateList')._currentTemplates;
+        if (!list || !list[idx]) return;
+        var t = list[idx];
+
+        document.getElementById('vendor').value = t.vendor || '';
+        document.getElementById('attention').value = t.attention || '';
+        document.getElementById('warehouse').value = t.warehouse || '';
+        document.getElementById('deliveryInstructions').value = t.deliveryInstructions || '';
+
+        itemCount = 0;
+        document.getElementById('itemsList').innerHTML = '';
+        var items = (t.items && t.items.length > 0) ? t.items : [{}];
+        items.forEach(function(item) { addItemRow(item); });
+        updateGrandTotal();
+
+        closeTemplateModal();
+        showNotif('Template "' + t.templateName + '" loaded.', 'success');
+      }
+
+      function deleteTemplateItem(idx) {
+        var list = document.getElementById('templateList')._currentTemplates;
+        if (!list || !list[idx]) return;
+        var name = list[idx].templateName;
+
+        if (!confirm('Delete template "' + name + '"?')) return;
+
+        if (typeof google !== 'undefined') {
+          google.script.run
+            .withSuccessHandler(function(result) {
+              if (result === 'Success') {
+                showNotif('Template deleted.', 'success');
+                templatesData = templatesData.filter(function(t) { return t.templateName !== name; });
+                renderTemplateList(templatesData);
+              } else {
+                showNotif(result || 'Failed to delete.', 'error');
+              }
+            })
+            .withFailureHandler(function(err) { showNotif('Error: ' + err.message, 'error'); })
+            .deleteTemplate(name);
+        } else {
+          templatesData = templatesData.filter(function(t) { return t.templateName !== name; });
+          renderTemplateList(templatesData);
+          showNotif('Template deleted.', 'success');
+        }
+      }
+
+      document.getElementById('templateModal').addEventListener('click', function(e) {
+        if (e.target === this) closeTemplateModal();
+      });
+
+      // Save Template
+      function openSaveTemplateModal() {
+        document.getElementById('templateNameInput').value = '';
+        document.getElementById('saveTemplateModal').classList.add('active');
+        setTimeout(function() { document.getElementById('templateNameInput').focus(); }, 100);
+      }
+
+      function closeSaveTemplateModal() {
+        document.getElementById('saveTemplateModal').classList.remove('active');
+      }
+
+      function saveTemplate() {
+        var name = document.getElementById('templateNameInput').value.trim();
+        if (!name) { showNotif('Please enter a template name.', 'error'); return; }
+
+        var items = [];
+        document.querySelectorAll('.item-row').forEach(function(row) {
+          items.push({
+            itemName: row.querySelector('.item-name').value.trim(),
+            sku: row.querySelector('.item-sku').value.trim(),
+            itemDesc: row.querySelector('.item-desc').value.trim(),
+            qty: parseInt(row.querySelector('.item-qty').value) || 0,
+            usageUnit: row.querySelector('.item-unit').value.trim(),
+            rate: parseFloat(row.querySelector('.item-rate').value) || 0
+          });
+        });
+
+        var data = {
+          templateName: name,
+          vendor: document.getElementById('vendor').value.trim(),
+          attention: document.getElementById('attention').value.trim(),
+          warehouse: document.getElementById('warehouse').value.trim(),
+          deliveryInstructions: document.getElementById('deliveryInstructions').value.trim(),
+          items: items
+        };
+
+        if (typeof google !== 'undefined') {
+          google.script.run
+            .withSuccessHandler(function(result) {
+              if (result === 'Success') {
+                showNotif('Template "' + name + '" saved!', 'success');
+                closeSaveTemplateModal();
+                templatesData = null;
+              } else {
+                showNotif(result || 'Failed to save template.', 'error');
+              }
+            })
+            .withFailureHandler(function(err) { showNotif('Error: ' + err.message, 'error'); })
+            .saveTemplate(data);
+        } else {
+          closeSaveTemplateModal();
+          showNotif('Template "' + name + '" saved!', 'success');
+        }
+      }
+
+      document.getElementById('saveTemplateModal').addEventListener('click', function(e) {
+        if (e.target === this) closeSaveTemplateModal();
+      });
+
+      // ── Disable browser autocomplete ─────────────────────────────
+      document.querySelectorAll('input, select').forEach(function(el) { el.setAttribute('autocomplete', 'nope'); });
+      new MutationObserver(function(mutations) {
+        mutations.forEach(function(m) {
+          m.addedNodes.forEach(function(n) {
+            if (n.nodeType === 1) {
+              if (n.matches && n.matches('input,select')) n.setAttribute('autocomplete', 'nope');
+              if (n.querySelectorAll) n.querySelectorAll('input,select').forEach(function(el) { el.setAttribute('autocomplete', 'nope'); });
+            }
+          });
+        });
+      }).observe(document.body, { childList: true, subtree: true });
+
+      // ── Init ────────────────────────────────────────────────────
+      window.addEventListener('load', function() {
+        loadPONumber();
+        addItemRow();
+        updateStepBar();
+      });
+    </script>
+  </body>
+</html>

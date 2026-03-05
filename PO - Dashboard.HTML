@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-thin-rounded/css/uicons-thin-rounded.css'>
+    <style>
+      /* ── Design Tokens ───────────────────────────────────────── */
+      :root {
+        --gap: 1.5rem;
+
+        /* Header (dark) */
+        --hdr-bg:     oklch(11% 0 0);
+        --hdr-text:   oklch(94% 0 0);
+        --hdr-muted:  oklch(52% 0 0);
+        --hdr-border: oklch(20% 0 0);
+
+        /* Content (light) */
+        --page-bg:  oklch(97% 0 0);
+        --card-bg:  #ffffff;
+        --border:   oklch(91% 0 0);
+        --text:     oklch(13% 0 0);
+        --muted:    oklch(52% 0 0);
+        --subtle:   oklch(68% 0 0);
+        --shadow:   0 1px 2px rgba(0,0,0,0.05), 0 4px 10px rgba(0,0,0,0.04);
+
+        /* Status – monochromatic */
+        --draft-bg:    oklch(93% 0 0);
+        --draft-text:  oklch(28% 0 0);
+        --issued-bg:   oklch(88% 0 0);
+        --issued-text: oklch(20% 0 0);
+        --partial-bg:  oklch(84% 0 0);
+        --partial-text:oklch(16% 0 0);
+        --closed-bg:   oklch(80% 0 0);
+        --closed-text: oklch(12% 0 0);
+
+        /* Feedback */
+        --success-bg:     oklch(95% 0.12 145);
+        --success-text:   oklch(30% 0.14 145);
+        --success-border: oklch(75% 0.12 145);
+        --error-bg:       oklch(95% 0.12 25);
+        --error-text:     oklch(50% 0.18 25);
+        --error-border:   oklch(75% 0.12 25);
+      }
+
+      /* ── Reset ───────────────────────────────────────────────── */
+      *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      * {
+        transition: background-color 0.15s ease, border-color 0.15s ease,
+                    color 0.15s ease, opacity 0.15s ease, transform 0.15s ease;
+      }
+
+      html, body {
+        height: 100%;
+        font-family: 'Inter', sans-serif;
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background: var(--page-bg);
+      }
+
+      i { padding-top: 0.22rem; }
+
+      /* ════════════════════════════════════════════════════════
+         DARK HEADER
+      ════════════════════════════════════════════════════════ */
+      .header {
+        background: var(--hdr-bg);
+        border-bottom: 1px solid var(--hdr-border);
+        padding: 1.25rem 2.5rem 0;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .header-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: var(--gap);
+      }
+
+      .header-title {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: var(--hdr-text);
+        letter-spacing: -0.01em;
+      }
+      .header-sub {
+        font-size: 0.78rem;
+        color: var(--hdr-muted);
+        margin-top: 0.2rem;
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.45rem 1rem;
+        border-radius: 6px;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        border: 1px solid transparent;
+        white-space: nowrap;
+        min-height: 34px;
+      }
+      .btn-primary {
+        background: oklch(97% 0 0);
+        color: oklch(11% 0 0);
+        border-color: oklch(97% 0 0);
+      }
+      .btn-primary:hover { background: oklch(86% 0 0); border-color: oklch(86% 0 0); }
+      .btn-ghost {
+        background: transparent;
+        color: var(--hdr-muted);
+        border-color: oklch(28% 0 0);
+      }
+      .btn-ghost:hover {
+        background: oklch(18% 0 0);
+        color: var(--hdr-text);
+        border-color: oklch(42% 0 0);
+      }
+
+      /* ── Header Nav ── */
+      .header-nav {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+      }
+      .nav-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.5rem 1rem;
+        border: none;
+        background: transparent;
+        color: var(--hdr-muted);
+        font-family: 'Inter', sans-serif;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 6px 6px 0 0;
+        position: relative;
+        white-space: nowrap;
+      }
+      .nav-pill:hover { color: var(--hdr-text); background: oklch(18% 0 0); }
+      .nav-pill.active { color: var(--hdr-text); }
+      .nav-pill.active::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0; right: 0;
+        height: 2px;
+        background: var(--hdr-text);
+        border-radius: 2px 2px 0 0;
+      }
+      .nav-pill i { font-size: 0.82rem; }
+
+      /* ════════════════════════════════════════════════════════
+         LIGHT CONTENT AREA
+      ════════════════════════════════════════════════════════ */
+      .content {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        background: var(--page-bg);
+        padding: 1.5rem 2.5rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        scrollbar-width: none;
+      }
+      .content::-webkit-scrollbar { width: 0; }
+
+      /* ── KPI Grid ─────────────────────────────────────────── */
+      .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 0.875rem;
+      }
+
+      .kpi-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1.25rem 1.5rem;
+        box-shadow: var(--shadow);
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        position: relative;
+        overflow: hidden;
+        animation: fadeInUp 0.3s ease-out backwards;
+      }
+      .kpi-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 2.5px;
+        border-radius: 10px 10px 0 0;
+      }
+
+      .kpi-total::before   { background: oklch(20% 0 0); }
+      .kpi-draft::before   { background: oklch(62% 0 0); }
+      .kpi-issued::before  { background: oklch(48% 0 0); }
+      .kpi-partial::before { background: oklch(36% 0 0); }
+      .kpi-closed::before  { background: oklch(26% 0 0); }
+      .kpi-value::before   { background: oklch(55% 0 0); }
+      .kpi-alert::before   { background: oklch(36% 0 0); }
+
+      .kpi-card:nth-child(1) { animation-delay: 0.04s; }
+      .kpi-card:nth-child(2) { animation-delay: 0.07s; }
+      .kpi-card:nth-child(3) { animation-delay: 0.10s; }
+      .kpi-card:nth-child(4) { animation-delay: 0.13s; }
+      .kpi-card:nth-child(5) { animation-delay: 0.16s; }
+      .kpi-card:nth-child(6) { animation-delay: 0.19s; }
+      .kpi-card:nth-child(7) { animation-delay: 0.22s; }
+
+      .kpi-icon {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 7px;
+        background: oklch(96% 0 0);
+        border: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--muted);
+        font-size: 0.82rem;
+        flex-shrink: 0;
+      }
+
+      .kpi-label {
+        font-size: 0.67rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--muted);
+      }
+
+      .kpi-num {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 800;
+        font-size: 1.8rem;
+        line-height: 1;
+        margin-top: 1rem;
+        letter-spacing: -0.02em;
+        color: var(--text);
+      }
+      .kpi-num.money  { font-size: 1.3rem; }
+      .kpi-num.draft  { color: var(--text); }
+      .kpi-num.issued { color: var(--text); }
+      .kpi-num.partial{ color: var(--text); }
+      .kpi-num.closed { color: var(--text); }
+
+      .kpi-alert {
+        cursor: pointer;
+        background: oklch(93% 0 0);
+        border-color: oklch(80% 0 0);
+      }
+      .kpi-alert:hover { border-color: oklch(65% 0 0); transform: translateY(-1px); }
+      .kpi-alert .kpi-num { color: oklch(18% 0 0); }
+
+      /* ── Dark Total Value card */
+      .kpi-value {
+        background: oklch(11% 0 0);
+        border-color: oklch(16% 0 0);
+      }
+      .kpi-value::before        { background: oklch(28% 0 0); }
+      .kpi-value .kpi-icon      { background: oklch(20% 0 0); border-color: oklch(30% 0 0); color: oklch(55% 0 0); }
+      .kpi-value .kpi-label     { color: oklch(48% 0 0); }
+      .kpi-value .kpi-num.money { color: oklch(96% 0 0); }
+
+      /* ── Bento Grid ───────────────────────────────────────── */
+      .bento {
+        display: grid;
+        grid-template-columns: 3fr 4fr 3fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 0.875rem;
+        flex: 1;
+        min-height: 0;
+      }
+      .bento-status  { grid-column: 1; grid-row: 1; }
+      .bento-recent  { grid-column: 2; grid-row: 1 / 3; }
+      .bento-stats   { grid-column: 3; grid-row: 1; }
+      .bento-vendors { grid-column: 1; grid-row: 2; }
+      .bento-wh      { grid-column: 3; grid-row: 2; }
+
+      /* ── Card ─────────────────────────────────────────────── */
+      .card {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        animation: fadeInUp 0.35s ease-out backwards;
+      }
+
+      .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.1rem 1.75rem;
+        border-bottom: 1px solid var(--border);
+        flex-shrink: 0;
+      }
+      .card-header-left {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .card-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--muted);
+      }
+      .card-badge {
+        font-size: 0.63rem;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: oklch(96% 0 0);
+        color: var(--muted);
+        border: 1px solid var(--border);
+      }
+
+      .card-body {
+        padding: 1.25rem 1.75rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        overflow-y: auto;
+        scrollbar-width: none;
+      }
+      .card-body::-webkit-scrollbar { width: 0; }
+
+      .view-all-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--subtle);
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 4px 8px;
+        border-radius: 5px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        white-space: nowrap;
+      }
+      .view-all-btn:hover { background: var(--page-bg); color: var(--text); }
+      .view-all-btn i { font-size: 0.65rem; }
+
+      /* ── Recent Orders ─────────────────────────────────────── */
+      .order-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .order-table thead th {
+        font-size: 0.66rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--muted);
+        padding: 0 0 0.65rem 0;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+        white-space: nowrap;
+      }
+      .order-table thead th + th { padding-left: var(--gap); }
+      .order-table thead th:last-child { text-align: right; }
+
+      .order-table tbody td {
+        padding: 0.75rem 0;
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: var(--text);
+        border-bottom: 1px solid oklch(95.5% 0 0);
+        vertical-align: middle;
+      }
+      .order-table tbody td + td { padding-left: var(--gap); }
+      .order-table tbody tr:last-child td { border-bottom: none; }
+      .order-table tbody tr:hover td { background: oklch(98.5% 0 0); }
+      .order-table tbody tr:hover td:first-child { border-radius: 6px 0 0 6px; }
+      .order-table tbody tr:hover td:last-child  { border-radius: 0 6px 6px 0; }
+
+      .td-po     { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.82rem; }
+      .td-vendor { color: var(--muted); font-size: 0.78rem; }
+      .td-date   { color: var(--subtle); font-size: 0.75rem; white-space: nowrap; }
+      .td-amount { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.82rem; text-align: right; }
+
+      /* ── Badges ───────────────────────────────────────────── */
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 3px 9px;
+        border-radius: 20px;
+        font-size: 0.63rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        white-space: nowrap;
+      }
+      .badge.draft   { background: var(--draft-bg);   color: var(--draft-text); }
+      .badge.issued  { background: var(--issued-bg);  color: var(--issued-text); }
+      .badge.partial { background: var(--partial-bg); color: var(--partial-text); }
+      .badge.closed  { background: var(--closed-bg);  color: var(--closed-text); }
+
+      /* ── Status Donut ─────────────────────────────────────── */
+      .donut-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--gap);
+        flex: 1;
+      }
+      .donut-svg { transform: rotate(-90deg); flex-shrink: 0; }
+      .donut-center-num {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 800;
+        font-size: 1.15rem;
+        fill: oklch(13% 0 0);
+        dominant-baseline: central;
+        text-anchor: middle;
+        transform: rotate(90deg);
+        transform-origin: center;
+      }
+      .donut-center-lbl {
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 0.44rem;
+        fill: oklch(52% 0 0);
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        dominant-baseline: central;
+        text-anchor: middle;
+        transform: rotate(90deg);
+        transform-origin: center;
+      }
+      .donut-legend { display: flex; flex-direction: column; gap: 0.65rem; }
+      .legend-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.78rem;
+        font-weight: 500;
+        color: var(--text);
+      }
+      .legend-dot   { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+      .legend-count { font-family: 'Poppins', sans-serif; font-weight: 700; color: var(--muted); margin-left: auto; padding-left: 0.75rem; }
+
+      /* ── Inventory Health ─────────────────────────────────── */
+      .bento-stats .card-body { overflow: hidden; }
+      #invHealth { flex: 1; display: flex; flex-direction: column; }
+      .inv-row {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        border-bottom: 1px solid var(--border);
+        min-height: 0;
+      }
+      .inv-row:last-child { border-bottom: none; }
+      .inv-dot   { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+      .inv-name  { font-size: 0.72rem; font-weight: 600; color: var(--text); flex: 1; min-width: 0; }
+      .inv-count { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.88rem; color: var(--text); min-width: 1.8rem; text-align: right; flex-shrink: 0; }
+      .inv-track { width: 44px; height: 3px; background: var(--border); border-radius: 999px; overflow: hidden; flex-shrink: 0; }
+      .inv-fill  { height: 100%; border-radius: 999px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+      .inv-pct   { font-size: 0.65rem; font-weight: 600; color: var(--muted); min-width: 2rem; text-align: right; flex-shrink: 0; }
+
+      /* ── Bar Charts ───────────────────────────────────────── */
+      .bar-list { display: flex; flex-direction: column; gap: 1rem; flex: 1; }
+      .bar-item { display: flex; flex-direction: column; gap: 0.4rem; }
+      .bar-row-label {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--text);
+      }
+      .bar-amount { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.72rem; color: var(--muted); }
+      .bar-track  { height: 4px; background: var(--border); border-radius: 999px; overflow: hidden; }
+      .bar-fill   { height: 100%; border-radius: 999px; background: oklch(22% 0 0); transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+      .bar-empty  { text-align: center; color: var(--muted); font-size: 0.82rem; padding: var(--gap) 0; }
+
+      /* ── Empty state ──────────────────────────────────────── */
+      .empty-state {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        color: var(--muted);
+        padding: var(--gap) 0;
+      }
+      .empty-state i  { font-size: 1.5rem; opacity: 0.25; }
+      .empty-state p  { font-size: 0.82rem; font-weight: 500; }
+
+      /* ── Notification ─────────────────────────────────────── */
+      .notification {
+        position: fixed;
+        bottom: var(--gap);
+        right: var(--gap);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.82rem;
+        display: none;
+        z-index: 9999;
+        animation: slideIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      }
+      .notification.success { background: var(--success-bg); color: var(--success-text); border: 1.5px solid var(--success-border); }
+      .notification.error   { background: var(--error-bg);   color: var(--error-text);   border: 1.5px solid var(--error-border); }
+
+      /* ── Modal ────────────────────────────────────────────── */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.28);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 20000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s, visibility 0.2s;
+      }
+      .modal-overlay.active { opacity: 1; visibility: visible; }
+      .modal {
+        background: var(--card-bg);
+        border-radius: 12px;
+        padding: var(--gap);
+        width: 400px;
+        max-width: 90vw;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.14);
+        border: 1px solid var(--border);
+        transform: scale(0.97);
+        transition: transform 0.2s;
+      }
+      .modal-overlay.active .modal { transform: scale(1); }
+      .modal-title {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: var(--text);
+        margin-bottom: var(--gap);
+      }
+      .modal-actions {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: flex-end;
+        margin-top: var(--gap);
+      }
+      .modal-btn {
+        padding: 0.45rem 1.25rem;
+        border-radius: 6px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 0.78rem;
+        cursor: pointer;
+        border: 1px solid var(--border);
+        background: var(--card-bg);
+        color: var(--text);
+      }
+      .modal-btn:hover { background: var(--page-bg); }
+
+      .low-stock-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.82rem;
+      }
+      .low-stock-item:last-child { border-bottom: none; }
+      .low-stock-name { font-weight: 600; color: var(--text); }
+      .low-stock-sku  { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+      .low-stock-qty  { font-family: 'Poppins', sans-serif; font-weight: 700; color: var(--closed-text); }
+      .low-stock-lvl  { font-size: 0.72rem; color: var(--muted); margin-top: 2px; text-align: right; }
+
+      /* ── Keyframes ────────────────────────────────────────── */
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(8px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes slideIn {
+        from { transform: translateX(380px); opacity: 0; }
+        to   { transform: translateX(0); opacity: 1; }
+      }
+
+      /* ── Responsive ───────────────────────────────────────── */
+      @media (max-width: 1200px) {
+        .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+      }
+      @media (max-width: 960px) {
+        .content { padding: 1.5rem; }
+        .bento {
+          grid-template-columns: 1fr;
+          grid-template-rows: auto;
+          flex: none;
+        }
+        .bento-status, .bento-recent, .bento-stats,
+        .bento-vendors, .bento-wh {
+          grid-column: auto;
+          grid-row: auto;
+        }
+      }
+      @media (max-width: 640px) {
+        :root { --gap: 1rem; }
+        .content { padding: 1rem; }
+        .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <!-- Low Stock Modal -->
+    <div class="modal-overlay" id="lowStockModal" onclick="if(event.target===this)closeLowStockModal()">
+      <div class="modal">
+        <div class="modal-title">Low Stock Items</div>
+        <div id="lowStockList" style="max-height:300px;overflow-y:auto;"></div>
+        <div class="modal-actions">
+          <button class="modal-btn" onclick="closeLowStockModal()">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════
+         DARK HEADER
+    ════════════════════════════════════════════════════ -->
+    <header class="header">
+      <div class="header-top">
+        <div>
+          <div class="header-title">Sole Avenue — Dashboard</div>
+          <div class="header-sub" id="lastUpdated">Loading data…</div>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-ghost" onclick="loadData()">
+            <i class="fi fi-rr-rotate-right"></i> Refresh
+          </button>
+          <button class="btn btn-primary" onclick="navigate('form')">
+            <i class="fi fi-rr-plus"></i> New PO
+          </button>
+        </div>
+      </div>
+      <nav class="header-nav">
+        <button class="nav-pill active">
+          <i class="fi fi-rr-chart-pie-alt"></i> Dashboard
+        </button>
+        <button class="nav-pill" onclick="navigate('orders')">
+          <i class="fi fi-rr-order-history"></i> Purchase Orders
+        </button>
+        <button class="nav-pill" onclick="navigate('form')">
+          <i class="fi fi-rr-add-document"></i> Create PO
+        </button>
+        <button class="nav-pill" onclick="navigate('edit')">
+          <i class="fi fi-rr-pen-square"></i> Edit PO
+        </button>
+        <button class="nav-pill" onclick="navigate('receives')">
+          <i class="fi fi-rr-box-open"></i> Receives
+        </button>
+        <button class="nav-pill" onclick="navigate('inventory')">
+          <i class="fi fi-rr-boxes"></i> Inventory
+        </button>
+      </nav>
+    </header>
+
+    <!-- ════════════════════════════════════════════════════
+         LIGHT CONTENT
+    ════════════════════════════════════════════════════ -->
+    <main class="content">
+
+      <!-- ── KPI Strip ── -->
+      <div class="kpi-grid">
+        <div class="kpi-card kpi-total">
+          <div class="kpi-icon"><i class="fi fi-rr-order-history"></i></div>
+          <div>
+            <div class="kpi-label">Total POs</div>
+            <div class="kpi-num" id="cTotal">—</div>
+          </div>
+        </div>
+        <div class="kpi-card kpi-draft">
+          <div class="kpi-icon"><i class="fi fi-rr-edit"></i></div>
+          <div>
+            <div class="kpi-label">Draft</div>
+            <div class="kpi-num draft" id="cDraft">—</div>
+          </div>
+        </div>
+        <div class="kpi-card kpi-issued">
+          <div class="kpi-icon"><i class="fi fi-rr-badge-check"></i></div>
+          <div>
+            <div class="kpi-label">Issued</div>
+            <div class="kpi-num issued" id="cIssued">—</div>
+          </div>
+        </div>
+        <div class="kpi-card kpi-partial">
+          <div class="kpi-icon"><i class="fi fi-rr-hourglass-end"></i></div>
+          <div>
+            <div class="kpi-label">Partial</div>
+            <div class="kpi-num partial" id="cPartial">—</div>
+          </div>
+        </div>
+        <div class="kpi-card kpi-closed">
+          <div class="kpi-icon"><i class="fi fi-rr-lock"></i></div>
+          <div>
+            <div class="kpi-label">Closed</div>
+            <div class="kpi-num closed" id="cClosed">—</div>
+          </div>
+        </div>
+        <div class="kpi-card kpi-value">
+          <div class="kpi-icon"><i class="fi fi-rr-coins"></i></div>
+          <div>
+            <div class="kpi-label">Total Value</div>
+            <div class="kpi-num money" id="cValue">—</div>
+          </div>
+        </div>
+        <div class="kpi-card kpi-alert" id="lowStockCard" onclick="openLowStockModal()" style="display:none;">
+          <div class="kpi-icon"><i class="fi fi-rr-box-open-full"></i></div>
+          <div>
+            <div class="kpi-label">Low Stock</div>
+            <div class="kpi-num" id="cLowStock">0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Bento Grid ── -->
+      <div class="bento">
+
+        <!-- Recent Orders — cols 1–4, rows 1–2 -->
+        <div class="card bento-recent" style="animation-delay:0.20s;">
+          <div class="card-header">
+            <div class="card-header-left">
+              <span class="card-title">Recent Orders</span>
+              <span class="card-badge" id="recentCount">—</span>
+            </div>
+            <button class="view-all-btn" onclick="navigate('orders')">
+              View All <i class="fi fi-rr-arrow-small-right"></i>
+            </button>
+          </div>
+          <div class="card-body">
+            <div class="empty-state" id="recentEmpty" style="display:none;">
+              <i class="fi fi-tr-receipt"></i>
+              <p>No orders yet</p>
+            </div>
+            <table class="order-table" id="recentTable">
+              <thead>
+                <tr>
+                  <th>PO #</th>
+                  <th>Vendor</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th style="text-align:right;">Amount</th>
+                </tr>
+              </thead>
+              <tbody id="recentChart"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Status Breakdown — cols 5–6, row 1 -->
+        <div class="card bento-status" style="animation-delay:0.24s;">
+          <div class="card-header">
+            <span class="card-title">Status Breakdown</span>
+          </div>
+          <div class="card-body">
+            <div id="donutChart" class="donut-container"></div>
+          </div>
+        </div>
+
+        <!-- Inventory Health — col 3, row 1 -->
+        <div class="card bento-stats" style="animation-delay:0.28s;">
+          <div class="card-header">
+            <span class="card-title">Inventory Health</span>
+            <button class="view-all-btn" onclick="navigate('inventory')">
+              View All <i class="fi fi-rr-arrow-small-right"></i>
+            </button>
+          </div>
+          <div class="card-body">
+            <div id="invHealth"></div>
+          </div>
+        </div>
+
+        <!-- Top Vendors — cols 1–3, row 3 -->
+        <div class="card bento-vendors" style="animation-delay:0.32s;">
+          <div class="card-header">
+            <div class="card-header-left">
+              <span class="card-title">Top Vendors by Spend</span>
+            </div>
+            <button class="view-all-btn" onclick="navigate('orders')">
+              View All <i class="fi fi-rr-arrow-small-right"></i>
+            </button>
+          </div>
+          <div class="card-body">
+            <div id="vendorChart" class="bar-list"></div>
+          </div>
+        </div>
+
+        <!-- By Warehouse — cols 4–6, row 3 -->
+        <div class="card bento-wh" style="animation-delay:0.36s;">
+          <div class="card-header">
+            <div class="card-header-left">
+              <span class="card-title">Spend by Warehouse</span>
+            </div>
+            <button class="view-all-btn" onclick="navigate('orders')">
+              View All <i class="fi fi-rr-arrow-small-right"></i>
+            </button>
+          </div>
+          <div class="card-body">
+            <div id="warehouseChart" class="bar-list"></div>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+
+    <!-- ════════════════════════════════════════════════════
+         SCRIPT
+    ════════════════════════════════════════════════════ -->
+    <script>
+      let allPOs = [];
+
+      // ── Navigation ────────────────────────────────────────────
+      const APP_URL = '<?= scriptUrl ?>';
+
+      function navigate(page, po) {
+        let url = APP_URL + '?page=' + page;
+        if (po) url += '&po=' + encodeURIComponent(po);
+        const a = document.createElement('a');
+        a.href = url; a.target = '_top'; a.style.display = 'none';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      }
+
+      // ── Notification ───────────────────────────────────────────
+      function showNotif(msg, type) {
+        const el = document.getElementById('notification');
+        el.textContent = msg;
+        el.className = 'notification ' + type;
+        el.style.display = 'block';
+        setTimeout(() => { el.style.display = 'none'; }, 4000);
+      }
+
+      // ── Helpers ────────────────────────────────────────────────
+      function fmt(n) {
+        return '₱' + parseFloat(n || 0).toLocaleString('en-PH', {
+          minimumFractionDigits: 2, maximumFractionDigits: 2
+        });
+      }
+      function esc(str) {
+        return String(str || '')
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+
+      // ── Summary cards (getSummary for KPI counts) ──────────────
+      function loadSummary() {
+        if (typeof google === 'undefined') {
+          document.getElementById('lowStockCard').style.display = '';
+          document.getElementById('cLowStock').textContent = '2';
+          return;
+        }
+        google.script.run
+          .withSuccessHandler(function(s) {
+            document.getElementById('cTotal').textContent   = s.total;
+            document.getElementById('cDraft').textContent   = s.draft;
+            document.getElementById('cIssued').textContent  = s.issued;
+            document.getElementById('cPartial').textContent = s.partial || 0;
+            document.getElementById('cClosed').textContent  = s.closed;
+            document.getElementById('cValue').textContent   = fmt(s.totalValue);
+            if (s.lowStockCount > 0) {
+              document.getElementById('lowStockCard').style.display = '';
+              document.getElementById('cLowStock').textContent = s.lowStockCount;
+            }
+          })
+          .getSummary();
+      }
+
+      // ── Load data ──────────────────────────────────────────────
+      function loadData() {
+        document.getElementById('lastUpdated').textContent = 'Loading data…';
+
+        if (typeof google === 'undefined') {
+          allPOs = [
+            { poDate: '02/20/2026', po: 'PO-00015', vendor: 'Raven Tejada',  status: 'Issued',  warehouse: 'Main Warehouse', items: [{qty:10,rate:5000,total:50000},{qty:5,rate:4500,total:22500}], itemCount:2, poTotal:72500 },
+            { poDate: '02/19/2026', po: 'PO-00014', vendor: 'Nike Store',     status: 'Draft',   warehouse: 'South Depot',    items: [{qty:5,rate:7500,total:37500}],                                 itemCount:1, poTotal:37500 },
+            { poDate: '02/18/2026', po: 'PO-00013', vendor: 'Adidas PH',      status: 'Closed',  warehouse: 'Main Warehouse', items: [{qty:8,rate:4500,total:36000}],                                 itemCount:1, poTotal:36000 },
+            { poDate: '02/17/2026', po: 'PO-00012', vendor: 'Nike Store',     status: 'Partial', warehouse: 'Main Warehouse', items: [{qty:6,rate:6000,total:36000}],                                 itemCount:1, poTotal:36000 },
+            { poDate: '02/16/2026', po: 'PO-00011', vendor: 'Raven Tejada',   status: 'Issued',  warehouse: 'Cebu Branch',    items: [{qty:12,rate:5000,total:60000}],                                itemCount:1, poTotal:60000 },
+            { poDate: '02/15/2026', po: 'PO-00010', vendor: 'Puma Trading',   status: 'Closed',  warehouse: 'South Depot',    items: [{qty:4,rate:3500,total:14000}],                                 itemCount:1, poTotal:14000 },
+            { poDate: '02/14/2026', po: 'PO-00009', vendor: 'Adidas PH',      status: 'Issued',  warehouse: 'Main Warehouse', items: [{qty:3,rate:4000,total:12000}],                                 itemCount:1, poTotal:12000 },
+            { poDate: '02/13/2026', po: 'PO-00008', vendor: 'Puma Trading',   status: 'Draft',   warehouse: 'Cebu Branch',    items: [{qty:7,rate:2500,total:17500}],                                 itemCount:1, poTotal:17500 }
+          ];
+          renderCharts();
+          loadInventoryHealth();
+          document.getElementById('cTotal').textContent   = '8';
+          document.getElementById('cDraft').textContent   = '2';
+          document.getElementById('cIssued').textContent  = '3';
+          document.getElementById('cPartial').textContent = '1';
+          document.getElementById('cClosed').textContent  = '2';
+          document.getElementById('cValue').textContent   = fmt(285500);
+          document.getElementById('lowStockCard').style.display = '';
+          document.getElementById('cLowStock').textContent = '2';
+          var now = new Date();
+          document.getElementById('lastUpdated').textContent =
+            'Last refreshed: ' + now.toLocaleTimeString() + ' (Mock Data)';
+          return;
+        }
+
+        google.script.run
+          .withSuccessHandler(function(data) {
+            allPOs = data;
+            renderCharts();
+            loadSummary();
+            loadInventoryHealth();
+            var now = new Date();
+            document.getElementById('lastUpdated').textContent =
+              'Last refreshed: ' + now.toLocaleTimeString();
+          })
+          .withFailureHandler(function(err) {
+            showNotif('Failed to load data: ' + err.message, 'error');
+            document.getElementById('lastUpdated').textContent = 'Failed to load';
+          })
+          .getAllPOs();
+      }
+
+      // ── Low Stock Modal ────────────────────────────────────────
+      function openLowStockModal() {
+        var list = document.getElementById('lowStockList');
+        list.innerHTML = '<div style="text-align:center;padding:1rem;color:var(--muted);">Loading…</div>';
+        document.getElementById('lowStockModal').classList.add('active');
+        if (typeof google !== 'undefined') {
+          google.script.run
+            .withSuccessHandler(renderLowStockList)
+            .withFailureHandler(function(err) {
+              list.innerHTML = '<div style="padding:1rem;color:var(--error-text);">Failed: ' + err.message + '</div>';
+            })
+            .getLowStockItems();
+        } else {
+          renderLowStockList([
+            { itemName: 'Adidas Samba', sku: 'ADS-SB-8', currentStock: 2, reorderLevel: 10 },
+            { itemName: 'Nike Air Max', sku: 'NKE-AM-9', currentStock: 0, reorderLevel: 5 }
+          ]);
+        }
+      }
+      function renderLowStockList(items) {
+        var list = document.getElementById('lowStockList');
+        if (!items || !items.length) {
+          list.innerHTML = '<div style="text-align:center;padding:1rem;color:var(--muted);">No low stock items.</div>';
+          return;
+        }
+        list.innerHTML = items.map(function(item) {
+          return '<div class="low-stock-item">' +
+            '<div>' +
+              '<div class="low-stock-name">' + esc(item.itemName) + '</div>' +
+              '<div class="low-stock-sku">' + esc(item.sku) + '</div>' +
+            '</div>' +
+            '<div>' +
+              '<div class="low-stock-qty">' + item.currentStock + '</div>' +
+              '<div class="low-stock-lvl">/ ' + item.reorderLevel + ' reorder</div>' +
+            '</div>' +
+          '</div>';
+        }).join('');
+      }
+      function closeLowStockModal() {
+        document.getElementById('lowStockModal').classList.remove('active');
+      }
+
+      // ── Render all charts ──────────────────────────────────────
+      function renderCharts() {
+        renderDonut();
+        renderVendorBars();
+        renderWarehouseBars();
+        renderRecentOrders();
+      }
+
+      // ── Donut (light-theme colors) ─────────────────────────────
+      function renderDonut() {
+        var container = document.getElementById('donutChart');
+        var counts = { Draft: 0, Issued: 0, Partial: 0, Closed: 0 };
+        allPOs.forEach(function(po) { if (counts.hasOwnProperty(po.status)) counts[po.status]++; });
+        var total = counts.Draft + counts.Issued + counts.Partial + counts.Closed;
+
+        if (total === 0) {
+          container.innerHTML = '<div class="empty-state"><i class="fi fi-tr-chart-pie-alt"></i><p>No data available</p></div>';
+          return;
+        }
+
+        var r = 42, cx = 54, cy = 54, stroke = 11;
+        var circ = 2 * Math.PI * r;
+        var segs = [
+          { count: counts.Draft,   color: 'oklch(72% 0 0)', label: 'Draft' },
+          { count: counts.Issued,  color: 'oklch(54% 0 0)', label: 'Issued' },
+          { count: counts.Partial, color: 'oklch(36% 0 0)', label: 'Partial' },
+          { count: counts.Closed,  color: 'oklch(20% 0 0)', label: 'Closed' }
+        ];
+
+        var track = '<circle cx="' + cx + '" cy="' + cy + '" r="' + r +
+          '" fill="none" stroke="oklch(92% 0 0)" stroke-width="' + stroke + '"/>';
+        var offset = 0, arcs = '';
+        segs.forEach(function(s) {
+          if (!s.count) return;
+          var len = (s.count / total) * circ;
+          arcs += '<circle cx="' + cx + '" cy="' + cy + '" r="' + r +
+            '" fill="none" stroke="' + s.color + '" stroke-width="' + stroke +
+            '" stroke-dasharray="' + len + ' ' + (circ - len) +
+            '" stroke-dashoffset="-' + offset + '" stroke-linecap="round"/>';
+          offset += len;
+        });
+
+        var svg = '<svg class="donut-svg" width="108" height="108" viewBox="0 0 108 108">' +
+          track + arcs +
+          '<text class="donut-center-num" x="' + cx + '" y="' + (cy - 6) + '">' + total + '</text>' +
+          '<text class="donut-center-lbl" x="' + cx + '" y="' + (cy + 9) + '">Total</text>' +
+          '</svg>';
+
+        var legend = '<div class="donut-legend">';
+        segs.forEach(function(s) {
+          legend += '<div class="legend-row">' +
+            '<span class="legend-dot" style="background:' + s.color + '"></span>' +
+            esc(s.label) +
+            '<span class="legend-count">' + s.count + '</span>' +
+          '</div>';
+        });
+        container.innerHTML = svg + legend + '</div>';
+      }
+
+      // ── Top Vendors (max 4) ────────────────────────────────────
+      function renderVendorBars() {
+        var container = document.getElementById('vendorChart');
+        var map = {};
+        allPOs.forEach(function(po) {
+          var v = po.vendor || 'Unknown';
+          map[v] = (map[v] || 0) + parseFloat(po.poTotal || 0);
+        });
+        var list = Object.keys(map)
+          .map(function(v) { return { name: v, amount: map[v] }; })
+          .sort(function(a, b) { return b.amount - a.amount; })
+          .slice(0, 4);
+
+        if (!list.length) { container.innerHTML = '<div class="empty-state"><i class="fi fi-tr-building"></i><p>No data</p></div>'; return; }
+        var max = list[0].amount;
+        container.innerHTML = list.map(function(v, i) {
+          var pct = max > 0 ? (v.amount / max * 100) : 0;
+          var op  = Math.max(0.32, 1 - i * 0.18);
+          return '<div class="bar-item">' +
+            '<div class="bar-row-label">' +
+              '<span>' + esc(v.name) + '</span>' +
+              '<span class="bar-amount">' + fmt(v.amount) + '</span>' +
+            '</div>' +
+            '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;opacity:' + op + '"></div></div>' +
+          '</div>';
+        }).join('');
+      }
+
+      // ── By Warehouse (max 4) ───────────────────────────────────
+      function renderWarehouseBars() {
+        var container = document.getElementById('warehouseChart');
+        var map = {};
+        allPOs.forEach(function(po) {
+          var w = (po.warehouse || '').trim() || 'Unspecified';
+          map[w] = (map[w] || 0) + parseFloat(po.poTotal || 0);
+        });
+        var list = Object.keys(map)
+          .map(function(w) { return { name: w, amount: map[w] }; })
+          .sort(function(a, b) { return b.amount - a.amount; })
+          .slice(0, 4);
+
+        if (!list.length) { container.innerHTML = '<div class="empty-state"><i class="fi fi-tr-warehouse-alt"></i><p>No data</p></div>'; return; }
+        var max = list[0].amount;
+        container.innerHTML = list.map(function(w, i) {
+          var pct = max > 0 ? (w.amount / max * 100) : 0;
+          var op  = Math.max(0.32, 1 - i * 0.20);
+          return '<div class="bar-item">' +
+            '<div class="bar-row-label">' +
+              '<span>' + esc(w.name) + '</span>' +
+              '<span class="bar-amount">' + fmt(w.amount) + '</span>' +
+            '</div>' +
+            '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;opacity:' + op + '"></div></div>' +
+          '</div>';
+        }).join('');
+      }
+
+      // ── Recent Orders (table rows, max 8) ─────────────────────
+      function renderRecentOrders() {
+        var tbody = document.getElementById('recentChart');
+        if (!allPOs.length) {
+          document.getElementById('recentEmpty').style.display = '';
+          document.getElementById('recentTable').style.display = 'none';
+          return;
+        }
+        document.getElementById('recentEmpty').style.display = 'none';
+        document.getElementById('recentTable').style.display = '';
+
+        var sorted = allPOs.slice().sort(function(a, b) {
+          return String(b.po).localeCompare(String(a.po));
+        });
+
+        var countEl = document.getElementById('recentCount');
+        if (countEl) countEl.textContent = sorted.length;
+
+        tbody.innerHTML = sorted.slice(0, 8).map(function(po) {
+          var sc = (po.status || '').toLowerCase();
+          return '<tr>' +
+            '<td class="td-po">' + esc(po.po) + '</td>' +
+            '<td class="td-vendor">' + esc(po.vendor || '—') + '</td>' +
+            '<td class="td-date">' + esc(po.poDate || '') + '</td>' +
+            '<td><span class="badge ' + sc + '">' + esc(po.status || '—') + '</span></td>' +
+            '<td class="td-amount">' + fmt(po.poTotal) + '</td>' +
+          '</tr>';
+        }).join('');
+      }
+
+      // ── Inventory Health ───────────────────────────────────────
+      function renderInventoryHealth(items) {
+        var container = document.getElementById('invHealth');
+        if (!items || !items.length) {
+          container.innerHTML = '<div class="empty-state"><i class="fi fi-rr-box"></i><p>No inventory data</p></div>';
+          return;
+        }
+        var total      = items.length;
+        var inStock    = items.filter(function(i) { return parseFloat(i.currentStock) > parseFloat(i.reorderLevel || 0); }).length;
+        var lowStock   = items.filter(function(i) { var s = parseFloat(i.currentStock); var r = parseFloat(i.reorderLevel || 0); return s > 0 && s <= r; }).length;
+        var outOfStock = items.filter(function(i) { return parseFloat(i.currentStock) <= 0; }).length;
+        function pct(n) { return total > 0 ? Math.round(n / total * 100) : 0; }
+        function row(color, label, count, barPct) {
+          return '<div class="inv-row">' +
+            '<span class="inv-dot" style="background:' + color + '"></span>' +
+            '<span class="inv-name">' + esc(label) + '</span>' +
+            '<span class="inv-count">' + count + '</span>' +
+            '<div class="inv-track"><div class="inv-fill" style="width:' + barPct + '%;background:' + color + '"></div></div>' +
+            '<span class="inv-pct">' + barPct + '%</span>' +
+          '</div>';
+        }
+        container.innerHTML =
+          row('oklch(52% 0 0)', 'Total Items',  total,      100) +
+          row('oklch(20% 0 0)', 'In Stock',     inStock,    pct(inStock)) +
+          row('oklch(52% 0 0)', 'Low Stock',    lowStock,   pct(lowStock)) +
+          row('oklch(75% 0 0)', 'Out of Stock', outOfStock, pct(outOfStock));
+      }
+
+      function loadInventoryHealth() {
+        if (typeof google === 'undefined') {
+          renderInventoryHealth([
+            { currentStock: 45, reorderLevel: 10 },
+            { currentStock: 30, reorderLevel: 15 },
+            { currentStock: 22, reorderLevel: 10 },
+            { currentStock: 8,  reorderLevel: 10 },
+            { currentStock: 3,  reorderLevel: 10 },
+            { currentStock: 5,  reorderLevel: 5  },
+            { currentStock: 0,  reorderLevel: 5  },
+            { currentStock: 0,  reorderLevel: 8  }
+          ]);
+          return;
+        }
+        google.script.run
+          .withSuccessHandler(renderInventoryHealth)
+          .withFailureHandler(function() {
+            document.getElementById('invHealth').innerHTML =
+              '<div class="empty-state"><i class="fi fi-tr-box"></i><p>Failed to load</p></div>';
+          })
+          .getInventory();
+      }
+
+      // ── Init ───────────────────────────────────────────────────
+      window.addEventListener('load', function() { loadData(); });
+    </script>
+
+  </body>
+</html>

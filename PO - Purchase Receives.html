@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-thin-rounded/css/uicons-thin-rounded.css'>
+    <style>
+      i { padding-top: .22rem; }
+
+      * {
+        font-family: 'Inter', sans-serif;
+        margin: 0; padding: 0;
+        box-sizing: border-box;
+        text-decoration: none;
+        list-style: none;
+        transition: all 0.15s ease;
+      }
+
+      :root {
+        --main-bg:      oklch(98.5% 0.001 106.423);
+        --btn-bg:       #000;
+        --btn-text:     #fff;
+        --muted:        oklch(60% 0 0);
+        --border:       oklch(92% 0 0);
+        --icon-bg:      oklch(97% 0 0);
+        --text:         oklch(20% 0 0);
+        --placeholder:  oklch(60% 0 0);
+        --shadow:       0 1px 3px 0 rgb(0 0 0 / 0.04), 0 4px 12px rgb(0 0 0 / 0.03);
+
+        --draft-bg:     oklch(97% 0.05 75);
+        --draft-text:   oklch(45% 0.15 60);
+        --issued-bg:    oklch(95% 0.08 240);
+        --issued-text:  oklch(40% 0.18 240);
+        --partial-bg:   oklch(95% 0.06 310);
+        --partial-text: oklch(40% 0.18 295);
+        --closed-bg:    oklch(95% 0.08 145);
+        --closed-text:  oklch(35% 0.15 145);
+
+        --success-bg:     oklch(95% 0.15 145);
+        --success-text:   oklch(35% 0.15 145);
+        --success-border: oklch(75% 0.15 145);
+        --error-bg:       oklch(95% 0.15 25);
+        --error-text:     oklch(55% 0.2 25);
+        --error-border:   oklch(75% 0.15 25);
+      }
+
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(14px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes slideIn {
+        from { transform: translateX(400px); opacity: 0; }
+        to   { transform: translateX(0);     opacity: 1; }
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      html, body { height: 100%; -webkit-font-smoothing: antialiased; }
+      .layout { height: 100vh; width: 100%; background: var(--main-bg); }
+
+      .main {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      /* ── Header ─────────────────────────────────────────────── */
+      .main-header {
+        padding: 1.25rem 2.5rem 0;
+        border-bottom: 1px solid oklch(20% 0 0);
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        background: oklch(11% 0 0);
+        position: sticky; top: 0; z-index: 50;
+      }
+      .main-header-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .main-header-title {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700; font-size: 1.25rem;
+        color: oklch(94% 0 0);
+      }
+      .main-header-sub {
+        font-size: 0.85rem;
+        color: oklch(52% 0 0);
+        margin-top: 2px;
+      }
+      .main-header-action-btns {
+        display: flex; align-items: center; gap: 1rem;
+      }
+
+      /* ── Nav pills ───────────────────────────────────────────── */
+      .header-nav {
+        display: flex; align-items: center;
+        gap: 4px; margin-top: 1rem;
+      }
+      .nav-pill {
+        padding: 8px 18px; border: none;
+        background: transparent; color: oklch(52% 0 0);
+        font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 600;
+        cursor: pointer; border-radius: 6px 6px 0 0;
+        position: relative; display: inline-flex; align-items: center;
+        gap: 7px; white-space: nowrap;
+      }
+      .nav-pill:hover { color: oklch(94% 0 0); background: oklch(18% 0 0); }
+      .nav-pill.active { color: oklch(94% 0 0); background: transparent; }
+      .nav-pill.active::after {
+        content: ''; position: absolute;
+        bottom: -1px; left: 0; right: 0;
+        height: 2px; background: oklch(94% 0 0);
+        border-radius: 2px 2px 0 0;
+      }
+      .nav-pill i { font-size: 0.85rem; }
+
+      .main-header .btn-primary {
+        background: oklch(97% 0 0); color: oklch(10% 0 0); border-color: oklch(97% 0 0);
+      }
+      .main-header .btn-primary:hover { background: oklch(86% 0 0); border-color: oklch(86% 0 0); }
+      .main-header .btn-outline {
+        background: transparent; border-color: oklch(28% 0 0); color: oklch(72% 0 0);
+      }
+      .main-header .btn-outline:hover {
+        background: oklch(18% 0 0); border-color: oklch(42% 0 0); color: oklch(90% 0 0);
+      }
+
+      /* ── Buttons ─────────────────────────────────────────────── */
+      .btn {
+        padding: 9px 18px; border-radius: 6px;
+        font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 600;
+        cursor: pointer; display: inline-flex; align-items: center;
+        justify-content: center; gap: 8px;
+        border: 1px solid transparent; min-height: 38px; white-space: nowrap;
+      }
+      .btn-primary { background: var(--btn-bg); color: var(--btn-text); border-color: var(--btn-bg); }
+      .btn-primary:hover { background: #333; border-color: #333; }
+      .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
+      .btn-outline { background: #fff; border-color: var(--border); color: var(--text); }
+      .btn-outline:hover { background: oklch(97% 0 0); border-color: oklch(70% 0 0); }
+
+      /* ── Status badges ───────────────────────────────────────── */
+      .badge {
+        display: inline-flex; align-items: center;
+        padding: 4px 10px; border-radius: 20px;
+        font-size: 0.72rem; font-weight: 700;
+        text-transform: uppercase; letter-spacing: 0.3px;
+      }
+      .badge.Draft   { background: var(--draft-bg);   color: var(--draft-text); }
+      .badge.Issued  { background: var(--issued-bg);  color: var(--issued-text); }
+      .badge.Partial { background: var(--partial-bg); color: var(--partial-text); }
+      .badge.Closed  { background: var(--closed-bg);  color: var(--closed-text); }
+
+      /* ── Notification ────────────────────────────────────────── */
+      .notification {
+        position: fixed; bottom: 24px; right: 24px;
+        padding: 8px 16px; border-radius: 10px; font-weight: 600;
+        display: none; z-index: 9999;
+        animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      }
+      .notification.success { background: var(--success-bg); color: var(--success-text); border: 2px solid var(--success-border); }
+      .notification.error   { background: var(--error-bg);   color: var(--error-text);   border: 2px solid var(--error-border); }
+
+      /* ── Spinner ─────────────────────────────────────────────── */
+      .spinner {
+        display: inline-block; width: 18px; height: 18px;
+        border: 2px solid var(--border); border-top-color: #000;
+        border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle;
+      }
+      .spinner-btn {
+        display: inline-block; width: 14px; height: 14px;
+        border: 2px solid rgba(255,255,255,0.35); border-top-color: #fff;
+        border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle;
+      }
+
+      /* ── Two-column body ─────────────────────────────────────── */
+      .receives-body {
+        flex: 1; overflow: hidden;
+        display: flex; gap: 1.25rem;
+        padding: 1.25rem 2.5rem 1.25rem;
+      }
+
+      /* ── Left: PO selector ───────────────────────────────────── */
+      .po-selector {
+        width: 310px; flex-shrink: 0;
+        display: flex; flex-direction: column; gap: 0.75rem; min-height: 0;
+      }
+      .selector-toolbar {
+        display: flex; flex-direction: column; gap: 0.5rem; flex-shrink: 0;
+      }
+      .selector-search { position: relative; }
+      .selector-search i {
+        position: absolute; left: 12px; top: 50%;
+        transform: translateY(-50%); color: var(--placeholder);
+        font-size: 0.9rem; pointer-events: none;
+      }
+      .selector-search input {
+        width: 100%; padding: 10px 12px 10px 38px;
+        border: 1px solid var(--border); border-radius: 8px;
+        font-size: 0.82rem; font-weight: 500;
+        background: #fff; outline: none; color: var(--text);
+      }
+      .selector-search input:focus { border-color: #000; box-shadow: 0 0 0 1px #000; }
+
+      .selector-filter {
+        width: 100%; padding: 9px 32px 9px 12px;
+        border: 1px solid var(--border); border-radius: 8px;
+        font-size: 0.8rem; font-weight: 600;
+        color: var(--text); background: #fff; outline: none;
+        cursor: pointer; appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat; background-position: right 10px center;
+      }
+      .selector-filter:focus { border-color: #000; box-shadow: 0 0 0 1px #000; }
+
+      .po-card-list {
+        flex: 1; overflow-y: auto;
+        display: flex; flex-direction: column; gap: 0.5rem;
+        scrollbar-width: none;
+      }
+      .po-card-list::-webkit-scrollbar { width: 0; }
+
+      /* PO card */
+      .po-card {
+        background: #fff; border: 1.5px solid var(--border);
+        border-radius: 10px; padding: 0.9rem 1rem;
+        cursor: pointer; flex-shrink: 0;
+        box-shadow: var(--shadow);
+      }
+      .po-card:hover { border-color: oklch(70% 0 0); box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+      .po-card.selected { border-color: oklch(55% 0 0); background: oklch(98.5% 0 0); }
+
+      .po-card-row1 {
+        display: flex; align-items: center;
+        justify-content: space-between; margin-bottom: 2px;
+      }
+      .po-card-num {
+        font-family: 'Poppins', sans-serif; font-weight: 700;
+        font-size: 0.875rem; color: #000; letter-spacing: 0.02em;
+      }
+      .po-card-vendor {
+        font-size: 0.78rem; color: var(--muted);
+        margin-bottom: 0.6rem; white-space: nowrap;
+        overflow: hidden; text-overflow: ellipsis;
+      }
+      .progress-bar-wrap {
+        height: 4px; background: var(--border);
+        border-radius: 2px; overflow: hidden;
+      }
+      .progress-bar-fill {
+        height: 100%; background: oklch(50% 0 0);
+        border-radius: 2px;
+      }
+      .progress-bar-fill.complete { background: oklch(45% 0.15 145); }
+      .progress-label {
+        display: flex; justify-content: space-between;
+        margin-top: 4px; font-size: 0.68rem;
+        color: var(--muted); font-weight: 600;
+      }
+
+      .po-list-empty {
+        text-align: center; padding: 2.5rem 1rem;
+        color: var(--muted); font-size: 0.82rem; font-weight: 500;
+        background: #fff; border: 1px solid var(--border); border-radius: 10px;
+      }
+      .po-list-empty i { display: block; font-size: 1.75rem; margin-bottom: 0.5rem; opacity: 0.25; }
+      .po-loading {
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        gap: 0.65rem; padding: 3rem 1rem;
+        color: var(--muted); font-size: 0.82rem; font-weight: 500;
+        background: #fff; border: 1px solid var(--border); border-radius: 10px;
+      }
+      .po-loading .spinner { width: 22px; height: 22px; }
+
+      /* ── Right: Receive panel ─────────────────────────────────── */
+      .receive-panel {
+        flex: 1; min-height: 0; overflow-y: auto;
+        display: flex; flex-direction: column; gap: 1.25rem;
+        scrollbar-width: none;
+      }
+      .receive-panel::-webkit-scrollbar { width: 0; }
+
+      .receive-empty {
+        flex: 1; display: flex; align-items: center; justify-content: center;
+        flex-direction: column; gap: 0.75rem;
+        background: #fff; border: 1px solid var(--border); border-radius: 10px;
+        padding: 4rem; color: var(--muted); min-height: 200px;
+      }
+      .receive-empty i { font-size: 2.5rem; opacity: 0.2; }
+      .receive-empty p { font-size: 0.88rem; font-weight: 500; }
+
+      /* PO info card */
+      .po-info-card {
+        background: #fff; border: 1px solid var(--border);
+        border-radius: 10px; padding: 1.25rem 1.5rem;
+        box-shadow: var(--shadow);
+        display: flex; align-items: flex-start;
+        justify-content: space-between; gap: 1rem;
+        flex-shrink: 0; animation: fadeInUp 0.2s ease-out;
+      }
+      .po-info-num {
+        font-family: 'Poppins', sans-serif; font-weight: 800;
+        font-size: 1.2rem; color: #000; letter-spacing: 0.02em; margin-bottom: 2px;
+      }
+      .po-info-vendor { font-size: 0.875rem; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+      .po-info-meta {
+        font-size: 0.75rem; color: var(--muted);
+        display: flex; gap: 14px; flex-wrap: wrap; align-items: center;
+      }
+      .po-info-meta span { display: flex; align-items: center; gap: 5px; }
+      .po-info-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+      /* Receive form card */
+      .receive-form-card {
+        background: #fff; border: 1px solid var(--border);
+        border-radius: 10px; box-shadow: var(--shadow);
+        overflow: hidden; flex-shrink: 0;
+        animation: fadeInUp 0.25s ease-out;
+      }
+      .card-section-hd {
+        font-size: 0.65rem; font-weight: 700;
+        text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted);
+        padding: 0.7rem 1.25rem;
+        background: oklch(98.5% 0 0);
+        border-bottom: 1px solid var(--border);
+        display: flex; align-items: center; justify-content: space-between;
+      }
+
+      /* Closed notice */
+      .closed-notice {
+        margin: 0.9rem 1.25rem;
+        padding: 0.75rem 1rem;
+        background: var(--closed-bg); color: var(--closed-text);
+        border-radius: 8px; font-size: 0.82rem; font-weight: 600;
+        display: flex; align-items: center; gap: 8px;
+      }
+
+      /* Items receive table */
+      .receive-table { width: 100%; border-collapse: collapse; }
+      .receive-table th {
+        padding: 10px 14px; text-align: left;
+        font-size: 0.65rem; font-weight: 700;
+        text-transform: uppercase; letter-spacing: 0.4px; color: var(--muted);
+        background: oklch(98.5% 0 0); border-bottom: 1px solid var(--border);
+        white-space: nowrap;
+      }
+      .receive-table th.th-center { text-align: center; padding-left: 8px; padding-right: 8px; }
+      .receive-table td.td-center { text-align: center; padding-left: 8px; padding-right: 8px; }
+      .receive-table-wrap { overflow-x: auto; }
+      .receive-table td {
+        padding: 12px 14px; border-bottom: 1px solid oklch(96% 0 0);
+        vertical-align: middle; color: var(--text); font-weight: 500;
+      }
+      .receive-table tbody tr:last-child td { border-bottom: none; }
+      .receive-table tbody tr:hover { background: oklch(99.2% 0 0); }
+      .td-item-name { font-weight: 700; color: #000; margin-bottom: 2px; }
+      .td-item-meta { font-size: 0.75rem; color: var(--muted); }
+
+      .remaining-pill {
+        display: inline-flex; padding: 3px 10px;
+        background: oklch(97% 0 0); border-radius: 20px;
+        font-size: 0.72rem; font-weight: 700; color: var(--text);
+        border: 1px solid var(--border);
+      }
+      .remaining-pill.done {
+        background: var(--closed-bg); color: var(--closed-text); border-color: transparent;
+      }
+
+      /* Qty input */
+      .receive-qty-input {
+        width: 80px; padding: 7px 10px;
+        border: 1.5px solid var(--border); border-radius: 6px;
+        font-size: 0.88rem; font-weight: 600; font-family: 'Inter', sans-serif;
+        text-align: center; outline: none; color: var(--text); background: #fff;
+      }
+      .receive-qty-input:focus { border-color: #000; box-shadow: 0 0 0 1px #000; }
+      .receive-qty-input:disabled {
+        background: var(--main-bg); color: var(--muted); cursor: not-allowed;
+      }
+      .receive-qty-input.over-input { border-color: oklch(72% 0.16 60); }
+      .over-tag {
+        display: none; margin-top: 4px;
+        font-size: 0.62rem; font-weight: 700;
+        color: oklch(45% 0.15 60);
+        white-space: nowrap;
+      }
+      .over-tag.visible { display: block; }
+
+      /* Over-receive confirm modal */
+      .over-modal-overlay {
+        display: none; position: fixed; inset: 0;
+        background: rgba(0,0,0,0.5); z-index: 20000;
+        align-items: center; justify-content: center; padding: 1rem;
+      }
+      .over-modal-overlay.active { display: flex; }
+      .over-modal {
+        background: #fff; border-radius: 14px; padding: 0;
+        max-width: 520px; width: 100%;
+        box-shadow: 0 24px 80px rgba(0,0,0,0.28);
+        overflow: hidden;
+      }
+
+      /* Modal header */
+      .over-modal-hd { padding: 1.35rem 1.75rem 1.1rem; border-bottom: 1px solid var(--border); }
+      .over-modal-title {
+        font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem;
+        color: #000; display: flex; align-items: center; gap: 10px; margin-bottom: 5px;
+      }
+      .over-modal-icon {
+        width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0;
+        background: oklch(93% 0.1 60); color: oklch(40% 0.18 60);
+        display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem;
+      }
+      .over-modal-intro {
+        font-size: 0.8rem; color: var(--muted); line-height: 1.5;
+        margin: 0; padding-left: 40px;
+      }
+
+      /* Modal scrollable body */
+      .over-modal-body { padding: 1.1rem 1.75rem; max-height: 55vh; overflow-y: auto; scrollbar-width: thin; }
+      .over-modal-body::-webkit-scrollbar { width: 4px; }
+      .over-modal-body::-webkit-scrollbar-track { background: transparent; }
+      .over-modal-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+      .over-modal-list { display: flex; flex-direction: column; gap: 0.75rem; }
+
+      /* Per-item card */
+      .over-item-card { border: 1px solid oklch(87% 0.08 75); border-radius: 10px; overflow: hidden; }
+      .over-item-hd {
+        display: flex; align-items: center; gap: 8px;
+        padding: 0.65rem 1rem;
+        background: oklch(97% 0.035 75);
+        border-bottom: 1px solid oklch(92% 0.06 75);
+      }
+      .over-item-name {
+        font-size: 0.85rem; font-weight: 700; color: oklch(22% 0 0); flex: 1; min-width: 0;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      }
+      .over-item-tag {
+        font-size: 0.65rem; font-weight: 700; padding: 3px 9px; border-radius: 20px;
+        background: oklch(91% 0.12 60); color: oklch(36% 0.2 55); flex-shrink: 0;
+      }
+
+      /* Stats row — 3 equal columns */
+      .over-item-stats { display: flex; border-bottom: 1px solid var(--border); }
+      .over-item-stat {
+        flex: 1; padding: 0.5rem 1rem; display: flex; flex-direction: column; gap: 1px;
+        border-right: 1px solid var(--border);
+      }
+      .over-item-stat:last-child { border-right: none; }
+      .over-item-stat-label { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: var(--muted); }
+      .over-item-stat-value { font-size: 0.88rem; font-weight: 700; color: var(--text); }
+
+      /* Choice buttons – vertical radio style */
+      .over-item-choices { display: flex; flex-direction: column; }
+      .over-choice {
+        display: flex; align-items: center; gap: 12px;
+        padding: 0.75rem 1rem; cursor: pointer; text-align: left;
+        border: none; background: #fff; font-family: 'Inter', sans-serif;
+        border-bottom: 1px solid oklch(95% 0 0); transition: background 0.12s;
+      }
+      .over-choice:last-child  { border-bottom: none; border-radius: 0 0 10px 10px; }
+      .over-choice:first-child { border-radius: 0; }
+      .over-choice:hover { background: oklch(98.5% 0 0); }
+      .over-choice-dot {
+        width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0;
+        border: 2px solid oklch(82% 0 0); transition: all 0.15s;
+      }
+      .over-choice-content { display: flex; flex-direction: column; gap: 1px; flex: 1; }
+      .over-choice-title { font-size: 0.82rem; font-weight: 700; color: var(--muted); line-height: 1.3; }
+      .over-choice-desc  { font-size: 0.72rem; font-weight: 500; color: oklch(72% 0 0); }
+
+      .over-choice.selected-accept { background: oklch(97% 0.06 145); }
+      .over-choice.selected-accept .over-choice-dot { background: oklch(44% 0.15 145); border-color: oklch(44% 0.15 145); box-shadow: inset 0 0 0 3px #fff; }
+      .over-choice.selected-accept .over-choice-title { color: oklch(28% 0.15 145); }
+      .over-choice.selected-accept .over-choice-desc  { color: oklch(42% 0.12 145); }
+
+      .over-choice.selected-return { background: oklch(97% 0.04 240); }
+      .over-choice.selected-return .over-choice-dot { background: oklch(40% 0.15 240); border-color: oklch(40% 0.15 240); box-shadow: inset 0 0 0 3px #fff; }
+      .over-choice.selected-return .over-choice-title { color: oklch(28% 0.15 240); }
+      .over-choice.selected-return .over-choice-desc  { color: oklch(42% 0.12 240); }
+
+      /* Modal footer */
+      .over-modal-footer {
+        padding: 1rem 1.75rem; border-top: 1px solid var(--border);
+        background: oklch(99% 0 0);
+        display: flex; gap: 0.75rem; justify-content: flex-end;
+      }
+      .over-modal-btn {
+        padding: 9px 20px; border-radius: 6px; font-size: 0.82rem; font-weight: 700;
+        cursor: pointer; border: 1.5px solid var(--border);
+        background: #fff; color: var(--text); font-family: 'Inter', sans-serif;
+      }
+      .over-modal-btn:hover { background: oklch(96% 0 0); }
+      .over-modal-btn.confirm { background: #000; color: #fff; border-color: #000; }
+      .over-modal-btn.confirm:hover { background: oklch(30% 0 0); }
+
+      /* Over-receive modal section labels */
+      .over-modal-section-label {
+        font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+        letter-spacing: 0.4px; color: var(--muted);
+        margin: 0.85rem 0 0.4rem;
+      }
+      .over-modal-section-label:first-child { margin-top: 0; }
+
+      /* Unexpected item card in modal (blue tint vs amber) */
+      .unexpected-item-card { border: 1px solid oklch(87% 0.06 240); border-radius: 10px; overflow: hidden; }
+      .unexpected-item-hd {
+        display: flex; align-items: center; gap: 8px;
+        padding: 0.65rem 1rem;
+        background: oklch(96.5% 0.04 240);
+        border-bottom: 1px solid oklch(91% 0.05 240);
+      }
+      .unexpected-item-tag {
+        font-size: 0.65rem; font-weight: 700; padding: 3px 9px; border-radius: 20px;
+        background: oklch(91% 0.08 240); color: oklch(36% 0.15 240); flex-shrink: 0;
+      }
+
+      /* Unexpected items section inside receive form */
+      .unexpected-section {
+        border-top: 1px solid var(--border);
+        padding: 0.75rem 1.25rem 0.9rem;
+      }
+      .unexpected-hd {
+        display: flex; align-items: center; justify-content: space-between;
+        margin-bottom: 0.5rem;
+      }
+      .unexpected-hd-label {
+        font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+        letter-spacing: 0.4px; color: var(--muted);
+      }
+      .btn-add-unexpected {
+        display: inline-flex; align-items: center; gap: 5px;
+        padding: 4px 10px; border: 1.5px solid var(--border); border-radius: 6px;
+        background: #fff; font-size: 0.72rem; font-weight: 600;
+        color: var(--text); cursor: pointer; font-family: 'Inter', sans-serif;
+      }
+      .btn-add-unexpected:hover { background: oklch(97% 0 0); border-color: oklch(70% 0 0); }
+      .unexpected-hint {
+        font-size: 0.78rem; color: var(--muted); font-weight: 500; font-style: italic;
+      }
+      .unexpected-row {
+        display: grid; grid-template-columns: 1fr 120px 64px 28px;
+        gap: 6px; align-items: center; margin-bottom: 5px;
+      }
+      .unexpected-input {
+        padding: 7px 10px; border: 1.5px solid var(--border); border-radius: 6px;
+        font-size: 0.82rem; font-weight: 500; font-family: 'Inter', sans-serif;
+        outline: none; color: var(--text); background: #fff; width: 100%;
+      }
+      .unexpected-input:focus { border-color: #000; }
+      .unexpected-qty-input {
+        padding: 7px 8px; border: 1.5px solid var(--border); border-radius: 6px;
+        font-size: 0.88rem; font-weight: 700; font-family: 'Inter', sans-serif;
+        outline: none; text-align: center; color: var(--text); background: #fff; width: 100%;
+      }
+      .unexpected-qty-input:focus { border-color: #000; }
+      .btn-remove-unexpected {
+        width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+        border: 1.5px solid var(--border); background: #fff;
+        cursor: pointer; color: var(--muted); font-size: 0.75rem;
+        display: flex; align-items: center; justify-content: center;
+        font-family: 'Inter', sans-serif;
+      }
+      .btn-remove-unexpected:hover {
+        background: var(--error-bg); border-color: oklch(80% 0.1 25); color: var(--error-text);
+      }
+
+      /* Form footer */
+      .receive-form-footer {
+        padding: 1rem 1.25rem; border-top: 1px solid var(--border);
+        background: oklch(99% 0 0);
+        display: flex; align-items: flex-end; gap: 1rem;
+      }
+      .notes-group { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+      .notes-label {
+        font-size: 0.65rem; font-weight: 700;
+        text-transform: uppercase; letter-spacing: 0.4px; color: var(--muted);
+      }
+      .notes-input {
+        width: 100%; padding: 9px 12px;
+        border: 1px solid var(--border); border-radius: 6px;
+        font-size: 0.82rem; font-weight: 500;
+        font-family: 'Inter', sans-serif; outline: none;
+        color: var(--text); background: #fff;
+      }
+      .notes-input:focus { border-color: #000; box-shadow: 0 0 0 1px #000; }
+
+      /* History card */
+      .history-card {
+        background: #fff; border: 1px solid var(--border);
+        border-radius: 10px; overflow: hidden; box-shadow: var(--shadow);
+        flex-shrink: 0; animation: fadeInUp 0.3s ease-out;
+      }
+      .history-entry {
+        padding: 0.9rem 1.25rem; border-bottom: 1px solid oklch(96% 0 0);
+      }
+      .history-entry:last-child { border-bottom: none; }
+      .history-entry-hd {
+        display: flex; align-items: center;
+        justify-content: space-between; margin-bottom: 6px;
+      }
+      .history-ts { font-size: 0.75rem; font-weight: 600; color: var(--text); }
+      .history-user { font-size: 0.68rem; color: var(--muted); }
+      .history-lines { display: flex; flex-direction: column; gap: 2px; margin-bottom: 4px; }
+      .history-line { font-size: 0.8rem; color: var(--text); font-weight: 500; }
+      .history-line strong { font-weight: 700; color: #000; }
+      .history-notes { font-size: 0.72rem; color: var(--muted); font-style: italic; margin-top: 3px; }
+      .history-empty {
+        padding: 1.5rem; text-align: center;
+        color: var(--muted); font-size: 0.82rem; font-weight: 500;
+      }
+
+      /* Panel loading */
+      .panel-loading {
+        display: flex; align-items: center; justify-content: center;
+        gap: 10px; padding: 2.5rem; color: var(--muted);
+        font-size: 0.85rem; font-weight: 500;
+        background: #fff; border: 1px solid var(--border);
+        border-radius: 10px; flex-shrink: 0;
+      }
+
+      /* Responsive */
+      @media (max-width: 960px) {
+        .receives-body { flex-direction: column; padding: 1rem; overflow-y: auto; }
+        .po-selector { width: 100%; min-height: unset; }
+        .po-card-list { max-height: 220px; }
+        .receive-panel { min-height: 0; overflow-y: visible; }
+      }
+      @media (max-width: 700px) {
+        .main-header { padding: 1rem 1.25rem 0; }
+        .receives-body { padding: 0.75rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="notification" id="notification"></div>
+
+    <div class="layout">
+      <div class="main">
+
+        <!-- ── Header ── -->
+        <div class="main-header">
+          <div class="main-header-top">
+            <div>
+              <div class="main-header-title">Purchase Receives</div>
+              <div class="main-header-sub" id="lastUpdated"></div>
+            </div>
+            <div class="main-header-action-btns">
+              <button class="btn btn-outline" onclick="loadData()">
+                <i class="fi fi-rr-rotate-right"></i> Refresh
+              </button>
+            </div>
+          </div>
+          <nav class="header-nav">
+            <button class="nav-pill" onclick="navigate('dashboard')">
+              <i class="fi fi-rr-chart-pie-alt"></i> Dashboard
+            </button>
+            <button class="nav-pill" onclick="navigate('orders')">
+              <i class="fi fi-rr-order-history"></i> Purchase Orders
+            </button>
+            <button class="nav-pill" onclick="navigate('form')">
+              <i class="fi fi-rr-add-document"></i> Create PO
+            </button>
+            <button class="nav-pill" onclick="navigate('edit')">
+              <i class="fi fi-rr-pen-square"></i> Edit PO
+            </button>
+            <button class="nav-pill active">
+              <i class="fi fi-rr-box-open"></i> Receives
+            </button>
+            <button class="nav-pill" onclick="navigate('inventory')">
+              <i class="fi fi-rr-boxes"></i> Inventory
+            </button>
+          </nav>
+        </div>
+
+        <!-- ── Body: two-column ── -->
+        <div class="receives-body">
+
+          <!-- Left: PO selector -->
+          <div class="po-selector">
+            <div class="selector-toolbar">
+              <div class="selector-search">
+                <i class="fi fi-rr-search"></i>
+                <input type="text" id="poSearch" autocomplete="nope"
+                       placeholder="Search PO number or vendor…"
+                       oninput="filterPOList()">
+              </div>
+              <select class="selector-filter" id="statusFilter" onchange="filterPOList()">
+                <option value="open">Issued + Partial</option>
+                <option value="">All POs</option>
+                <option value="Issued">Issued only</option>
+                <option value="Partial">Partial only</option>
+                <option value="Closed">Closed only</option>
+              </select>
+            </div>
+            <div class="po-card-list" id="poCardList">
+              <div class="po-list-empty">
+                <span class="spinner"></span><br>Loading purchase orders…
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Receive panel -->
+          <div class="receive-panel" id="receivePanel">
+            <div class="receive-empty">
+              <i class="fi fi-tr-box-open"></i>
+              <p>Select a purchase order on the left to record receiving.</p>
+            </div>
+          </div>
+
+        </div><!-- /.receives-body -->
+      </div><!-- /.main -->
+    </div><!-- /.layout -->
+
+    <script>
+      // ── State ────────────────────────────────────────────────────
+      var allPOs     = [];
+      var selectedPO = null;
+
+      // ── Navigation ───────────────────────────────────────────────
+      const APP_URL = '<?= scriptUrl ?>';
+      const PRE_LOADED_PO = '<?= poParam ?>';
+      function navigate(page, po) {
+        var url = APP_URL + '?page=' + page;
+        if (po) url += '&po=' + encodeURIComponent(po);
+        var a = document.createElement('a');
+        a.href = url; a.target = '_top'; a.style.display = 'none';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      }
+
+      // ── Notification ─────────────────────────────────────────────
+      function showNotif(msg, type) {
+        var el = document.getElementById('notification');
+        el.textContent = msg; el.className = 'notification ' + type;
+        el.style.display = 'block';
+        setTimeout(function() { el.style.display = 'none'; }, 4000);
+      }
+
+      // ── Helpers ──────────────────────────────────────────────────
+      function esc(s) {
+        return String(s || '')
+          .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+          .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      }
+
+      // ── Load all POs ─────────────────────────────────────────────
+      function loadData() {
+        document.getElementById('poCardList').innerHTML =
+          '<div class="po-loading"><span class="spinner"></span>Loading purchase orders…</div>';
+
+        if (typeof google === 'undefined') {
+          allPOs = [
+            {
+              po: 'PO-00011', vendor: 'Raven Tejada', status: 'Partial',
+              warehouse: 'Main Warehouse', deliveryDate: '03/01/2026',
+              reference: 'PO-REF-00011', poDate: '02/16/2026',
+              qtyReceived: 50, totalQtyOrdered: 100,
+              items: [
+                { itemName: 'Adidas Samba Jane', sku: 'ADS-SJ-8', qty: 60, usageUnit: 'Pairs', rate: 5000 },
+                { itemName: 'Adidas Stan Smith',  sku: 'ADS-SS-9', qty: 40, usageUnit: 'Pairs', rate: 4500 }
+              ]
+            },
+            {
+              po: 'PO-00012', vendor: 'Nike Store PH', status: 'Issued',
+              warehouse: 'Main Warehouse', deliveryDate: '03/10/2026',
+              reference: 'PO-REF-00012', poDate: '02/16/2026',
+              qtyReceived: 0, totalQtyOrdered: 30,
+              items: [
+                { itemName: 'Air Jordan 1',     sku: 'NKE-AJ1-9', qty: 20, usageUnit: 'Pairs', rate: 7500 },
+                { itemName: 'Nike Air Force 1', sku: 'NKE-AF1-9', qty: 10, usageUnit: 'Pairs', rate: 6500 }
+              ]
+            },
+            {
+              po: 'PO-00013', vendor: 'Adidas PH', status: 'Closed',
+              warehouse: 'Cebu Branch', deliveryDate: '03/05/2026',
+              reference: 'PO-REF-00013', poDate: '02/15/2026',
+              qtyReceived: 8, totalQtyOrdered: 8,
+              items: [
+                { itemName: 'Ultraboost 22', sku: 'ADS-UB22-7', qty: 8, usageUnit: 'Pairs', rate: 4500 }
+              ]
+            }
+          ];
+          document.getElementById('lastUpdated').textContent =
+            'Mock data · ' + new Date().toLocaleTimeString();
+          if (PRE_LOADED_PO) document.getElementById('statusFilter').value = '';
+          filterPOList();
+          if (PRE_LOADED_PO) selectPO(PRE_LOADED_PO);
+          return;
+        }
+
+        google.script.run
+          .withSuccessHandler(function(data) {
+            allPOs = data || [];
+            document.getElementById('lastUpdated').textContent =
+              'Last refreshed: ' + new Date().toLocaleTimeString();
+            if (PRE_LOADED_PO) document.getElementById('statusFilter').value = '';
+            filterPOList();
+            if (PRE_LOADED_PO) selectPO(PRE_LOADED_PO);
+          })
+          .withFailureHandler(function(err) {
+            showNotif('Failed to load: ' + err.message, 'error');
+            document.getElementById('poCardList').innerHTML =
+              '<div class="po-list-empty">Failed to load. Try refreshing.</div>';
+          })
+          .getAllPOs();
+      }
+
+      // ── Filter + render PO list ──────────────────────────────────
+      function filterPOList() {
+        var q      = document.getElementById('poSearch').value.toLowerCase().trim();
+        var filter = document.getElementById('statusFilter').value;
+
+        var filtered = allPOs.filter(function(po) {
+          var matchText = !q ||
+            po.po.toLowerCase().includes(q) ||
+            (po.vendor || '').toLowerCase().includes(q) ||
+            (po.reference || '').toLowerCase().includes(q);
+          var matchStatus;
+          if (filter === 'open')  matchStatus = po.status === 'Issued' || po.status === 'Partial';
+          else if (filter === '') matchStatus = true;
+          else                    matchStatus = po.status === filter;
+          return matchText && matchStatus;
+        });
+
+        renderPOCards(filtered);
+      }
+
+      function renderPOCards(pos) {
+        var list = document.getElementById('poCardList');
+        if (!pos || pos.length === 0) {
+          list.innerHTML = '<div class="po-list-empty"><i class="fi fi-rr-box-alt"></i>No POs found.</div>';
+          return;
+        }
+        list.innerHTML = pos.map(function(po) {
+          var total    = po.totalQtyOrdered || 0;
+          var received = po.qtyReceived || 0;
+          var pct      = total > 0 ? Math.min(100, Math.round(received / total * 100)) : 0;
+          var complete  = received >= total && total > 0;
+          var isSelected = selectedPO && selectedPO.po === po.po;
+
+          return '<div class="po-card' + (isSelected ? ' selected' : '') +
+            '" onclick="selectPO(\'' + po.po + '\')">' +
+            '<div class="po-card-row1">' +
+              '<span class="po-card-num">' + esc(po.po) + '</span>' +
+              '<span class="badge ' + esc(po.status) + '">' + esc(po.status) + '</span>' +
+            '</div>' +
+            '<div class="po-card-vendor">' + esc(po.vendor) + '</div>' +
+            '<div class="progress-bar-wrap">' +
+              '<div class="progress-bar-fill' + (complete ? ' complete' : '') +
+                '" style="width:' + pct + '%"></div>' +
+            '</div>' +
+            '<div class="progress-label">' +
+              '<span>' + received + ' / ' + total + ' units</span>' +
+              '<span>' + pct + '%</span>' +
+            '</div>' +
+          '</div>';
+        }).join('');
+      }
+
+      // ── Select a PO ──────────────────────────────────────────────
+      function selectPO(poNumber) {
+        var po = allPOs.find(function(p) { return p.po === poNumber; });
+        if (!po) return;
+        selectedPO = po;
+
+        // Re-render cards to refresh selection highlight
+        filterPOList();
+
+        // Show loading in panel
+        document.getElementById('receivePanel').innerHTML =
+          '<div class="panel-loading"><span class="spinner"></span> Loading receiving data…</div>';
+
+        if (typeof google === 'undefined') {
+          // Mock data
+          var perItem = Math.floor((po.qtyReceived || 0) / Math.max(1, po.items.length));
+          var mockSummary = po.items.map(function(item) {
+            return {
+              itemName: item.itemName, sku: item.sku,
+              qtyOrdered:  item.qty,
+              qtyReceived: perItem,
+              remaining:   Math.max(0, item.qty - perItem)
+            };
+          });
+          var mockHistory = po.qtyReceived > 0 ? [{
+            timestamp:   '02/19/2026 10:30',
+            itemName:    po.items[0].itemName,
+            sku:         po.items[0].sku,
+            qtyReceived: po.qtyReceived,
+            receivedBy:  'warehouse@soleavenue.com',
+            notes:       'First delivery batch'
+          }] : [];
+          renderReceivePanel(po, mockSummary, mockHistory);
+          return;
+        }
+
+        // Fire two concurrent requests
+        var summaryResult = null, historyResult = null;
+        var summaryDone = false, historyDone = false;
+
+        function tryRender() {
+          if (summaryDone && historyDone) renderReceivePanel(po, summaryResult, historyResult);
+        }
+
+        google.script.run
+          .withSuccessHandler(function(d) { summaryResult = d || []; summaryDone = true; tryRender(); })
+          .withFailureHandler(function()  { summaryResult = [];      summaryDone = true; tryRender(); })
+          .getReceivingSummary(poNumber);
+
+        google.script.run
+          .withSuccessHandler(function(d) { historyResult = d || []; historyDone = true; tryRender(); })
+          .withFailureHandler(function()  { historyResult = [];      historyDone = true; tryRender(); })
+          .getReceivingHistory(poNumber);
+      }
+
+      // ── Render right panel ───────────────────────────────────────
+      function renderReceivePanel(po, summary, history) {
+        var canReceive = (po.status === 'Issued' || po.status === 'Partial');
+
+        // Merge po.items with per-item summary
+        var rows = po.items.map(function(item) {
+          var s = summary.find(function(x) {
+            return x.itemName === item.itemName && x.sku === item.sku;
+          }) || { qtyOrdered: item.qty, qtyReceived: 0, remaining: item.qty };
+          return {
+            itemName:    item.itemName,
+            sku:         item.sku,
+            usageUnit:   item.usageUnit || '',
+            qtyOrdered:  s.qtyOrdered  || item.qty,
+            qtyReceived: s.qtyReceived || 0,
+            remaining:   Math.max(0, s.remaining !== undefined ? s.remaining : item.qty)
+          };
+        });
+
+        // Table rows
+        var tableRows = rows.map(function(r, i) {
+          var done = r.remaining <= 0;
+          var inputHtml = canReceive
+            ? '<input type="number" class="receive-qty-input" id="qty-' + i + '"' +
+              ' min="0" placeholder="0"' +
+              (done ? ' disabled' : '') +
+              ' oninput="onQtyInput(this,' + i + ',' + r.remaining + ')">' +
+              '<span class="over-tag" id="over-tag-' + i + '">Over by <span id="over-amt-' + i + '">0</span></span>'
+            : '<span class="remaining-pill done">—</span>';
+
+          return '<tr>' +
+            '<td>' +
+              '<div class="td-item-name">' + esc(r.itemName) + '</div>' +
+              (r.sku ? '<div class="td-item-meta">' + esc(r.sku) + '</div>' : '') +
+            '</td>' +
+            '<td class="td-center">' + esc(r.usageUnit || '—') + '</td>' +
+            '<td class="td-center">' + r.qtyOrdered + '</td>' +
+            '<td class="td-center">' + r.qtyReceived + '</td>' +
+            '<td class="td-center">' +
+              '<span class="remaining-pill' + (done ? ' done' : '') + '">' +
+                (done ? '✓ Done' : r.remaining) +
+              '</span>' +
+            '</td>' +
+            '<td class="td-center">' + inputHtml + '</td>' +
+          '</tr>';
+        }).join('');
+
+        // Fill max button
+        var fillMaxBtn = canReceive
+          ? '<button class="btn btn-outline" style="font-size:0.72rem;min-height:28px;padding:4px 12px;" onclick="fillAllMax()">' +
+              '<i class="fi fi-rr-layers"></i> Fill Max' +
+            '</button>'
+          : '';
+
+        // Closed notice
+        var closedNotice = po.status === 'Closed'
+          ? '<div class="closed-notice"><i class="fi fi-sr-check-circle"></i>' +
+              ' This PO is fully received and closed. No further receiving required.' +
+            '</div>'
+          : '';
+
+        // Form footer (notes + submit)
+        var unexpectedSection = canReceive
+          ? '<div class="unexpected-section">' +
+              '<div class="unexpected-hd">' +
+                '<span class="unexpected-hd-label">Unexpected Items</span>' +
+                '<button type="button" class="btn-add-unexpected" onclick="addUnexpectedItem()">' +
+                  '<i class="fi fi-rr-plus-small"></i> Add Item' +
+                '</button>' +
+              '</div>' +
+              '<div class="unexpected-list" id="unexpectedList">' +
+                '<div class="unexpected-hint">Items the vendor sent that are <em>not</em> on this PO.</div>' +
+              '</div>' +
+            '</div>'
+          : '';
+
+        var formFooter = canReceive
+          ? '<div class="receive-form-footer">' +
+              '<div class="notes-group">' +
+                '<label class="notes-label">Delivery Notes</label>' +
+                '<input type="text" class="notes-input" id="receivingNotes" autocomplete="nope"' +
+                ' placeholder="Optional notes about this delivery…">' +
+              '</div>' +
+              '<button class="btn btn-primary" id="submitBtn" onclick="submitReceiving()">' +
+                '<i class="fi fi-rr-box-open"></i>' +
+                '<span id="submitBtnText">Record Receiving</span>' +
+              '</button>' +
+            '</div>'
+          : '';
+
+        // History
+        var historyHtml;
+        if (!history || history.length === 0) {
+          historyHtml = '<div class="history-empty">No receiving history for this PO.</div>';
+        } else {
+          // Group individual log entries by timestamp + user
+          var grouped = [];
+          var groupMap = {};
+          history.forEach(function(entry) {
+            var key = entry.timestamp + '||' + (entry.receivedBy || '');
+            if (!groupMap[key]) {
+              groupMap[key] = { timestamp: entry.timestamp, receivedBy: entry.receivedBy || '', notes: entry.notes || '', lines: [] };
+              grouped.push(groupMap[key]);
+            }
+            groupMap[key].lines.push({ itemName: entry.itemName, sku: entry.sku, qty: entry.qtyReceived });
+          });
+
+          historyHtml = grouped.map(function(g) {
+            var lines = g.lines.map(function(l) {
+              return '<div class="history-line"><strong>' + esc(l.qty) + ' units</strong> — ' +
+                esc(l.itemName) +
+                (l.sku ? ' <span style="color:var(--muted)">(' + esc(l.sku) + ')</span>' : '') +
+              '</div>';
+            }).join('');
+            return '<div class="history-entry">' +
+              '<div class="history-entry-hd">' +
+                '<span class="history-ts">' + esc(g.timestamp) + '</span>' +
+                '<span class="history-user">' + esc(g.receivedBy || 'Unknown') + '</span>' +
+              '</div>' +
+              '<div class="history-lines">' + lines + '</div>' +
+              (g.notes ? '<div class="history-notes">' + esc(g.notes) + '</div>' : '') +
+            '</div>';
+          }).join('');
+        }
+
+        var panel = document.getElementById('receivePanel');
+        panel.innerHTML =
+          // PO info card
+          '<div class="po-info-card">' +
+            '<div>' +
+              '<div class="po-info-num">' + esc(po.po) + '</div>' +
+              '<div class="po-info-vendor">' + esc(po.vendor) + '</div>' +
+              '<div class="po-info-meta">' +
+                (po.warehouse    ? '<span><i class="fi fi-rr-building"></i>' + esc(po.warehouse) + '</span>' : '') +
+                (po.deliveryDate ? '<span><i class="fi fi-rr-calendar"></i>' + esc(po.deliveryDate) + '</span>' : '') +
+                (po.reference    ? '<span><i class="fi fi-rr-hastag"></i>' + esc(po.reference) + '</span>' : '') +
+              '</div>' +
+            '</div>' +
+            '<div class="po-info-right">' +
+              '<span class="badge ' + esc(po.status) + '">' + esc(po.status) + '</span>' +
+              '<button class="btn btn-outline" style="font-size:0.72rem;min-height:30px;padding:5px 12px;"' +
+                ' onclick="navigate(\'edit\',\'' + po.po + '\')">' +
+                '<i class="fi fi-rr-pen-square"></i> Edit PO' +
+              '</button>' +
+            '</div>' +
+          '</div>' +
+
+          // Receive form card
+          '<div class="receive-form-card">' +
+            '<div class="card-section-hd">' +
+              '<span>Line Items — Record Receiving</span>' + fillMaxBtn +
+            '</div>' +
+            closedNotice +
+            '<div class="receive-table-wrap">' +
+            '<table class="receive-table">' +
+              '<thead><tr>' +
+                '<th>Item</th>' +
+                '<th class="th-center">Unit</th>' +
+                '<th class="th-center">Ordered</th>' +
+                '<th class="th-center">Received</th>' +
+                '<th class="th-center">Remaining</th>' +
+                '<th class="th-center">Receive Now</th>' +
+              '</tr></thead>' +
+              '<tbody>' + tableRows + '</tbody>' +
+            '</table>' +
+            '</div>' +
+            unexpectedSection +
+            formFooter +
+          '</div>' +
+
+          // Receiving history
+          '<div class="history-card">' +
+            '<div class="card-section-hd"><span>Receiving History</span></div>' +
+            historyHtml +
+          '</div>';
+
+        // Attach row data to panel for submit
+        panel._rows = rows;
+        panel._po   = po;
+      }
+
+      // ── Unexpected items ──────────────────────────────────────────
+      function addUnexpectedItem() {
+        var list = document.getElementById('unexpectedList');
+        if (!list) return;
+        var hint = list.querySelector('.unexpected-hint');
+        if (hint) hint.remove();
+
+        var row = document.createElement('div');
+        row.className = 'unexpected-row';
+        row.innerHTML =
+          '<input type="text" class="unexpected-input unexpected-name" placeholder="Item name…" autocomplete="nope">' +
+          '<input type="text" class="unexpected-input unexpected-sku" placeholder="SKU (optional)" autocomplete="nope">' +
+          '<input type="number" class="unexpected-qty-input unexpected-qty" placeholder="Qty" min="1" autocomplete="nope">' +
+          '<button type="button" class="btn-remove-unexpected" onclick="removeUnexpectedItem(this)">' +
+            '<i class="fi fi-rr-cross-small"></i>' +
+          '</button>';
+        list.appendChild(row);
+        row.querySelector('.unexpected-name').focus();
+      }
+
+      function removeUnexpectedItem(btn) {
+        var row  = btn.closest('.unexpected-row');
+        var list = row.parentElement;
+        row.remove();
+        if (!list.querySelector('.unexpected-row')) {
+          var hint = document.createElement('div');
+          hint.className = 'unexpected-hint';
+          hint.innerHTML = 'Items the vendor sent that are <em>not</em> on this PO.';
+          list.appendChild(hint);
+        }
+      }
+
+      // ── Fill all remaining ────────────────────────────────────────
+      function fillAllMax() {
+        var panel = document.getElementById('receivePanel');
+        if (!panel._rows) return;
+        panel._rows.forEach(function(r, i) {
+          var input = document.getElementById('qty-' + i);
+          if (input && !input.disabled && r.remaining > 0) input.value = r.remaining;
+        });
+      }
+
+      // ── Per-input over-receive indicator ─────────────────────────
+      function onQtyInput(input, idx, remaining) {
+        var qty = parseInt(input.value) || 0;
+        var tag = document.getElementById('over-tag-' + idx);
+        var amt = document.getElementById('over-amt-' + idx);
+        if (qty > remaining && remaining > 0) {
+          input.classList.add('over-input');
+          if (amt) amt.textContent = qty - remaining;
+          if (tag) tag.classList.add('visible');
+        } else {
+          input.classList.remove('over-input');
+          if (tag) tag.classList.remove('visible');
+        }
+      }
+
+      // ── Submit receiving ──────────────────────────────────────────
+      function submitReceiving() {
+        var panel = document.getElementById('receivePanel');
+        if (!panel._rows || !panel._po) return;
+
+        var items = [];
+        var overItems = [];
+        var hasQty = false;
+
+        panel._rows.forEach(function(r, i) {
+          var input = document.getElementById('qty-' + i);
+          if (!input || input.disabled) return;
+          var qty = parseInt(input.value) || 0;
+          if (qty < 0) { showNotif('Quantity cannot be negative.', 'error'); return; }
+          if (qty > 0) {
+            hasQty = true;
+            items.push({ itemName: r.itemName, sku: r.sku, qtyReceived: qty });
+            if (qty > r.remaining) {
+              overItems.push({
+                itemName:    r.itemName,
+                sku:         r.sku,
+                qtyOrdered:  r.qtyOrdered,
+                qtyReceived: r.qtyReceived,
+                qtyReceived2: qty,
+                newTotal:    r.qtyReceived + qty
+              });
+            }
+          }
+        });
+
+        // Collect unexpected items
+        var unexpectedItems = [];
+        document.querySelectorAll('#unexpectedList .unexpected-row').forEach(function(row) {
+          var name = row.querySelector('.unexpected-name').value.trim();
+          var sku  = row.querySelector('.unexpected-sku').value.trim();
+          var qty  = parseInt(row.querySelector('.unexpected-qty').value) || 0;
+          if (name && qty > 0) unexpectedItems.push({ itemName: name, sku: sku, qty: qty });
+        });
+
+        if (!hasQty && unexpectedItems.length === 0) {
+          showNotif('Enter at least one quantity to receive.', 'error'); return;
+        }
+
+        var notes   = (document.getElementById('receivingNotes') || {}).value || '';
+        var payload = { poNumber: panel._po.po, notes: notes, items: items };
+
+        if (overItems.length > 0 || unexpectedItems.length > 0) {
+          openOverReceiveModal(overItems, unexpectedItems, payload);
+          return;
+        }
+
+        doSubmitReceiving(payload);
+      }
+
+      function doSubmitReceiving(payload) {
+        var submitBtn = document.getElementById('submitBtn');
+        var submitTxt = document.getElementById('submitBtnText');
+        if (submitBtn) submitBtn.disabled = true;
+        if (submitTxt) submitTxt.textContent = 'Saving…';
+
+        if (typeof google === 'undefined') {
+          setTimeout(function() {
+            if (submitBtn) submitBtn.disabled = false;
+            if (submitTxt) submitTxt.textContent = 'Record Receiving';
+            var totalQty = payload.items.reduce(function(s, it) { return s + it.qtyReceived; }, 0);
+            showNotif('Receiving recorded — ' + totalQty + ' units for ' + payload.poNumber, 'success');
+            allPOs.forEach(function(po) {
+              if (po.po === payload.poNumber) po.qtyReceived = (po.qtyReceived || 0) + totalQty;
+            });
+            if (selectedPO) selectedPO.qtyReceived = (selectedPO.qtyReceived || 0) + totalQty;
+            filterPOList();
+            selectPO(payload.poNumber);
+          }, 600);
+          return;
+        }
+
+        google.script.run
+          .withSuccessHandler(function(result) {
+            if (submitBtn) submitBtn.disabled = false;
+            if (submitTxt) submitTxt.textContent = 'Record Receiving';
+            if (result === 'Success') {
+              var totalQty = payload.items.reduce(function(s, it) { return s + it.qtyReceived; }, 0);
+              showNotif('Receiving recorded — ' + totalQty + ' units for ' + payload.poNumber, 'success');
+              reloadAndReselect(payload.poNumber);
+            } else {
+              showNotif(result || 'Failed to record receiving.', 'error');
+            }
+          })
+          .withFailureHandler(function(err) {
+            if (submitBtn) submitBtn.disabled = false;
+            if (submitTxt) submitTxt.textContent = 'Record Receiving';
+            showNotif('Error: ' + err.message, 'error');
+          })
+          .recordReceiving(payload);
+      }
+
+      // Reload all POs then re-select the same PO (status may have changed)
+      function reloadAndReselect(poNumber) {
+        google.script.run
+          .withSuccessHandler(function(data) {
+            allPOs = data || [];
+            selectedPO = allPOs.find(function(p) { return p.po === poNumber; }) || null;
+            document.getElementById('lastUpdated').textContent =
+              'Last refreshed: ' + new Date().toLocaleTimeString();
+            filterPOList();
+            if (poNumber) selectPO(poNumber);
+          })
+          .withFailureHandler(function() {
+            if (poNumber) selectPO(poNumber);
+          })
+          .getAllPOs();
+      }
+
+      // ── Over-receive / unexpected confirmation modal ─────────────
+      var pendingReceivePayload  = null;
+      var pendingOverItems       = null;
+      var pendingUnexpectedItems = null;
+
+      function openOverReceiveModal(overItems, unexpectedItems, payload) {
+        pendingReceivePayload  = payload;
+        pendingOverItems       = overItems;
+        pendingUnexpectedItems = unexpectedItems;
+
+        var html = '';
+
+        if (overItems.length > 0) {
+          html += '<div class="over-modal-section-label">Over-received items</div>';
+          html += overItems.map(function(it, idx) {
+            var excess   = it.qtyReceived2 - (it.qtyOrdered - it.qtyReceived);
+            var remaining = it.qtyOrdered - it.qtyReceived;
+            return '<div class="over-item-card">' +
+              '<div class="over-item-hd">' +
+                '<span class="over-item-name">' + esc(it.itemName) + '</span>' +
+                '<span class="over-item-tag">+' + excess + ' excess</span>' +
+              '</div>' +
+              '<div class="over-item-stats">' +
+                '<div class="over-item-stat"><span class="over-item-stat-label">Ordered</span><span class="over-item-stat-value">' + it.qtyOrdered + '</span></div>' +
+                '<div class="over-item-stat"><span class="over-item-stat-label">Prev. Received</span><span class="over-item-stat-value">' + it.qtyReceived + '</span></div>' +
+                '<div class="over-item-stat"><span class="over-item-stat-label">Entering Now</span><span class="over-item-stat-value">' + it.qtyReceived2 + '</span></div>' +
+              '</div>' +
+              '<div class="over-item-choices">' +
+                '<button class="over-choice selected-accept" id="over-accept-' + idx + '" onclick="setOverChoice(\'over\',' + idx + ',\'accept\')">' +
+                  '<span class="over-choice-dot"></span>' +
+                  '<span class="over-choice-content">' +
+                    '<span class="over-choice-title">Accept all ' + it.qtyReceived2 + ' units</span>' +
+                    '<span class="over-choice-desc">Add to inventory, including ' + excess + ' extra unit' + (excess !== 1 ? 's' : '') + '</span>' +
+                  '</span>' +
+                '</button>' +
+                '<button class="over-choice" id="over-return-' + idx + '" onclick="setOverChoice(\'over\',' + idx + ',\'return\')">' +
+                  '<span class="over-choice-dot"></span>' +
+                  '<span class="over-choice-content">' +
+                    '<span class="over-choice-title">Return excess — receive only ' + remaining + '</span>' +
+                    '<span class="over-choice-desc">Return ' + excess + ' extra unit' + (excess !== 1 ? 's' : '') + ' to vendor</span>' +
+                  '</span>' +
+                '</button>' +
+              '</div>' +
+            '</div>';
+          }).join('');
+        }
+
+        if (unexpectedItems.length > 0) {
+          html += '<div class="over-modal-section-label">Items not on this PO</div>';
+          html += unexpectedItems.map(function(it, idx) {
+            return '<div class="unexpected-item-card">' +
+              '<div class="unexpected-item-hd">' +
+                '<span class="over-item-name">' + esc(it.itemName) + '</span>' +
+                '<span class="unexpected-item-tag">Not on PO</span>' +
+              '</div>' +
+              '<div class="over-item-stats">' +
+                '<div class="over-item-stat"><span class="over-item-stat-label">Qty Received</span><span class="over-item-stat-value">' + it.qty + '</span></div>' +
+                (it.sku ? '<div class="over-item-stat"><span class="over-item-stat-label">SKU</span><span class="over-item-stat-value">' + esc(it.sku) + '</span></div>' : '') +
+              '</div>' +
+              '<div class="over-item-choices">' +
+                '<button class="over-choice selected-accept" id="unexp-accept-' + idx + '" onclick="setOverChoice(\'unexp\',' + idx + ',\'accept\')">' +
+                  '<span class="over-choice-dot"></span>' +
+                  '<span class="over-choice-content">' +
+                    '<span class="over-choice-title">Accept — add to inventory</span>' +
+                    '<span class="over-choice-desc">Record ' + it.qty + ' unit' + (it.qty !== 1 ? 's' : '') + ' and update stock</span>' +
+                  '</span>' +
+                '</button>' +
+                '<button class="over-choice" id="unexp-return-' + idx + '" onclick="setOverChoice(\'unexp\',' + idx + ',\'return\')">' +
+                  '<span class="over-choice-dot"></span>' +
+                  '<span class="over-choice-content">' +
+                    '<span class="over-choice-title">Return to vendor</span>' +
+                    '<span class="over-choice-desc">Don\'t record — send items back</span>' +
+                  '</span>' +
+                '</button>' +
+              '</div>' +
+            '</div>';
+          }).join('');
+        }
+
+        // Update title based on what's present
+        var titleEl = document.getElementById('overModalTitleText');
+        if (titleEl) {
+          if (overItems.length > 0 && unexpectedItems.length > 0) titleEl.textContent = 'Receiving Issues — Review Items';
+          else if (unexpectedItems.length > 0) titleEl.textContent = 'Unexpected Items — Choose Action';
+          else titleEl.textContent = 'Over-Receive — Choose Action';
+        }
+
+        document.getElementById('overReceiveList').innerHTML = html;
+        document.getElementById('overReceiveModal').classList.add('active');
+      }
+
+      function setOverChoice(type, idx, choice) {
+        var prefix    = type === 'over' ? 'over' : 'unexp';
+        var acceptBtn = document.getElementById(prefix + '-accept-' + idx);
+        var returnBtn = document.getElementById(prefix + '-return-' + idx);
+        if (choice === 'accept') {
+          acceptBtn.classList.add('selected-accept');
+          acceptBtn.classList.remove('selected-return');
+          returnBtn.classList.remove('selected-accept', 'selected-return');
+        } else {
+          returnBtn.classList.add('selected-return');
+          returnBtn.classList.remove('selected-accept');
+          acceptBtn.classList.remove('selected-accept', 'selected-return');
+        }
+      }
+
+      function closeOverReceiveModal() {
+        pendingReceivePayload  = null;
+        pendingOverItems       = null;
+        pendingUnexpectedItems = null;
+        document.getElementById('overReceiveModal').classList.remove('active');
+      }
+
+      function confirmOverReceive() {
+        if (!pendingReceivePayload) return;
+
+        // Adjust over-received items
+        var adjustedItems = pendingReceivePayload.items.map(function(item) {
+          var overIdx = (pendingOverItems || []).findIndex(function(o) {
+            return o.itemName === item.itemName && o.sku === item.sku;
+          });
+          if (overIdx === -1) return item;
+
+          var returnBtn = document.getElementById('over-return-' + overIdx);
+          if (returnBtn && returnBtn.classList.contains('selected-return')) {
+            var it = pendingOverItems[overIdx];
+            return { itemName: item.itemName, sku: item.sku, qtyReceived: it.qtyOrdered - it.qtyReceived };
+          }
+          return item;
+        }).filter(function(item) { return item.qtyReceived > 0; });
+
+        // Add accepted unexpected items
+        (pendingUnexpectedItems || []).forEach(function(it, idx) {
+          var returnBtn = document.getElementById('unexp-return-' + idx);
+          if (!(returnBtn && returnBtn.classList.contains('selected-return'))) {
+            adjustedItems.push({ itemName: it.itemName, sku: it.sku, qtyReceived: it.qty });
+          }
+        });
+
+        var finalPayload = {
+          poNumber: pendingReceivePayload.poNumber,
+          notes:    pendingReceivePayload.notes,
+          items:    adjustedItems
+        };
+
+        closeOverReceiveModal();
+        if (finalPayload.items.length > 0) doSubmitReceiving(finalPayload);
+        else showNotif('Nothing to record after adjustments.', 'error');
+      }
+
+      // ── Init ─────────────────────────────────────────────────────
+      window.addEventListener('load', function() {
+        loadData();
+      });
+    </script>
+
+    <!-- Over-receive confirmation modal -->
+    <div class="over-modal-overlay" id="overReceiveModal">
+      <div class="over-modal">
+        <div class="over-modal-hd">
+          <div class="over-modal-title">
+            <span class="over-modal-icon"><i class="fi fi-sr-triangle-warning"></i></span>
+            <span id="overModalTitleText">Over-Receive — Choose Action</span>
+          </div>
+          <p class="over-modal-intro">Review the items below and choose how to handle each one.</p>
+        </div>
+        <div class="over-modal-body">
+          <div class="over-modal-list" id="overReceiveList"></div>
+        </div>
+        <div class="over-modal-footer">
+          <button class="over-modal-btn" onclick="closeOverReceiveModal()">Cancel</button>
+          <button class="over-modal-btn confirm" onclick="confirmOverReceive()">Confirm & Record</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
